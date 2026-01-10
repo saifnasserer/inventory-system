@@ -7,11 +7,16 @@ import { useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { supabaseClient } from "../../utility/supabaseClient";
 import { useImpersonation } from "../../contexts/impersonation";
+import { Company } from "../../types";
 
 const { Title, Text } = Typography;
 
 export const CompanyShow = () => {
-    const { queryResult } = useShow();
+    const { id } = useParams();
+    const { queryResult } = useShow<Company>({
+        resource: "companies",
+        id: id as string,
+    });
     const { data: companyData, isLoading: companyLoading } = queryResult;
     const record = companyData?.data;
 

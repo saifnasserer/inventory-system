@@ -8,7 +8,7 @@ interface AssetIdPrintProps {
 export const AssetIdPrint = React.forwardRef<HTMLDivElement, AssetIdPrintProps>(
     ({ assetIds }, ref) => {
         return (
-            <div style={{ display: "none" }}>
+            <div style={{ overflow: "hidden", height: 0, width: 0 }}>
                 <div ref={ref} className="print-container">
                     <div style={{
                         display: "flex",

@@ -15,9 +15,7 @@ interface InspectionDecisionProps {
 
 export const InspectionDecision: React.FC<InspectionDecisionProps> = ({
     physicalData,
-    hardwareData,
     onFinish,
-    loading,
 }) => {
     const [form] = Form.useForm();
     const [decision, setDecision] = React.useState<string>();
@@ -43,7 +41,7 @@ export const InspectionDecision: React.FC<InspectionDecisionProps> = ({
                 textAlign: "center"
             }}>
                 <Text type="secondary" style={{ marginBottom: 8, display: "block" }}>ملخص الحالة</Text>
-                <Space size="large" wrap justify="center">
+                <Space size="large" wrap style={{ justifyContent: "center" }}>
                     <StatusBadge label="الحالة العامة" value={getConditionLabel(physicalData?.overall_condition)} color={getConditionColor(physicalData?.overall_condition)} />
                     {physicalData?.has_scratches && <StatusBadge label="خدوش" value="موجود" color="red" />}
                     {physicalData?.has_cracks && <StatusBadge label="شروخ" value="موجود" color="red" />}

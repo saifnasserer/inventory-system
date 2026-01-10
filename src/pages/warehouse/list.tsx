@@ -9,50 +9,119 @@ import {
     Statistic,
     Button,
     Modal,
+    Spin,
 } from "antd";
 import {
     ShoppingOutlined,
     InboxOutlined,
     SearchOutlined,
-    UserAddOutlined,
     PrinterOutlined,
+    ToolOutlined,
+    SwapOutlined,
 } from "@ant-design/icons";
 import { Input } from "antd";
 import { Device } from "../../types";
-import { useState, useRef } from "react";
-import { DeviceAssignmentModal } from "./components/DeviceAssignmentModal";
+import { useState, useRef, useEffect } from "react";
 import { useGetIdentity } from "@refinedev/core";
 import { DeviceLabel } from "../../components/DeviceLabel";
 import { useReactToPrint } from "react-to-print";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { DeviceTransferModal } from "./components/DeviceTransferModal";
 
 export const DeviceList: React.FC = () => {
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-    const [assignmentModalVisible, setAssignmentModalVisible] = useState(false);
-    const [deviceToAssign, setDeviceToAssign] = useState<string[]>([]);
     const [printModalOpen, setPrintModalOpen] = useState(false);
+    const [transferModalVisible, setTransferModalVisible] = useState(false);
+    const [devicesToTransfer, setDevicesToTransfer] = useState<string[]>([]);
     const printRef = useRef<HTMLDivElement>(null);
+
+    // Search state
+    const [searchText, setSearchText] = useState("");
+
+
 
     const { data: identity } = useGetIdentity<{ role: string }>();
     const isAdmin = identity?.role && ["admin", "warehouse_manager", "super_admin"].includes(identity.role);
 
-    const { tableProps, setFilters, tableQueryResult } = useTable<Device>({
+    const { tableProps, setFilters, tableQueryResult, current, setCurrent, pageSize } = useTable<Device>({
         resource: "devices",
-        syncWithLocation: true,
-        pagination: { pageSize: 10 },
+        syncWithLocation: false, // Disabled to prevent 416 errors when filters strictly reduce record count
+        pagination: { pageSize: 20 }, // Larger page size for infinite scroll
         filters: {
             permanent: [
                 {
                     field: "status",
-                    operator: "in",
-                    value: ["ready_for_sale", "in_branch", "sold"],
-                },
+                    operator: "eq",
+                    value: "ready_for_sale",
+                }
             ],
         },
+        queryOptions: {
+            onSuccess: (data) => {
+                // If it's the first page, reset data. Else, append.
+                if (current === 1) {
+                    setAllDevices((data.data as Device[]) || []);
+                } else {
+                    setAllDevices((prev) => [...prev, ...((data.data as Device[]) || [])]);
+                }
+            }
+        }
     });
 
-    const devices = (tableProps.dataSource || []) as Device[];
+    const [allDevices, setAllDevices] = useState<Device[]>([]);
 
-    const readyForSaleCount = devices.filter((d) => d.status === "ready_for_sale").length;
+    // Debounced Search
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setFilters([
+                {
+                    operator: "or",
+                    value: [
+                        {
+                            field: "asset_id",
+                            operator: "contains",
+                            value: searchText,
+                        },
+                        {
+                            field: "serial_number",
+                            operator: "contains",
+                            value: searchText,
+                        },
+                        {
+                            field: "model",
+                            operator: "contains",
+                            value: searchText,
+                        },
+                    ],
+                },
+            ], "merge");
+        }, 500);
+
+        return () => clearTimeout(timer);
+    }, [searchText, setFilters]);
+
+    // Reset accumulated data when filters change (detected by current page resetting to 1 usually, 
+    // or we can listen to query result isLoading/isFetching but that might flicker.
+    // The onSuccess handler with current === 1 check handles the "new search/filter" case mostly,
+    // provided useTable resets current to 1 on filter change, which it does).
+
+    // We need to ensure that when we search/filter, we reset the list.
+    // Refine's useTable resets `current` to 1 automatically on filter change.
+
+    // However, we need to make sure the `data` in onSuccess is correct.
+
+    const devices = allDevices; // Use our local accumulated state
+    const total = tableQueryResult?.data?.total || 0;
+    const hasMore = devices.length < total;
+
+    const loadMoreData = () => {
+        if (!tableQueryResult?.isFetching) {
+            setCurrent(current + 1);
+        }
+    };
+
+    const inWarehouseCount = devices.filter((d) => d.status === "ready_for_sale").length;
+    const inMaintenanceCount = devices.filter((d) => ["needs_repair", "in_repair"].includes(d.status)).length;
     const inBranchCount = devices.filter((d) => d.status === "in_branch").length;
 
     const getStatusColor = (status: string) => {
@@ -73,23 +142,13 @@ export const DeviceList: React.FC = () => {
         return labels[status] || status;
     };
 
-    const handleAssignDevice = (deviceId: string) => {
-        setDeviceToAssign([deviceId]);
-        setAssignmentModalVisible(true);
-    };
-
-    const handleBulkAssign = () => {
-        setDeviceToAssign(selectedRowKeys as string[]);
-        setAssignmentModalVisible(true);
-    };
-
-    const handleAssignmentSuccess = () => {
-        setSelectedRowKeys([]);
-        tableQueryResult?.refetch();
-    };
-
     const handleBulkPrint = () => {
         setPrintModalOpen(true);
+    };
+
+    const handleTransfer = (ids: string[]) => {
+        setDevicesToTransfer(ids);
+        setTransferModalVisible(true);
     };
 
     const handlePrint = useReactToPrint({
@@ -107,157 +166,129 @@ export const DeviceList: React.FC = () => {
     } : undefined;
 
     return (
-        <div style={{ padding: "24px" }}>
-            {/* Quick Stats */}
-            <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
-                <Col xs={24} sm={12} lg={8}>
-                    <Card hoverable>
-                        <Statistic
-                            title="جاهز للبيع"
-                            value={readyForSaleCount}
-                            prefix={<ShoppingOutlined />}
-                            valueStyle={{ color: "#52c41a" }}
-                        />
-                    </Card>
-                </Col>
-                <Col xs={24} sm={12} lg={8}>
-                    <Card hoverable>
-                        <Statistic
-                            title="في الفرع"
-                            value={inBranchCount}
-                            prefix={<InboxOutlined />}
-                            valueStyle={{ color: "#1890ff" }}
-                        />
-                    </Card>
-                </Col>
-                <Col xs={24} sm={12} lg={8}>
-                    <Card hoverable>
-                        <Statistic
-                            title="إجمالي المخزون"
-                            value={devices.length}
-                            prefix={<InboxOutlined />}
-                            valueStyle={{ color: "#722ed1" }}
-                        />
-                    </Card>
-                </Col>
-            </Row>
+        <div style={{ padding: "0px" }}>
+            {/* Quick Stats Removed as per request */}
 
-            <div style={{ marginBottom: 16, display: "flex", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
-                <Input.Search
-                    placeholder="بحث برقم الأصل..."
-                    allowClear
-                    onSearch={(value) => setFilters([{ field: "asset_id", operator: "contains", value: value }], "merge")}
-                    style={{ maxWidth: 300 }}
-                />
-                {isAdmin && selectedRowKeys.length > 0 && (
-                    <Space>
-                        <Button
-                            icon={<PrinterOutlined />}
-                            onClick={handleBulkPrint}
-                        >
-                            طباعة الملصقات ({selectedRowKeys.length})
-                        </Button>
-                        <Button
-                            type="primary"
-                            icon={<UserAddOutlined />}
-                            onClick={handleBulkAssign}
-                        >
-                            تعيين ({selectedRowKeys.length})
-                        </Button>
-                    </Space>
-                )}
+            {/* Custom Header Area */}
+            <div style={{
+                marginBottom: 24,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                backgroundColor: "#fff",
+                padding: "16px 24px",
+                borderBottom: "1px solid #f0f0f0",
+            }}>
+                <div>
+                    <h2 style={{ fontSize: "20px", fontWeight: 600, margin: 0 }}>المخزن</h2>
+                </div>
+                <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+                    <Input
+                        placeholder="بحث (رقم الأصل، السيريال، الموديل)..."
+                        allowClear
+                        value={searchText}
+                        onChange={(e) => setSearchText(e.target.value)}
+                        prefix={<SearchOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
+                        style={{ width: 300, borderRadius: "50px" }}
+                    />
+                    {isAdmin && (
+                        <>
+                            {selectedRowKeys.length > 0 && (
+                                <Space>
+                                    <Button
+                                        icon={<PrinterOutlined />}
+                                        onClick={handleBulkPrint}
+                                    >
+                                        طباعة ({selectedRowKeys.length})
+                                    </Button>
+                                    <Button
+                                        icon={<SwapOutlined />}
+                                        onClick={() => handleTransfer(selectedRowKeys as string[])}
+                                    >
+                                        نقل ({selectedRowKeys.length})
+                                    </Button>
+                                </Space>
+                            )}
+                        </>
+                    )}
+                </div>
             </div>
 
-            <List title="المخزون - الأجهزة الجاهزة" breadcrumb={false}>
-                <Table
-                    {...tableProps}
-                    rowKey="id"
-                    rowSelection={rowSelection}
-                    pagination={{
-                        ...tableProps.pagination,
-                        showSizeChanger: true,
-                        position: ["bottomCenter"],
-                    }}
+
+
+            <div id="scrollableDiv" style={{ height: "calc(100vh - 180px)", overflow: "auto", padding: "0 24px", backgroundColor: "#fff" }}>
+                <InfiniteScroll
+                    dataLength={devices.length}
+                    next={loadMoreData}
+                    hasMore={hasMore}
+                    loader={<div style={{ textAlign: "center", padding: 10 }}><Spin /></div>}
+                    scrollableTarget="scrollableDiv"
+                    endMessage={<div style={{ textAlign: "center", padding: 10, color: "#ccc" }}>وصلت لنهاية القائمة</div>}
                 >
-                    <Table.Column
-                        dataIndex="asset_id"
-                        title="رقم الأصل"
-                        render={(value) => <strong>{value}</strong>}
-                        sorter={(a: Device, b: Device) => a.asset_id.localeCompare(b.asset_id)}
-                    />
-                    <Table.Column
-                        dataIndex="model"
-                        title="الموديل"
-                        sorter={(a: Device, b: Device) =>
-                            (a.model || "").localeCompare(b.model || "")
-                        }
-                    />
+                    <Table
+                        {...tableProps}
+                        dataSource={devices} // Override dataSource with our accumulated one
+                        pagination={false} // Disable internal pagination
+                        rowKey="id"
+                        rowSelection={rowSelection}
+                    >
+                        <Table.Column
+                            dataIndex="asset_id"
+                            title="رقم الأصل"
+                            render={(value) => <strong>{value}</strong>}
+                            sorter={(a: Device, b: Device) => a.asset_id.localeCompare(b.asset_id)}
+                            width={100}
+                        />
+                        <Table.Column
+                            dataIndex="model"
+                            title="الموديل"
+                            sorter={(a: Device, b: Device) =>
+                                (a.model || "").localeCompare(b.model || "")
+                            }
+                        />
 
-                    <Table.Column
-                        dataIndex="serial_number"
-                        title="الرقم التسلسلي"
-                        responsive={["lg"]}
-                    />
-                    <Table.Column
-                        dataIndex="status"
-                        title="الحالة"
-                        render={(value) => (
-                            <Tag color={getStatusColor(value)}>{getStatusLabel(value)}</Tag>
-                        )}
-                        filters={[
-                            { text: "جاهز للبيع", value: "ready_for_sale" },
-                            { text: "في الفرع", value: "in_branch" },
-                            { text: "تم البيع", value: "sold" },
-                        ]}
-                        onFilter={(value, record: Device) => record.status === value}
-                    />
-                    <Table.Column
-                        dataIndex="current_location"
-                        title="الموقع"
-                        responsive={["md"]}
-                    />
-                    <Table.Column
-                        dataIndex="created_at"
-                        title="تاريخ الإضافة"
-                        render={(value) =>
-                            value ? new Date(value).toLocaleDateString("ar-EG") : "-"
-                        }
-                        sorter={(a: Device, b: Device) =>
-                            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-                        }
-                        responsive={["lg"]}
-                    />
-                    <Table.Column
-                        title="الإجراءات"
-                        dataIndex="actions"
-                        fixed="left"
-                        render={(_, record: Device) => (
-                            <Space>
-                                {isAdmin && (
-                                    <Button
-                                        type="link"
-                                        size="small"
-                                        icon={<UserAddOutlined />}
-                                        onClick={() => handleAssignDevice(record.id)}
-                                    >
-                                        تعيين
-                                    </Button>
-                                )}
-                                <ShowButton hideText size="small" recordItemId={record.id} resource="devices" />
-                                <EditButton hideText size="small" recordItemId={record.id} resource="devices" />
-                            </Space>
-                        )}
-                    />
-                </Table>
-            </List>
+                        <Table.Column
+                            dataIndex="serial_number"
+                            title="الرقم التسلسلي"
+                        />
 
-            {/* Assignment Modal */}
-            <DeviceAssignmentModal
-                visible={assignmentModalVisible}
-                onCancel={() => setAssignmentModalVisible(false)}
-                deviceIds={deviceToAssign}
-                onSuccess={handleAssignmentSuccess}
-            />
+                        <Table.Column
+                            dataIndex="current_location"
+                            title="الموقع"
+                        />
+                        <Table.Column
+                            dataIndex="created_at"
+                            title="تاريخ الإضافة"
+                            render={(value) =>
+                                value ? new Date(value).toLocaleDateString("ar-EG") : "-"
+                            }
+                            sorter={(a: Device, b: Device) =>
+                                new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+                            }
+                            responsive={["lg"]}
+                        />
+                        <Table.Column
+                            title="الإجراءات"
+                            dataIndex="actions"
+                            render={(_, record: Device) => (
+                                <Space>
+                                    {isAdmin && (
+                                        <Button
+                                            size="small"
+                                            icon={<SwapOutlined />}
+                                            onClick={() => handleTransfer([record.id])}
+                                            title="نقل"
+                                        />
+                                    )}
+                                    <ShowButton hideText size="small" recordItemId={record.id} resource="devices" />
+                                    <EditButton hideText size="small" recordItemId={record.id} resource="devices" />
+                                </Space>
+                            )}
+                        />
+                    </Table>
+                </InfiniteScroll>
+            </div>
+
 
             {/* Bulk Print Modal */}
             <Modal
@@ -302,6 +333,17 @@ export const DeviceList: React.FC = () => {
                     ))}
                 </div>
             </Modal>
-        </div>
+
+            <DeviceTransferModal
+                visible={transferModalVisible}
+                onCancel={() => setTransferModalVisible(false)}
+                onSuccess={() => {
+                    setSelectedRowKeys([]);
+                    setCurrent(1);
+                    tableQueryResult?.refetch();
+                }}
+                deviceIds={devicesToTransfer}
+            />
+        </div >
     );
 };

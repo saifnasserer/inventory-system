@@ -3,7 +3,6 @@ import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 import {
   ErrorComponent,
-  ThemedLayoutV2,
   useNotificationProvider,
 } from "@refinedev/antd";
 import "@refinedev/antd/dist/reset.css";
@@ -37,7 +36,7 @@ import { MyTasksPage } from "./pages/my-tasks";
 import { SalesPage } from "./pages/sales";
 import { SalesPortalPage } from "./pages/sales-portal";
 import { MaintenanceDashboard } from "./pages/maintenance-dashboard";
-import { Header } from "./components/header";
+import { CustomLayout } from "./components/layout";
 import { AdminRoute } from "./components/AdminRoute";
 
 function App() {
@@ -51,11 +50,29 @@ function App() {
             theme={{
               token: {
                 colorPrimary: "#1890ff",
+                colorBgLayout: "#ffffff",
+                colorBgContainer: "#ffffff",
                 fontFamily: "'Cairo', sans-serif",
-                borderRadius: 12,
-                borderRadiusLG: 16,
-                borderRadiusSM: 8,
+                borderRadius: 16, // Increased for circular/rounded feel
+                borderRadiusLG: 24,
+                borderRadiusSM: 12,
+                boxShadowSecondary: "none", // Remove shadows
               },
+              components: {
+                Layout: {
+                  colorBgBody: "#ffffff",
+                  colorBgHeader: "#ffffff",
+                  colorBgTrigger: "#ffffff",
+                },
+                Menu: {
+                  colorBgContainer: "#ffffff",
+                  colorItemBg: "#ffffff",
+                  colorSubItemBg: "#ffffff",
+                },
+                Card: {
+                  boxShadowTertiary: "none", // Remove card shadows
+                }
+              }
             }}
           >
 
@@ -205,9 +222,9 @@ function App() {
                             key="authenticated-routes"
                             fallback={<CatchAllNavigate to="/login" />}
                           >
-                            <ThemedLayoutV2 Header={Header} Sider={() => null}>
+                            <CustomLayout>
                               <Outlet />
-                            </ThemedLayoutV2>
+                            </CustomLayout>
                           </Authenticated>
                         }
                       >

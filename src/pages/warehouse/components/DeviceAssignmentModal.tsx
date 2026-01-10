@@ -37,7 +37,7 @@ export const DeviceAssignmentModal: React.FC<DeviceAssignmentModalProps> = ({
         },
     });
 
-    const { mutate: createAssignment } = useCreate<DeviceAssignment>();
+    const { mutateAsync: createAssignment } = useCreate<DeviceAssignment>();
 
     const handleSubmit = async () => {
         try {
@@ -46,23 +46,15 @@ export const DeviceAssignmentModal: React.FC<DeviceAssignmentModalProps> = ({
 
             // Create assignments for all selected devices
             const promises = deviceIds.map((deviceId) =>
-                new Promise((resolve, reject) => {
-                    createAssignment(
-                        {
-                            resource: "device_assignments",
-                            values: {
-                                device_id: deviceId,
-                                assigned_to: values.assigned_to,
-                                assigned_by: identity?.id,
-                                status: "active",
-                                notes: values.notes,
-                            },
-                        },
-                        {
-                            onSuccess: resolve,
-                            onError: reject,
-                        }
-                    );
+                createAssignment({
+                    resource: "device_assignments",
+                    values: {
+                        device_id: deviceId,
+                        assigned_to: values.assigned_to,
+                        assigned_by: identity?.id,
+                        status: "active",
+                        notes: values.notes,
+                    },
                 })
             );
 
@@ -74,12 +66,14 @@ export const DeviceAssignmentModal: React.FC<DeviceAssignmentModalProps> = ({
                     : `تم تعيين ${deviceIds.length} أجهزة بنجاح`
             );
 
-            form.resetFields();
             onSuccess();
             onCancel();
         } catch (error) {
             console.error("Assignment error:", error);
-            message.error("فشل في تعيين الأجهزة");
+            // Only show error if it's not a validation error (validation errors are handled by Form automatically mostly)
+            if (!(error as any).errorFields) {
+                message.error("فشل في تعيين الأجهزة");
+            }
         } finally {
             setLoading(false);
         }
@@ -97,6 +91,7 @@ export const DeviceAssignmentModal: React.FC<DeviceAssignmentModalProps> = ({
             okText="تعيين"
             cancelText="إلغاء"
             width={500}
+            destroyOnClose
         >
             <Form form={form} layout="vertical">
                 <Form.Item

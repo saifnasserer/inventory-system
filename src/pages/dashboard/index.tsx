@@ -10,7 +10,7 @@ import {
 } from "@ant-design/icons";
 import { Device } from "../../types";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 export const DashboardPage: React.FC = () => {
     const { data: identity, isLoading: identityLoading } = useGetIdentity<{
@@ -69,65 +69,88 @@ export const DashboardPage: React.FC = () => {
 
     return (
         <div style={{ padding: "24px" }}>
-            <Title level={2}>
-                مرحباً، {identity?.fullName || "المستخدم"}
-            </Title>
-            <Title level={4} type="secondary">
-                الدور: {getRoleLabel(identity?.role)}
-            </Title>
+            <div style={{ marginBottom: 24 }}>
+                <Title level={3} style={{ fontWeight: 400, margin: 0 }}>
+                    مرحباً بك، <span style={{ fontWeight: 700 }}>{identity?.fullName || "المستخدم"}</span>
+                </Title>
+                <Text type="secondary" style={{ fontSize: 16 }}>
+                    ملخص سريع لنشاط المخزون اليوم
+                </Text>
+            </div>
 
             <Spin spinning={isLoading}>
-                <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
+                <Row gutter={[24, 24]}>
                     <Col xs={24} sm={12} lg={6}>
-                        <Card hoverable>
+                        <Card
+                            bordered={false}
+                            style={{ boxShadow: "none", height: '100%', borderRadius: 24, background: "#f9f9f9" }}
+                            bodyStyle={{ padding: 24 }}
+                        >
                             <Statistic
-                                title="في الفحص"
+                                title={<Text type="secondary">في الفحص</Text>}
                                 value={inInspectionCount}
-                                prefix={<SearchOutlined />}
-                                valueStyle={{ color: "#1890ff" }}
+                                prefix={<SearchOutlined style={{ color: "#1890ff", background: "#e6f7ff", padding: 8, borderRadius: 8 }} />}
+                                valueStyle={{ fontSize: 32, fontWeight: 700, marginTop: 8 }}
                             />
                         </Card>
                     </Col>
                     <Col xs={24} sm={12} lg={6}>
-                        <Card hoverable>
+                        <Card
+                            bordered={false}
+                            style={{ boxShadow: "none", height: '100%', borderRadius: 24, background: "#f9f9f9" }}
+                            bodyStyle={{ padding: 24 }}
+                        >
                             <Statistic
-                                title="في المخزن"
+                                title={<Text type="secondary">في المخزن</Text>}
                                 value={inWarehouseCount}
-                                prefix={<InboxOutlined />}
-                                valueStyle={{ color: "#722ed1" }}
+                                prefix={<InboxOutlined style={{ color: "#722ed1", background: "#f9f0ff", padding: 8, borderRadius: 8 }} />}
+                                valueStyle={{ fontSize: 32, fontWeight: 700, marginTop: 8 }}
                             />
                         </Card>
                     </Col>
                     <Col xs={24} sm={12} lg={6}>
-                        <Card hoverable>
+                        <Card
+                            bordered={false}
+                            style={{ boxShadow: "none", height: '100%', borderRadius: 24, background: "#f9f9f9" }}
+                            bodyStyle={{ padding: 24 }}
+                        >
                             <Statistic
-                                title="في الصيانة"
+                                title={<Text type="secondary">في الصيانة</Text>}
                                 value={inMaintenanceCount}
-                                prefix={<ToolOutlined />}
-                                valueStyle={{ color: "#faad14" }}
+                                prefix={<ToolOutlined style={{ color: "#faad14", background: "#fffbe6", padding: 8, borderRadius: 8 }} />}
+                                valueStyle={{ fontSize: 32, fontWeight: 700, marginTop: 8 }}
                             />
                         </Card>
                     </Col>
                     <Col xs={24} sm={12} lg={6}>
-                        <Card hoverable>
+                        <Card
+                            bordered={false}
+                            style={{ boxShadow: "none", height: '100%', borderRadius: 24, background: "#f9f9f9" }}
+                            bodyStyle={{ padding: 24 }}
+                        >
                             <Statistic
-                                title="جاهز للبيع"
+                                title={<Text type="secondary">جاهز للبيع</Text>}
                                 value={readyForSaleCount}
-                                prefix={<ShoppingOutlined />}
-                                valueStyle={{ color: "#52c41a" }}
+                                prefix={<ShoppingOutlined style={{ color: "#52c41a", background: "#f6ffed", padding: 8, borderRadius: 8 }} />}
+                                valueStyle={{ fontSize: 32, fontWeight: 700, marginTop: 8 }}
                             />
                         </Card>
                     </Col>
                 </Row>
             </Spin>
 
-            <Card style={{ marginTop: 24 }}>
-                <Title level={4}>ملخص النظام</Title>
-                <Row gutter={[16, 16]}>
+            <Card bordered={false} style={{ marginTop: 24, boxShadow: "none", borderRadius: 24 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                    <Title level={4} style={{ margin: 0, fontWeight: 600 }}>نظرة عامة على النظام</Title>
+                </div>
+
+                <Row gutter={[24, 24]}>
                     <Col span={24}>
-                        <p>
-                            <strong>إجمالي الأجهزة:</strong> {devices.length}
-                        </p>
+                        <div style={{ display: 'flex', alignItems: 'center', fontSize: 16 }}>
+                            <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#1890ff', marginLeft: 8 }}></div>
+                            <Text type="secondary" style={{ marginLeft: 8 }}>إجمالي الأجهزة المسجلة:</Text>
+                            <Text strong>{devices.length}</Text>
+                        </div>
                     </Col>
                 </Row>
             </Card>

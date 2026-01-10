@@ -39,7 +39,7 @@ export const DeviceShow: React.FC = () => {
     const device = data?.data;
 
     const handlePrint = useReactToPrint({
-        content: () => printRef.current,
+        contentRef: printRef,
         documentTitle: `Label-${device?.asset_id || 'device'}`,
     });
 

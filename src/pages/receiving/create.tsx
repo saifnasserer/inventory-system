@@ -18,10 +18,11 @@ const { Title, Text } = Typography;
 
 export const ShipmentCreate: React.FC = () => {
     const navigate = useNavigate();
-    const { formProps, onFinish } = useForm({
+    const { formProps, onFinish, formLoading } = useForm({
         resource: "shipments",
         action: "create",
         redirect: "list",
+        warnWhenUnsavedChanges: false,
     });
 
     const handleFinish = async (values: any) => {
@@ -61,49 +62,9 @@ export const ShipmentCreate: React.FC = () => {
 
             if (devicesError) throw devicesError;
 
-            // Show success modal with work distribution
-            Modal.success({
-                title: "تم إضافة الشحنة بنجاح!",
-                width: 600,
-                content: (
-                    <div>
-                        <Typography.Paragraph>تم إنشاء {values.device_count} سجلات أجهزة جديدة.</Typography.Paragraph>
-                        <Divider>توزيع المهام (Work Allocation)</Divider>
-                        <div style={{ backgroundColor: "#f5f5f5", padding: "16px", borderRadius: "8px" }}>
-                            <Typography.Title level={5} style={{ marginTop: 0 }}>المهمة المطلوبة:</Typography.Title>
-                            <Typography.Paragraph>
-                                يرجى توصيل الأجهزة بالشبكة ليتم تحميل البيانات تلقائياً عبر البرنامج المساعد.
-                            </Typography.Paragraph>
-                            <Divider style={{ margin: "12px 0" }} />
-                            <Space direction="vertical" style={{ width: "100%" }}>
-                                {/* Hardcoded assignments commented out per user request
-                                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                    <span>🟢 <strong>سيف (Saif):</strong></span>
-                                    <span>الأجهزة من 1 إلى {Math.min(5, values.device_count)}</span>
-                                </div>
-                                {values.device_count > 5 && (
-                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                        <span>🔵 <strong>يوسف (Yousef):</strong></span>
-                                        <span>الأجهزة من 6 إلى {Math.min(20, values.device_count)}</span>
-                                    </div>
-                                )}
-                                {values.device_count > 20 && (
-                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                        <span>🟠 <strong>باقي الفريق:</strong></span>
-                                        <span>الأجهزة من 21 إلى {values.device_count}</span>
-                                    </div>
-                                )}
-                                */}
-                                <div style={{ display: "flex", justifyContent: "center" }}>
-                                    <span>سيتم توزيع المهام تلقائياً على الفريق المتاح.</span>
-                                </div>
-                            </Space>
-                        </div>
-                    </div>
-                ),
-                okText: "الذهاب للقائمة",
-                onOk: () => navigate("/receiving/shipments"),
-            });
+            // Show success message and navigate
+            message.success(`تم إضافة الشحنة بنجاح! تم إنشاء ${values.device_count} سجلات.`);
+            navigate("/receiving/shipments");
 
         } catch (error: any) {
             console.error("Error creating shipment:", error);
@@ -131,7 +92,10 @@ export const ShipmentCreate: React.FC = () => {
                     boxShadow: "0 4px 20px rgba(0,0,0,0.03)"
                 }}
             >
-                <Form {...formProps} layout="vertical" onFinish={handleFinish} initialValues={{ delivery_date: dayjs() }}>
+                <Form {...formProps} layout="vertical" onFinish={handleFinish} initialValues={{
+                    delivery_date: dayjs(),
+                    shipment_code: `SHP-${Date.now().toString().slice(-6)}`
+                }}>
                     <div style={{ marginBottom: 24 }}>
                         <Title level={5} style={{ marginBottom: 16, color: "#1890ff" }}>
                             <BarcodeOutlined /> بيانات الشحنة الأساسية
@@ -256,7 +220,7 @@ export const ShipmentCreate: React.FC = () => {
                         <Button
                             size="large"
                             onClick={() => navigate("/receiving/shipments")}
-                            style={{ borderRadius: "8px", height: "48px", minWidth: "100px" }}
+                            style={{ borderRadius: "50px", height: "48px", minWidth: "100px" }}
                         >
                             إلغاء
                         </Button>
@@ -265,9 +229,9 @@ export const ShipmentCreate: React.FC = () => {
                             htmlType="submit"
                             size="large"
                             icon={<PlusCircleOutlined />}
-                            loading={formProps.loading}
+                            loading={formLoading}
                             style={{
-                                borderRadius: "8px",
+                                borderRadius: "50px",
                                 height: "48px",
                                 minWidth: "160px",
                                 background: "linear-gradient(90deg, #1890ff 0%, #096dd9 100%)",
