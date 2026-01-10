@@ -1,0 +1,312 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model announcements {
+  id               String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title            String     @db.VarChar(255)
+  content          String
+  created_by       String?    @db.Uuid
+  target_role      user_role?
+  target_branch_id String?    @db.Uuid
+  is_active        Boolean?   @default(true)
+  priority         String?    @default("normal") @db.VarChar(20)
+  expires_at       DateTime?  @db.Timestamptz(6)
+  created_at       DateTime?  @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime?  @default(now()) @db.Timestamptz(6)
+  users            users?     @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  branches         branches?  @relation(fields: [target_branch_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([is_active], map: "idx_announcements_active")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model branches {
+  id                                           String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                                         String          @db.VarChar(255)
+  location                                     String?         @db.VarChar(500)
+  manager_id                                   String?         @db.Uuid
+  created_at                                   DateTime?       @default(now()) @db.Timestamptz(6)
+  updated_at                                   DateTime?       @default(now()) @db.Timestamptz(6)
+  announcements                                announcements[]
+  users_branches_manager_idTousers             users?          @relation("branches_manager_idTousers", fields: [manager_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  devices                                      devices[]
+  invoices                                     invoices[]
+  transfers_transfers_from_branch_idTobranches transfers[]     @relation("transfers_from_branch_idTobranches")
+  transfers_transfers_to_branch_idTobranches   transfers[]     @relation("transfers_to_branch_idTobranches")
+  users_users_branch_idTobranches              users[]         @relation("users_branch_idTobranches")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model companies {
+  id                String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name              String
+  status            String      @default("active")
+  subscription_plan String?     @default("free")
+  created_at        DateTime    @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  updated_at        DateTime    @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  devices           devices[]
+  shipments         shipments[]
+  users             users[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model devices {
+  id                    String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  asset_id              String                  @unique @db.VarChar(100)
+  shipment_id           String?                 @db.Uuid
+  status                device_status?          @default(received)
+  model                 String?                 @db.VarChar(255)
+  serial_number         String?                 @db.VarChar(255)
+  manufacturer          String?                 @db.VarChar(255)
+  ram_size              Int?
+  ram_count             Int?
+  ram_models            String[]
+  storage_size          Int?
+  storage_count         Int?
+  storage_types         String[]
+  storage_models        String[]
+  gpu_model             String?                 @db.VarChar(255)
+  cpu_model             String?                 @db.VarChar(255)
+  current_location      String?                 @db.VarChar(50)
+  branch_id             String?                 @db.Uuid
+  assigned_to           String?                 @db.Uuid
+  created_at            DateTime?               @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime?               @default(now()) @db.Timestamptz(6)
+  company_id            String                  @db.Uuid
+  users                 users?                  @relation(fields: [assigned_to], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  branches              branches?               @relation(fields: [branch_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  companies             companies               @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  shipments             shipments?              @relation(fields: [shipment_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  invoices              invoices[]
+  physical_inspections  physical_inspections[]
+  repairs               repairs[]
+  technical_inspections technical_inspections[]
+  transfers             transfers[]
+  device_assignments    device_assignments[]
+
+  @@index([asset_id], map: "idx_devices_asset_id")
+  @@index([assigned_to], map: "idx_devices_assigned")
+  @@index([branch_id], map: "idx_devices_branch")
+  @@index([status], map: "idx_devices_status")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model device_assignments {
+  id                                          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  device_id                                   String    @db.Uuid
+  assigned_to                                 String    @db.Uuid
+  assigned_by                                 String    @db.Uuid
+  assigned_at                                 DateTime? @default(now()) @db.Timestamptz(6)
+  completed_at                                DateTime? @db.Timestamptz(6)
+  status                                      String    @default("active") @db.VarChar(50)
+  notes                                       String?
+  created_at                                  DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at                                  DateTime? @default(now()) @db.Timestamptz(6)
+  users_device_assignments_assigned_byTousers users     @relation("device_assignments_assigned_byTousers", fields: [assigned_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users_device_assignments_assigned_toTousers users     @relation("device_assignments_assigned_toTousers", fields: [assigned_to], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  devices                                     devices   @relation(fields: [device_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([device_id], map: "idx_device_assignments_device")
+  @@index([assigned_to], map: "idx_device_assignments_assigned_to")
+  @@index([status], map: "idx_device_assignments_status")
+  @@index([assigned_at(sort: Desc)], map: "idx_device_assignments_assigned_at")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+
+model invoices {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  invoice_number   String    @unique @db.VarChar(100)
+  device_id        String?   @db.Uuid
+  branch_id        String?   @db.Uuid
+  customer_name    String    @db.VarChar(255)
+  customer_contact String?   @db.VarChar(255)
+  customer_email   String?   @db.VarChar(255)
+  sale_price       Decimal   @db.Decimal(10, 2)
+  tax_amount       Decimal?  @db.Decimal(10, 2)
+  total_amount     Decimal   @db.Decimal(10, 2)
+  sold_by          String?   @db.Uuid
+  sale_date        DateTime? @default(now()) @db.Timestamptz(6)
+  notes            String?
+  created_at       DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime? @default(now()) @db.Timestamptz(6)
+  branches         branches? @relation(fields: [branch_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  devices          devices?  @relation(fields: [device_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users            users?    @relation(fields: [sold_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model physical_inspections {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  device_id         String?   @db.Uuid
+  inspector_id      String?   @db.Uuid
+  has_scratches     Boolean?  @default(false)
+  has_cracks        Boolean?  @default(false)
+  has_dents         Boolean?  @default(false)
+  overall_condition String?   @db.VarChar(50)
+  notes             String?
+  photos            String[]
+  inspected_at      DateTime? @default(now()) @db.Timestamptz(6)
+  created_at        DateTime? @default(now()) @db.Timestamptz(6)
+  devices           devices?  @relation(fields: [device_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users             users?    @relation(fields: [inspector_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model repairs {
+  id                               String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  device_id                        String?                @db.Uuid
+  assigned_to                      String?                @db.Uuid
+  assigned_by                      String?                @db.Uuid
+  issue_description                String?
+  work_log                         String[]
+  status                           String?                @default("pending") @db.VarChar(50)
+  assigned_at                      DateTime?              @db.Timestamptz(6)
+  completed_at                     DateTime?              @db.Timestamptz(6)
+  created_at                       DateTime?              @default(now()) @db.Timestamptz(6)
+  updated_at                       DateTime?              @default(now()) @db.Timestamptz(6)
+  users_repairs_assigned_byTousers users?                 @relation("repairs_assigned_byTousers", fields: [assigned_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users_repairs_assigned_toTousers users?                 @relation("repairs_assigned_toTousers", fields: [assigned_to], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  devices                          devices?               @relation(fields: [device_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  spare_parts_requests             spare_parts_requests[]
+
+  @@index([assigned_to], map: "idx_repairs_assigned")
+  @@index([status], map: "idx_repairs_status")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model shipments {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  shipment_code    String    @unique @db.VarChar(100)
+  supplier_name    String    @db.VarChar(255)
+  supplier_contact String?   @db.VarChar(255)
+  delivery_date    DateTime  @db.Date
+  device_count     Int
+  notes            String?
+  created_by       String?   @db.Uuid
+  created_at       DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime? @default(now()) @db.Timestamptz(6)
+  company_id       String    @db.Uuid
+  devices          devices[]
+  companies        companies @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users            users?    @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model spare_parts_requests {
+  id                                             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  repair_id                                      String?   @db.Uuid
+  requested_by                                   String?   @db.Uuid
+  part_name                                      String    @db.VarChar(255)
+  part_description                               String?
+  quantity                                       Int?      @default(1)
+  status                                         String?   @default("pending") @db.VarChar(50)
+  approved_by                                    String?   @db.Uuid
+  approved_at                                    DateTime? @db.Timestamptz(6)
+  notes                                          String?
+  created_at                                     DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at                                     DateTime? @default(now()) @db.Timestamptz(6)
+  users_spare_parts_requests_approved_byTousers  users?    @relation("spare_parts_requests_approved_byTousers", fields: [approved_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  repairs                                        repairs?  @relation(fields: [repair_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users_spare_parts_requests_requested_byTousers users?    @relation("spare_parts_requests_requested_byTousers", fields: [requested_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model technical_inspections {
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  device_id          String?   @db.Uuid
+  inspector_id       String?   @db.Uuid
+  stress_test_passed Boolean?
+  max_temperature    Decimal?  @db.Decimal(5, 2)
+  performance_score  Int?
+  ready_for_sale     Boolean?  @default(false)
+  needs_repair       Boolean?  @default(false)
+  repair_notes       String?
+  notes              String?
+  inspected_at       DateTime? @default(now()) @db.Timestamptz(6)
+  created_at         DateTime? @default(now()) @db.Timestamptz(6)
+  devices            devices?  @relation(fields: [device_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users              users?    @relation(fields: [inspector_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model transfers {
+  id                                          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  device_id                                   String?   @db.Uuid
+  from_location                               String?   @db.VarChar(50)
+  to_location                                 String?   @db.VarChar(50)
+  from_branch_id                              String?   @db.Uuid
+  to_branch_id                                String?   @db.Uuid
+  initiated_by                                String?   @db.Uuid
+  status                                      String?   @default("pending") @db.VarChar(50)
+  requested_at                                DateTime? @default(now()) @db.Timestamptz(6)
+  completed_at                                DateTime? @db.Timestamptz(6)
+  notes                                       String?
+  created_at                                  DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at                                  DateTime? @default(now()) @db.Timestamptz(6)
+  devices                                     devices?  @relation(fields: [device_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  branches_transfers_from_branch_idTobranches branches? @relation("transfers_from_branch_idTobranches", fields: [from_branch_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users                                       users?    @relation(fields: [initiated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  branches_transfers_to_branch_idTobranches   branches? @relation("transfers_to_branch_idTobranches", fields: [to_branch_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([status], map: "idx_transfers_status")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model users {
+  id                                                            String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email                                                         String                  @unique @db.VarChar(255)
+  full_name                                                     String                  @db.VarChar(255)
+  role                                                          user_role
+  branch_id                                                     String?                 @db.Uuid
+  created_at                                                    DateTime?               @default(now()) @db.Timestamptz(6)
+  updated_at                                                    DateTime?               @default(now()) @db.Timestamptz(6)
+  company_id                                                    String?                 @db.Uuid
+  announcements                                                 announcements[]
+  branches_branches_manager_idTousers                           branches[]              @relation("branches_manager_idTousers")
+  devices                                                       devices[]
+  invoices                                                      invoices[]
+  physical_inspections                                          physical_inspections[]
+  repairs_repairs_assigned_byTousers                            repairs[]               @relation("repairs_assigned_byTousers")
+  repairs_repairs_assigned_toTousers                            repairs[]               @relation("repairs_assigned_toTousers")
+  shipments                                                     shipments[]
+  spare_parts_requests_spare_parts_requests_approved_byTousers  spare_parts_requests[]  @relation("spare_parts_requests_approved_byTousers")
+  spare_parts_requests_spare_parts_requests_requested_byTousers spare_parts_requests[]  @relation("spare_parts_requests_requested_byTousers")
+  technical_inspections                                         technical_inspections[]
+  transfers                                                     transfers[]
+  device_assignments_device_assignments_assigned_byTousers      device_assignments[]    @relation("device_assignments_assigned_byTousers")
+  device_assignments_device_assignments_assigned_toTousers      device_assignments[]    @relation("device_assignments_assigned_toTousers")
+  branches_users_branch_idTobranches                            branches?               @relation("users_branch_idTobranches", fields: [branch_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_branch")
+  companies                                                     companies?              @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+enum device_status {
+  received
+  pending_inspection
+  in_physical_inspection
+  in_technical_inspection
+  ready_for_sale
+  needs_repair
+  in_repair
+  in_branch
+  sold
+}
+
+enum user_role {
+  admin
+  warehouse_manager
+  warehouse_staff
+  repair_manager
+  technician
+  branch_manager
+  sales_staff
+  super_admin
+}

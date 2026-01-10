@@ -26,7 +26,7 @@ export const ColorModeContextProvider: React.FC<PropsWithChildren> = ({
 
   const systemPreference = isSystemPreferenceDark ? "dark" : "light";
   const [mode, setMode] = useState(
-    colorModeFromLocalStorage || systemPreference
+    colorModeFromLocalStorage || "light" // Always default to light mode
   );
 
   useEffect(() => {

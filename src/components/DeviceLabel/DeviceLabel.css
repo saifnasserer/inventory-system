@@ -1,0 +1,86 @@
+.device-label {
+    width: 4in;
+    height: 2in;
+    padding: 0.25in;
+    border: 2px solid #000;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    page-break-after: always;
+    box-sizing: border-box;
+}
+
+.label-header {
+    text-align: center;
+    border-bottom: 1px solid #000;
+    padding-bottom: 0.1in;
+}
+
+.label-header h3 {
+    margin: 0;
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+.asset-id {
+    font-size: 16pt;
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+    margin-top: 0.05in;
+}
+
+.qr-code-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+
+.device-info {
+    font-size: 9pt;
+    border-top: 1px solid #000;
+    padding-top: 0.1in;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.05in;
+}
+
+.info-row:last-child {
+    margin-bottom: 0;
+}
+
+.info-row .label {
+    font-weight: bold;
+    margin-right: 0.1in;
+}
+
+.info-row .value {
+    text-align: right;
+    font-family: 'Courier New', monospace;
+}
+
+/* Print styles */
+@media print {
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    .device-label {
+        border: 2px solid #000;
+        margin: 0;
+    }
+
+    /* Hide everything except labels when printing */
+    body>*:not(.print-container) {
+        display: none !important;
+    }
+
+    .print-container {
+        display: block !important;
+    }
+}
