@@ -1,4 +1,20 @@
 import { Refine, Authenticated } from "@refinedev/core";
+import {
+  ToolOutlined,
+  SwapOutlined,
+  PieChartOutlined,
+  ContainerOutlined,
+  LaptopOutlined,
+  SettingOutlined,
+  UserOutlined,
+  TeamOutlined,
+  ProfileOutlined,
+  ShoppingCartOutlined,
+  ShopOutlined,
+  BuildOutlined,
+  BarsOutlined,
+  FileTextOutlined
+} from "@ant-design/icons";
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 import {
@@ -34,7 +50,8 @@ import { CompanyList, CompanyCreate, CompanyEdit, CompanyShow } from "./pages/co
 import { EmployeeDashboard } from "./pages/employee-dashboard";
 import { MyTasksPage } from "./pages/my-tasks";
 import { SalesPage } from "./pages/sales";
-import { SalesPortalPage } from "./pages/sales-portal";
+import { SalesPortalList } from "./pages/sales-portal";
+import { InvoiceCreate } from "./pages/invoices";
 import { MaintenanceDashboard } from "./pages/maintenance-dashboard";
 import { CustomLayout } from "./components/layout";
 import { AdminRoute } from "./components/AdminRoute";
@@ -91,9 +108,9 @@ function App() {
                         name: "dashboard",
                         list: "/",
                         meta: {
-                          label: "لوحة التحكم",
-                          icon: "📊",
-                          roles: ["admin", "warehouse_manager", "branch_manager"],
+                          label: "لوحة التحكم الرئيسية",
+                          icon: <PieChartOutlined />,
+                          roles: ["admin", "warehouse_manager"],
                         },
                       },
                       {
@@ -102,7 +119,7 @@ function App() {
                         create: "/receiving/shipments/create",
                         meta: {
                           label: "الشحنات",
-                          icon: "📦",
+                          icon: <ContainerOutlined />,
                           roles: ["admin", "warehouse_manager"],
                         },
                       },
@@ -112,8 +129,8 @@ function App() {
                         show: "/warehouse/devices/show/:id",
                         edit: "/warehouse/devices/edit/:id",
                         meta: {
-                          label: "المخزن",
-                          icon: "💻",
+                          label: "بوابة المخزن",
+                          icon: <LaptopOutlined />,
                           roles: ["admin", "warehouse_manager", "branch_manager"],
                         },
                       },
@@ -122,7 +139,7 @@ function App() {
                         list: "/maintenance/dashboard",
                         meta: {
                           label: "لوحة الصيانة",
-                          icon: "🔧",
+                          icon: <SettingOutlined />,
                           roles: ["repair_manager"],
                         },
                       },
@@ -132,17 +149,17 @@ function App() {
                         show: "/maintenance/devices/show/:id",
                         meta: {
                           label: "بوابة الصيانة",
-                          icon: "🛠️",
-                          roles: ["repair_manager"],
+                          icon: <ToolOutlined />,
+                          roles: ["admin", "warehouse_manager", "repair_manager"],
                         },
                       },
                       {
                         name: "sales",
                         list: "/sales",
                         meta: {
-                          label: "المبيعات",
-                          icon: "💰",
-                          roles: ["admin", "warehouse_manager", "branch_manager"],
+                          label: "لوحة المبيعات",
+                          icon: <ShoppingCartOutlined />,
+                          roles: ["branch_manager"],
                         },
                       },
                       {
@@ -150,8 +167,8 @@ function App() {
                         list: "/sales-portal",
                         meta: {
                           label: "بوابة المبيعات",
-                          icon: "🛒",
-                          roles: ["branch_manager", "sales_staff"],
+                          icon: <ShopOutlined />,
+                          roles: ["admin", "warehouse_manager", "branch_manager", "sales_staff"],
                         },
                       },
                       {
@@ -159,7 +176,7 @@ function App() {
                         list: "/my-dashboard",
                         meta: {
                           label: "لوحتي",
-                          icon: "👤",
+                          icon: <UserOutlined />,
                           roles: ["warehouse_staff", "technician", "sales_staff"],
                         },
                       },
@@ -168,7 +185,7 @@ function App() {
                         list: "/my-tasks",
                         meta: {
                           label: "مهامي",
-                          icon: "📋",
+                          icon: <FileTextOutlined />,
                           roles: ["warehouse_staff", "technician"],
                         },
                       },
@@ -204,7 +221,7 @@ function App() {
                         show: "/companies/show/:id",
                         meta: {
                           label: "الشركات",
-                          icon: "🏢",
+                          icon: <BuildOutlined />,
                           roles: ["super_admin"],
                         },
                       },
@@ -274,7 +291,11 @@ function App() {
                         </Route>
 
                         <Route path="/sales-portal">
-                          <Route index element={<SalesPortalPage />} />
+                          <Route index element={<SalesPortalList />} />
+                        </Route>
+
+                        <Route path="/invoices">
+                          <Route path="create" element={<InvoiceCreate />} />
                         </Route>
 
                       </Route>

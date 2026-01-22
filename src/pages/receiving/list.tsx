@@ -396,6 +396,7 @@ export const ShipmentList: React.FC = () => {
                 onCancel={() => setAssignmentModalVisible(false)}
                 deviceIds={deviceToAssign}
                 onSuccess={handleAssignmentSuccess}
+                allowedRoles={["warehouse_staff"]}
             />
 
             {/* Print Modal */}

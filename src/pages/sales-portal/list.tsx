@@ -4,29 +4,27 @@ import {
     Table,
     Space,
     Tag,
-    Card,
-    Row,
-    Col,
-    Statistic,
+    Button,
+    Input,
+    Typography,
+    Tooltip,
     Spin
 } from "antd";
 import {
-    ToolOutlined,
-    WarningOutlined,
     SearchOutlined,
     UserAddOutlined,
-    UserOutlined,
-    EditOutlined
+    EditOutlined,
+    ShopOutlined,
+    FileAddOutlined
 } from "@ant-design/icons";
-import { Input, Typography, Tooltip, Button } from "antd";
+import { useNavigation } from "@refinedev/core";
 import { Device, User } from "../../types";
-import { supabaseClient } from "../../utility/supabaseClient";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { DeviceAssignmentModal } from "../warehouse/components/DeviceAssignmentModal";
 import { useList } from "@refinedev/core";
 
-
-export const MaintenanceList: React.FC = () => {
+export const SalesPortalList: React.FC = () => {
+    const { push } = useNavigation();
     const { tableProps, setFilters, tableQueryResult, current, setCurrent } = useTable<Device>({
         resource: "devices",
         syncWithLocation: false,
@@ -36,7 +34,7 @@ export const MaintenanceList: React.FC = () => {
                 {
                     field: "status",
                     operator: "in",
-                    value: ["needs_repair", "in_repair"],
+                    value: ["in_branch", "ready_for_sale"],
                 },
             ],
         },
@@ -86,6 +84,7 @@ export const MaintenanceList: React.FC = () => {
 
     // Search state
     const [searchText, setSearchText] = useState("");
+    const [allDevices, setAllDevices] = useState<Device[]>([]);
 
     // Debounced Search
     useEffect(() => {
@@ -117,9 +116,6 @@ export const MaintenanceList: React.FC = () => {
         return () => clearTimeout(timer);
     }, [searchText, setFilters]);
 
-    const [allDevices, setAllDevices] = useState<Device[]>([]);
-
-
     const devices = allDevices;
     const total = tableQueryResult?.data?.total || 0;
     const hasMore = devices.length < total;
@@ -130,65 +126,20 @@ export const MaintenanceList: React.FC = () => {
         }
     };
 
-    const [repairStatuses, setRepairStatuses] = React.useState<Record<string, string>>({});
-
-
-
-
-
-    // Fetch repair statuses for all devices
-    React.useEffect(() => {
-        const fetchRepairStatuses = async () => {
-            if (devices.length === 0) return;
-
-            const deviceIds = devices.map(d => d.id);
-            const { data } = await supabaseClient
-                .from("repairs")
-                .select("device_id, status")
-                .in("device_id", deviceIds)
-                .neq("status", "completed");
-
-            if (data) {
-                const statusMap: Record<string, string> = {};
-                data.forEach(repair => {
-                    statusMap[repair.device_id] = repair.status;
-                });
-                setRepairStatuses(statusMap);
-            }
-        };
-
-        fetchRepairStatuses();
-    }, [devices.length]); // Re-run when devices list grows
-
-    const needsRepairCount = devices.filter((d) => d.status === "needs_repair").length;
-    const inRepairCount = devices.filter((d) => d.status === "in_repair").length;
-
     const getStatusLabel = (status: string) => {
         const labels: Record<string, string> = {
-            needs_repair: "يحتاج صيانة",
-            in_repair: "في الصيانة",
-            // Repair workflow statuses
-            pending: "في انتظار الفحص",
-            diagnosing: "جاري التشخيص",
-            waiting_for_parts: "في انتظار قطع الغيار",
-            in_progress: "جاري الإصلاح",
-            testing: "في الاختبار",
-            completed: "تم الإصلاح",
+            in_branch: "في الفرع",
+            ready_for_sale: "جاهز للبيع",
+            sold: "تم البيع",
         };
         return labels[status] || status;
     };
 
     const getStatusColor = (status: string) => {
         const colors: Record<string, string> = {
-            needs_repair: "red",
-            in_repair: "volcano",
-            // Repair workflow statuses
-            pending: "orange",
-            diagnosing: "cyan",
-            waiting_for_parts: "gold",
-            in_progress: "blue",
-            testing: "purple",
-            completed: "green",
+            in_branch: "blue",
+            ready_for_sale: "green",
+            sold: "gold",
         };
         return colors[status] || "default";
     };
@@ -206,7 +157,7 @@ export const MaintenanceList: React.FC = () => {
                 borderBottom: "1px solid #f0f0f0",
             }}>
                 <div>
-                    <h2 style={{ fontSize: "20px", fontWeight: 600, margin: 0 }}>الصيانة</h2>
+                    <h2 style={{ fontSize: "20px", fontWeight: 600, margin: 0 }}>بوابة المبيعات</h2>
                 </div>
                 <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
                     <Input
@@ -237,7 +188,7 @@ export const MaintenanceList: React.FC = () => {
                 )}
             </div>
 
-            <List breadcrumb={false}>
+            <List breadcrumb={false} title={null}>
                 <div id="scrollableDiv" style={{ height: "calc(100vh - 180px)", overflow: "auto", padding: "0 24px", backgroundColor: "#fff" }}>
                     <InfiniteScroll
                         dataLength={devices.length}
@@ -271,74 +222,41 @@ export const MaintenanceList: React.FC = () => {
                                     (a.model || "").localeCompare(b.model || "")
                                 }
                             />
+                            <Table.Column
+                                dataIndex="serial_number"
+                                title="السيريال"
+                                sorter={(a: Device, b: Device) =>
+                                    (a.serial_number || "").localeCompare(b.serial_number || "")
+                                }
+                            />
 
                             <Table.Column
-                                dataIndex="status"
-                                title="حالة الصيانة"
-                                render={(_, record: Device) => {
-                                    const repairStatus = repairStatuses[record.id] || record.status;
-                                    return (
-                                        <Tag color={getStatusColor(repairStatus)}>{getStatusLabel(repairStatus)}</Tag>
-                                    );
-                                }}
-                                filters={[
-                                    { text: "يحتاج صيانة", value: "needs_repair" },
-                                    { text: "في الصيانة", value: "in_repair" },
-                                ]}
-                                onFilter={(value, record: Device) => record.status === value}
-                            />
-                            <Table.Column
                                 dataIndex="current_location"
-                                title="الموقع"
+                                title="الموقع / الفرع"
                                 responsive={["md"]}
-                            />
-                            <Table.Column
-                                dataIndex="assigned_to"
-                                title="الموظف المسؤول"
                                 render={(value, record: Device) => (
-                                    value ? (
-                                        <Space>
-                                            <Tag icon={<UserOutlined />} color="blue">
-                                                {getUserName(value)}
-                                            </Tag>
-                                            <Tooltip title="تغيير الموظف">
-                                                <Button
-                                                    size="small"
-                                                    type="text"
-                                                    icon={<EditOutlined />}
-                                                    onClick={() => handleAssignDevice(record.id)}
-                                                />
-                                            </Tooltip>
-                                        </Space>
-                                    ) : (
-                                        <Button
-                                            size="small"
-                                            type="dashed"
-                                            icon={<UserAddOutlined />}
-                                            onClick={() => handleAssignDevice(record.id)}
-                                        >
-                                            تعيين موظف
-                                        </Button>
-                                    )
+                                    <Space>
+                                        {record.status === 'in_branch' && <ShopOutlined />}
+                                        {value || "المخزن الرئيسي"}
+                                    </Space>
                                 )}
                             />
-                            <Table.Column
-                                dataIndex="updated_at"
-                                title="آخر تحديث"
-                                render={(value) =>
-                                    value ? new Date(value).toLocaleDateString("ar-EG") : "-"
-                                }
-                                sorter={(a: Device, b: Device) =>
-                                    new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime()
-                                }
-                                responsive={["lg"]}
-                            />
+
                             <Table.Column
                                 title="الإجراءات"
                                 dataIndex="actions"
                                 render={(_, record: Device) => (
                                     <Space>
-                                        <ShowButton hideText size="small" recordItemId={record.id} resource="maintenance" />
+                                        <ShowButton hideText size="small" recordItemId={record.id} resource="devices" />
+                                        <Tooltip title="إنشاء فاتورة">
+                                            <Button
+                                                size="small"
+                                                icon={<FileAddOutlined />}
+                                                onClick={() => push(`/invoices/create?device_id=${record.id}`)}
+                                            >
+                                                فاتورة
+                                            </Button>
+                                        </Tooltip>
                                     </Space>
                                 )}
                             />
@@ -352,7 +270,7 @@ export const MaintenanceList: React.FC = () => {
                 onCancel={() => setAssignmentModalVisible(false)}
                 deviceIds={deviceToAssign}
                 onSuccess={handleAssignmentSuccess}
-                allowedRoles={["technician"]}
+                allowedRoles={["sales_staff", "branch_manager"]}
             />
         </div>
     );

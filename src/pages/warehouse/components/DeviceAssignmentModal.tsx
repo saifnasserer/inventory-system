@@ -10,6 +10,7 @@ interface DeviceAssignmentModalProps {
     onCancel: () => void;
     deviceIds: string[];
     onSuccess: () => void;
+    allowedRoles?: string[];
 }
 
 export const DeviceAssignmentModal: React.FC<DeviceAssignmentModalProps> = ({
@@ -17,6 +18,7 @@ export const DeviceAssignmentModal: React.FC<DeviceAssignmentModalProps> = ({
     onCancel,
     deviceIds,
     onSuccess,
+    allowedRoles,
 }) => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
@@ -29,7 +31,7 @@ export const DeviceAssignmentModal: React.FC<DeviceAssignmentModalProps> = ({
             {
                 field: "role",
                 operator: "in",
-                value: ["warehouse_staff", "technician", "warehouse_manager", "repair_manager"],
+                value: allowedRoles || ["warehouse_staff", "technician", "warehouse_manager", "repair_manager"],
             },
         ],
         pagination: {
