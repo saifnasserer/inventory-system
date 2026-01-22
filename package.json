@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "setup": "bash setup.sh",
-    "start:prod": "serve -s dist -l 4005"
+    "start:prod": "serve -s dist -l 4005 --listen 0.0.0.0"
   },
   "dependencies": {
     "@ant-design/plots": "^2.6.8",
