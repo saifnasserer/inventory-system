@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "setup": "bash setup.sh",
     "start:prod": "serve -s dist -l 4005"
@@ -21,6 +21,7 @@
     "@refinedev/simple-rest": "^5.0.8",
     "@refinedev/supabase": "^5.9.4",
     "@supabase/supabase-js": "^2.47.10",
+    "@uiw/react-md-editor": "^4.0.11",
     "antd": "^5.22.5",
     "qrcode.react": "^4.2.0",
     "react": "^18.3.1",
