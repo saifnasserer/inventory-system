@@ -1,11 +1,9 @@
-import { useShow, useList, useInvalidate, useUpdate, useDelete } from "@refinedev/core";
+import { useShow, useList, useInvalidate, useUpdate, useDelete, useCreate } from "@refinedev/core";
 import { Show, DeleteButton, EditButton } from "@refinedev/antd";
 import { Typography, Row, Col, Card, Statistic, Table, Button, Space, Avatar, Tag, Modal, Form, Input, App, Select, Tooltip } from "antd";
 import { UserOutlined, ShopOutlined, DatabaseOutlined, TeamOutlined, PlusOutlined, EditOutlined, DeleteOutlined, LoginOutlined } from "@ant-design/icons";
 import { useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { createClient } from "@supabase/supabase-js";
-import { supabaseClient } from "../../utility/supabaseClient";
 import { useImpersonation } from "../../contexts/impersonation";
 import { Company } from "../../types";
 
@@ -21,12 +19,13 @@ export const CompanyShow = () => {
     const record = companyData?.data;
 
     const invalidate = useInvalidate();
-    const { message, notification } = App.useApp();
+    const { notification } = App.useApp();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [createLoading, setCreateLoading] = useState(false);
     const [form] = Form.useForm();
 
     const { mutate: update } = useUpdate();
+    const { mutate: createUser } = useCreate();
     const { mutate: deleteUser } = useDelete();
     const [editingUser, setEditingUser] = useState<any>(null);
 
@@ -41,8 +40,6 @@ export const CompanyShow = () => {
     };
 
     // Fetch related stats (devices, users, etc.)
-    // For now, we'll just mock or use separate useList calls
-
     // Fetch Users for this company
     const { data: usersData, isLoading: usersLoading } = useList({
         resource: "users",
@@ -75,67 +72,31 @@ export const CompanyShow = () => {
     const activeUsers = usersData?.data?.length || 0;
     const totalDevices = devicesData?.total || 0;
 
-    const handleCreateAdmin = async (values: any) => {
+    const handleCreateUser = async (values: any) => {
         setCreateLoading(true);
-        try {
-            // 1. Create temporary client to create Auth User without logging out Super Admin
-            const tempSupabase = createClient(
-                import.meta.env.VITE_SUPABASE_URL,
-                import.meta.env.VITE_SUPABASE_ANON_KEY,
-                {
-                    auth: {
-                        persistSession: false, // CRITICAL: Don't overwrite current session
-                        autoRefreshToken: false,
-                        detectSessionInUrl: false,
-                    },
-                }
-            );
-
-            // 2. Sign up the new user
-            const { data: authData, error: authError } = await tempSupabase.auth.signUp({
+        // Using auth/register for user creation as it handles hashing and company association properly
+        createUser({
+            resource: "auth/register",
+            values: {
+                fullName: values.fullName,
                 email: values.email,
                 password: values.password,
-            });
-
-            if (authError) throw authError;
-            if (!authData.user) throw new Error("No user returned from signUp");
-
-            // 3. Insert into public.users (using main client with Super Admin privileges)
-            const { error: insertError } = await supabaseClient
-                .from("users")
-                .insert({
-                    id: authData.user.id,
-                    email: values.email,
-                    full_name: values.fullName,
-                    role: values.role, // Use selected role
-                    company_id: record?.id,
-                    branch_id: null, // Company Admins might not belong to a specific branch initially
-                });
-
-            if (insertError) {
-                // cleanup auth user if insert fails? 
-                // For now, just throw, admin can manually fix or retry
-                throw insertError;
+                role: values.role,
+                companyId: record?.id,
+            },
+        }, {
+            onSuccess: () => {
+                notification.success({ message: "User created successfully" });
+                setIsModalOpen(false);
+                form.resetFields();
+                invalidate({ resource: "users", invalidates: ["list"] });
+                setCreateLoading(false);
+            },
+            onError: (error) => {
+                notification.error({ message: "Error creating user", description: error.message });
+                setCreateLoading(false);
             }
-
-            notification.success({
-                message: "Success",
-                description: "User created and confirmed successfully",
-            });
-
-            setIsModalOpen(false);
-            form.resetFields();
-            invalidate({ resource: "users", invalidates: ["list"] });
-
-        } catch (error: any) {
-            console.error("Create User Error:", error);
-            notification.error({
-                message: "Error",
-                description: error.message || "Failed to create user",
-            });
-        } finally {
-            setCreateLoading(false);
-        }
+        });
     };
 
     const handleEditUser = (values: any) => {
@@ -146,7 +107,7 @@ export const CompanyShow = () => {
             values: {
                 full_name: values.fullName,
                 role: values.role,
-                // accessing email/password on edit is complex for auth.users, skipping for now
+                password: values.password || undefined, // Only update if provided
             },
         }, {
             onSuccess: () => {
@@ -204,7 +165,7 @@ export const CompanyShow = () => {
 
             <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
                 <Col span={8}>
-                    <Card hoverable>
+                    <Card hoverable loading={devicesLoading}>
                         <Statistic
                             title="Total Devices"
                             value={totalDevices}
@@ -213,7 +174,7 @@ export const CompanyShow = () => {
                     </Card>
                 </Col>
                 <Col span={8}>
-                    <Card hoverable>
+                    <Card hoverable loading={usersLoading}>
                         <Statistic
                             title="Active Users"
                             value={activeUsers}
@@ -273,10 +234,10 @@ export const CompanyShow = () => {
                             render: (value) => <Tag color={value === 'admin' ? 'blue' : 'default'}>{value}</Tag>
                         },
                         {
-                            title: "Status",
-                            dataIndex: "status",
-                            key: "status",
-                            render: (value) => <Tag>{value || "Active"}</Tag>
+                            title: "Created At",
+                            dataIndex: "created_at",
+                            key: "created_at",
+                            render: (value) => value ? new Date(value).toLocaleDateString() : "-"
                         },
                         {
                             title: "Actions",
@@ -311,7 +272,7 @@ export const CompanyShow = () => {
                 <Form
                     form={form}
                     layout="vertical"
-                    onFinish={editingUser ? handleEditUser : handleCreateAdmin}
+                    onFinish={editingUser ? handleEditUser : handleCreateUser}
                     initialValues={{ role: "admin" }}
                 >
                     <Form.Item
@@ -322,7 +283,6 @@ export const CompanyShow = () => {
                         <Input placeholder="John Doe" />
                     </Form.Item>
 
-                    {/* Disable Email/Password editing for now */}
                     <Form.Item
                         name="email"
                         label="Email"
@@ -334,15 +294,13 @@ export const CompanyShow = () => {
                         <Input placeholder="user@company.com" disabled={!!editingUser} />
                     </Form.Item>
 
-                    {!editingUser && (
-                        <Form.Item
-                            name="password"
-                            label="Password"
-                            rules={[{ required: true, message: "Please enter password" }]}
-                        >
-                            <Input.Password />
-                        </Form.Item>
-                    )}
+                    <Form.Item
+                        name="password"
+                        label={editingUser ? "New Password (leave empty to keep current)" : "Password"}
+                        rules={[{ required: !editingUser, message: "Please enter password" }]}
+                    >
+                        <Input.Password />
+                    </Form.Item>
 
                     <Form.Item
                         name="role"

@@ -1,71 +1,296 @@
 import { DataProvider } from "@refinedev/core";
-import { dataProvider as supabaseDataProvider } from "@refinedev/supabase";
-import { supabaseClient } from "./supabaseClient";
+import { stringify } from "query-string";
 
-const baseDataProvider = supabaseDataProvider(supabaseClient);
+const API_URL = import.meta.env.VITE_API_URL || '';
 
-// Helper to get impersonated ID from storage (since we can't easily access Context inside a plain function without hooks)
-// Alternatively, we could create a custom hook usage, but Refine expects a static DataProvider object usually.
+// Helper to get stored token
+const getToken = (): string | null => {
+    return localStorage.getItem('auth_token');
+};
+
+// Helper to make authenticated requests
+const fetchWithAuth = async (url: string, options: RequestInit = {}): Promise<Response> => {
+    const token = getToken();
+    const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+        ...(token && { 'Authorization': `Bearer ${token}` }),
+        ...options.headers,
+    };
+
+    return fetch(url, {
+        ...options,
+        headers,
+    });
+};
+
+// Helper to get impersonated company ID
 const getImpersonationId = () => localStorage.getItem("impersonated_company_id");
 
 export const customDataProvider: DataProvider = {
-    ...baseDataProvider,
-    getList: async ({ resource, filters, ...params }) => {
-        const companyId = getImpersonationId();
+    getList: async ({ resource, pagination, filters, sorters }) => {
+        const { current = 1, pageSize = 10 } = pagination ?? {};
 
-        // Don't filter the companies list itself, and don't filter if no company selected
-        if (resource !== "companies" && companyId) {
-            const currentFilters = filters || [];
-            // Add company_id filter
-            // Note: We use 'override' behavior or just push it. Refine usually ANDs them.
-            return baseDataProvider.getList({
-                resource,
-                filters: [
-                    ...currentFilters,
-                    {
-                        field: "company_id",
-                        operator: "eq",
-                        value: companyId,
-                    },
-                ],
-                ...params,
-            });
+        const queryFilters: Record<string, any> = {};
+
+        // Handle filters
+        const handleFilter = (filter: any) => {
+            if (filter.operator === "or" || filter.operator === "and") {
+                filter.value.forEach(handleFilter);
+                return;
+            }
+
+            if (filter.operator === "eq" || filter.operator === "in") {
+                queryFilters[filter.field] = filter.value;
+            } else if (filter.operator === "contains") {
+                queryFilters.search = filter.value;
+            }
+        };
+
+        if (filters) {
+            filters.forEach(handleFilter);
         }
 
-        return baseDataProvider.getList({ resource, filters, ...params });
+        // Handle sorting
+        let sort = 'created_at';
+        let order = 'desc';
+        if (sorters && sorters.length > 0) {
+            sort = sorters[0].field;
+            order = sorters[0].order;
+        }
+
+        // Add company impersonation filter if applicable
+        const companyId = getImpersonationId();
+        if (resource !== "companies" && companyId) {
+            queryFilters.company_id = companyId;
+        }
+
+        const query = {
+            page: current,
+            limit: pageSize,
+            sort,
+            order,
+            ...queryFilters,
+        };
+
+        const url = `${API_URL}/api/${resource}?${stringify(query)}`;
+
+        try {
+            const response = await fetchWithAuth(url);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            return {
+                data: data.data || [],
+                total: data.pagination?.total || 0,
+            };
+        } catch (error) {
+            console.error(`Error fetching ${resource}:`, error);
+            throw error;
+        }
     },
 
-    // Implement custom method for calling PostgreSQL functions
-    custom: async ({ url, method: _method, payload }) => {
+    getOne: async ({ resource, id }) => {
+        const url = `${API_URL}/api/${resource}/${id}`;
+
         try {
-            // Extract function name from URL
-            // Handle both full URLs and simple paths
-            let functionName: string;
-            if (url.includes('/rpc/')) {
-                const parts = url.split('/rpc/');
-                functionName = parts[parts.length - 1];
-            } else {
-                functionName = url;
+            const response = await fetchWithAuth(url);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            // Call the PostgreSQL function using Supabase RPC
-            const { data, error } = await supabaseClient.rpc(functionName, payload || {});
+            const result = await response.json();
 
-            if (error) {
-                throw error;
+            return {
+                data: result.data,
+            };
+        } catch (error) {
+            console.error(`Error fetching ${resource} ${id}:`, error);
+            throw error;
+        }
+    },
+
+    create: async ({ resource, variables }) => {
+        const url = `${API_URL}/api/${resource}`;
+
+        try {
+            const response = await fetchWithAuth(url, {
+                method: 'POST',
+                body: JSON.stringify(variables),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
             }
+
+            const result = await response.json();
+
+            return {
+                data: result.data,
+            };
+        } catch (error) {
+            console.error(`Error creating ${resource}:`, error);
+            throw error;
+        }
+    },
+
+    update: async ({ resource, id, variables }) => {
+        const url = `${API_URL}/api/${resource}/${id}`;
+
+        try {
+            const response = await fetchWithAuth(url, {
+                method: 'PUT',
+                body: JSON.stringify(variables),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+
+            return {
+                data: result.data,
+            };
+        } catch (error) {
+            console.error(`Error updating ${resource} ${id}:`, error);
+            throw error;
+        }
+    },
+
+    createMany: async ({ resource, variables }) => {
+        try {
+            const data = await Promise.all(
+                variables.map(async (variable) => {
+                    const url = `${API_URL}/api/${resource}`;
+                    const response = await fetchWithAuth(url, {
+                        method: 'POST',
+                        body: JSON.stringify(variable),
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    return result.data;
+                })
+            );
 
             return {
                 data,
             };
         } catch (error) {
-            console.error("Custom RPC error:", error);
+            console.error(`Error creating multiple ${resource}:`, error);
             throw error;
         }
     },
 
-    // We should ideally wrap getOne, create, update etc. too to enforce context, 
-    // but creation is handled by Triggers now (users company). 
-    // For Super Admin "Creating on behalf of company", we might need more logic or just let them select it if the form allows.
-    // For now, Reading (getList) is the primary requirement for "seeing data".
+    deleteOne: async ({ resource, id }) => {
+        const url = `${API_URL}/api/${resource}/${id}`;
+
+        try {
+            const response = await fetchWithAuth(url, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+            }
+
+            return {
+                data: { id } as any,
+            };
+        } catch (error) {
+            console.error(`Error deleting ${resource} ${id}:`, error);
+            throw error;
+        }
+    },
+
+    getMany: async ({ resource, ids }) => {
+        try {
+            const data = await Promise.all(
+                ids.map(async (id) => {
+                    const url = `${API_URL}/api/${resource}/${id}`;
+                    const response = await fetchWithAuth(url);
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    return result.data;
+                })
+            );
+
+            return {
+                data,
+            };
+        } catch (error) {
+            console.error(`Error fetching multiple ${resource}:`, error);
+            throw error;
+        }
+    },
+
+    updateMany: async ({ resource, ids, variables }) => {
+        try {
+            const data = await Promise.all(
+                ids.map(async (id) => {
+                    const url = `${API_URL}/api/${resource}/${id}`;
+                    const response = await fetchWithAuth(url, {
+                        method: 'PUT',
+                        body: JSON.stringify(variables),
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    return result.data;
+                })
+            );
+
+            return {
+                data,
+            };
+        } catch (error) {
+            console.error(`Error updating multiple ${resource}:`, error);
+            throw error;
+        }
+    },
+
+    deleteMany: async ({ resource, ids }) => {
+        try {
+            await Promise.all(
+                ids.map(async (id) => {
+                    const url = `${API_URL}/api/${resource}/${id}`;
+                    const response = await fetchWithAuth(url, {
+                        method: 'DELETE',
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                })
+            );
+
+            return {
+                data: ids.map(id => ({ id })) as any,
+            };
+        } catch (error) {
+            console.error(`Error deleting multiple ${resource}:`, error);
+            throw error;
+        }
+    },
+
+    getApiUrl: () => API_URL,
 };

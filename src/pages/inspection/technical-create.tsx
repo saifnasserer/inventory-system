@@ -1,24 +1,30 @@
 import { Create, useForm } from "@refinedev/antd";
-import { Form, Input, InputNumber, Radio, Switch } from "antd";
-import { supabaseClient } from "../../utility/supabaseClient";
+import { Form, Input, InputNumber, Radio, Switch, App } from "antd";
 import { useParams, useNavigate } from "react-router";
+import { useUpdate, useCreate, useGetIdentity } from "@refinedev/core";
 
 export const TechnicalInspectionCreate: React.FC = () => {
     const { deviceId } = useParams();
     const navigate = useNavigate();
-    const { formProps, saveButtonProps } = useForm({
-        resource: "technical_inspections",
+    const { message } = App.useApp();
+    const { data: identity } = useGetIdentity<any>();
+
+    const { formProps, saveButtonProps, formLoading } = useForm({
+        resource: "technical-inspections",
         action: "create",
+        redirect: false,
     });
+
+    const { mutateAsync: updateDevice } = useUpdate();
+    const { mutateAsync: createInspection } = useCreate();
 
     const handleFinish = async (values: any) => {
         try {
-            const { data: userData } = await supabaseClient.auth.getUser();
-
-            // Update device with technical specs
-            await supabaseClient
-                .from("devices")
-                .update({
+            // 1. Update device with technical specs
+            await updateDevice({
+                resource: "devices",
+                id: deviceId as string,
+                values: {
                     model: values.model,
                     serial_number: values.serial_number,
                     manufacturer: values.manufacturer,
@@ -28,15 +34,16 @@ export const TechnicalInspectionCreate: React.FC = () => {
                     ram_count: values.ram_count,
                     storage_size: values.storage_size,
                     storage_count: values.storage_count,
-                })
-                .eq("id", deviceId);
+                    status: values.ready_for_sale ? "ready_for_sale" : "needs_repair",
+                },
+            });
 
-            // Create technical inspection
-            const { error } = await supabaseClient
-                .from("technical_inspections")
-                .insert({
+            // 2. Create technical inspection
+            await createInspection({
+                resource: "technical-inspections",
+                values: {
                     device_id: deviceId,
-                    inspector_id: userData?.user?.id,
+                    inspector_id: identity?.id,
                     stress_test_passed: values.stress_test_passed,
                     max_temperature: values.max_temperature,
                     performance_score: values.performance_score,
@@ -44,28 +51,19 @@ export const TechnicalInspectionCreate: React.FC = () => {
                     needs_repair: values.needs_repair,
                     repair_notes: values.repair_notes,
                     notes: values.notes,
-                });
+                },
+            });
 
-            if (error) throw error;
-
-            // Update device status based on decision
-            const newStatus = values.ready_for_sale
-                ? "ready_for_sale"
-                : "needs_repair";
-
-            await supabaseClient
-                .from("devices")
-                .update({ status: newStatus })
-                .eq("id", deviceId);
-
+            message.success("تم تسجيل الفحص الفني بنجاح");
             navigate("/warehouse/devices");
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error creating technical inspection:", error);
+            message.error(error.message || "حدث خطأ أثناء تسجيل الفحص");
         }
     };
 
     return (
-        <Create saveButtonProps={saveButtonProps} title="الفحص الفني للجهاز">
+        <Create saveButtonProps={saveButtonProps} title="الفحص الفني للجهاز" isLoading={formLoading}>
             <Form {...formProps} layout="vertical" onFinish={handleFinish}>
                 <h3>مواصفات الجهاز</h3>
 

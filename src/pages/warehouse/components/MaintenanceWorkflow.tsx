@@ -11,77 +11,60 @@ import {
     MedicineBoxOutlined
 } from "@ant-design/icons";
 import { Device, Repair, SparePartsRequest } from "../../../types";
-import { supabaseClient } from "../../../utility/supabaseClient";
 
 const { Text, Title, Paragraph } = Typography;
 const { TextArea } = Input;
 
 interface MaintenanceWorkflowProps {
-    device: Device;
+    device: Array<Device> | Device; // Handle potential array if useList is used
 }
 
-export const MaintenanceWorkflow: React.FC<MaintenanceWorkflowProps> = ({ device }) => {
+export const MaintenanceWorkflow: React.FC<{ device: Device }> = ({ device }) => {
     const [currentStep, setCurrentStep] = useState(0);
     const [repairRecord, setRepairRecord] = useState<Repair | null>(null);
-    const [loading, setLoading] = useState(true);
     const [isPartsModalVisible, setIsPartsModalVisible] = useState(false);
 
-    // Fetch or create repair record
+    const { data: listData, isLoading: listLoading, refetch } = useList<Repair>({
+        resource: "repairs",
+        filters: [
+            { field: "device_id", operator: "eq", value: device.id },
+            { field: "status", operator: "ne", value: "completed" }
+        ],
+        pagination: { pageSize: 1, mode: "client" },
+        queryOptions: {
+            enabled: !!device.id
+        }
+    });
+
+    const { mutate: createRepair, isLoading: creatingRepair } = useCreate<Repair>();
+    const { mutate: updateRepair, isLoading: updatingRepair } = useUpdate<Repair>();
+
+    const loading = listLoading || creatingRepair || updatingRepair;
+
     useEffect(() => {
-        const fetchRepair = async () => {
-            try {
-                // Find active repair for this device
-                const { data, error } = await supabaseClient
-                    .from("repairs")
-                    .select("*")
-                    .eq("device_id", device.id)
-                    .neq("status", "completed")
-                    .maybeSingle(); // Use maybeSingle instead of single to avoid error when no record
-
-                if (error) {
-                    console.error("Error fetching repair:", error);
-                }
-
-                if (data) {
-                    console.log("Found existing repair:", data);
-                    setRepairRecord(data);
-                    mapStatusToStep(data.status);
-                } else {
-                    console.log("No existing repair found, creating new one");
-                    // Create new repair record if none exists (auto-start)
-                    const { data: newRepair, error: createError } = await supabaseClient
-                        .from("repairs")
-                        .insert({
-                            device_id: device.id,
-                            status: "pending",
-                            issue_description: device.notes || "Device sent for maintenance",
-                            status_history: [{
-                                status: "pending",
-                                started_at: new Date().toISOString()
-                            }]
-                        })
-                        .select()
-                        .single();
-
-                    if (createError) {
-                        console.error("Error creating repair:", createError);
+        if (!listLoading && listData) {
+            const existingRepair = listData.data[0];
+            if (existingRepair) {
+                setRepairRecord(existingRepair);
+                mapStatusToStep(existingRepair.status);
+            } else if (!creatingRepair && !repairRecord) {
+                // Auto-create repair if none exists
+                createRepair({
+                    resource: "repairs",
+                    values: {
+                        device_id: device.id,
+                        status: "pending",
+                        issue_description: device.notes || "Device sent for maintenance",
                     }
-
-                    if (!createError && newRepair) {
-                        console.log("Created new repair:", newRepair);
-                        setRepairRecord(newRepair);
+                }, {
+                    onSuccess: (data) => {
+                        setRepairRecord(data.data as any);
                         setCurrentStep(0);
                     }
-                }
-            } catch (err) {
-                console.error("Error fetching/creating repair:", err);
-            } finally {
-                setLoading(false);
+                });
             }
-        };
-
-        if (device.id) fetchRepair();
-    }, [device.id]);
+        }
+    }, [listData, listLoading, device.id]);
 
     const mapStatusToStep = (status: string) => {
         const statusMap: Record<string, number> = {
@@ -98,42 +81,22 @@ export const MaintenanceWorkflow: React.FC<MaintenanceWorkflowProps> = ({ device
     const updateStatus = async (newStatus: string) => {
         if (!repairRecord) return;
 
-        setLoading(true);
-
-        // Get current status_history or initialize empty array
-        const currentHistory = repairRecord.status_history || [];
-
-        // Close the previous status entry by setting ended_at
-        const updatedHistory = currentHistory.map((entry: any) => {
-            if (!entry.ended_at && entry.status === repairRecord.status) {
-                return { ...entry, ended_at: new Date().toISOString() };
-            }
-            return entry;
-        });
-
-        // Add new status entry with started_at
-        updatedHistory.push({
-            status: newStatus,
-            started_at: new Date().toISOString(),
-        });
-
-        const { error } = await supabaseClient
-            .from("repairs")
-            .update({
+        updateRepair({
+            resource: "repairs",
+            id: repairRecord.id,
+            values: {
                 status: newStatus,
-                status_history: updatedHistory,
-                updated_at: new Date().toISOString()
-            })
-            .eq("id", repairRecord.id);
-
-        if (!error) {
-            setRepairRecord({ ...repairRecord, status: newStatus, status_history: updatedHistory } as any);
-            mapStatusToStep(newStatus);
-            message.success("تم تحديث حالة الصيانة");
-        } else {
-            message.error("فشل تحديث الحالة");
-        }
-        setLoading(false);
+            }
+        }, {
+            onSuccess: (data) => {
+                setRepairRecord(data.data as any);
+                mapStatusToStep(newStatus);
+                message.success("تم تحديث حالة الصيانة");
+            },
+            onError: () => {
+                message.error("فشل تحديث الحالة");
+            }
+        });
     };
 
     const steps = [
@@ -196,6 +159,8 @@ export const MaintenanceWorkflow: React.FC<MaintenanceWorkflowProps> = ({ device
 };
 
 const CurrentStepContent = ({ step, onNext, onOpenParts, device }: { step: number; onNext: (status: string) => void; onOpenParts: () => void; device: Device }) => {
+    const { mutate: updateDevice } = useUpdate();
+
     switch (step) {
         case 0:
             return (
@@ -272,15 +237,19 @@ const CurrentStepContent = ({ step, onNext, onOpenParts, device }: { step: numbe
                             await onNext("completed");
 
                             // Update device status to ready_for_sale
-                            const { error } = await supabaseClient
-                                .from("devices")
-                                .update({ status: "ready_for_sale", current_location: "warehouse" })
-                                .eq("id", device.id);
-
-                            if (!error) {
-                                message.success("تم إنهاء الصيانة بنجاح! الجهاز جاهز للبيع");
-                                setTimeout(() => window.location.href = "/warehouse/devices", 1500);
-                            }
+                            updateDevice({
+                                resource: "devices",
+                                id: device.id,
+                                values: {
+                                    status: "ready_for_sale",
+                                    current_location: "warehouse"
+                                }
+                            }, {
+                                onSuccess: () => {
+                                    message.success("تم إنهاء الصيانة بنجاح! الجهاز جاهز للبيع");
+                                    setTimeout(() => window.location.href = "/warehouse/devices", 1500);
+                                }
+                            });
                         }}
                         style={{ background: "#52c41a", borderColor: "#52c41a" }}
                     >
@@ -295,7 +264,7 @@ const CurrentStepContent = ({ step, onNext, onOpenParts, device }: { step: numbe
 
 const SparePartsList = ({ repairId }: { repairId: string }) => {
     const { data, isLoading } = useList<SparePartsRequest>({
-        resource: "spare_parts_requests", // Make sure this resource is in App.tsx
+        resource: "spare-parts-requests",
         filters: [{ field: "repair_id", operator: "eq", value: repairId }]
     });
 
@@ -339,22 +308,17 @@ const PartsRequestModal = ({ visible, onClose, repairId }: any) => {
     const [reason, setReason] = useState("");
     const [qty, setQty] = useState(1);
 
-    // Get current user (simple fix: assume logged in user, logic handled by backend mostly or context)
-    // For now we omit requested_by or let backend handle default if possible, or pass it in.
-
     const handleSubmit = () => {
         if (!partName) return message.error("اسم القطعة مطلوب");
 
         createRequest({
-            resource: "spare_parts_requests",
+            resource: "spare-parts-requests",
             values: {
                 repair_id: repairId,
                 part_name: partName,
                 notes: reason,
                 quantity: qty,
                 status: "pending",
-                // requested_by column relies on RLS auth.uid() default or manual from Identity.
-                // We'll trust the backend/RLS or add it if needed. For now simplest approach.
             },
             successNotification: () => ({ message: "تم إرسال الطلب بنجاح", type: "success" })
         }, {

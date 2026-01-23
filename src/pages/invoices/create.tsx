@@ -60,7 +60,7 @@ export const InvoiceCreate: React.FC = () => {
             <div style={{ display: "flex", gap: "24px", flexDirection: "column" }}>
                 {/* Device Info Card */}
                 {device && (
-                    <Card title="تفاصيل الجهاز" bordered={false} style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
+                    <Card title="تفاصيل الجهاز" variant="borderless" style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
                         <Descriptions column={2}>
                             <Descriptions.Item label="رقم الأصل"><Text strong>{device.asset_id}</Text></Descriptions.Item>
                             <Descriptions.Item label="الموديل">{device.model}</Descriptions.Item>
@@ -81,7 +81,7 @@ export const InvoiceCreate: React.FC = () => {
                         <Input />
                     </Form.Item>
 
-                    <Card title="بيانات العميل والفاتورة" bordered={false} style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
+                    <Card title="بيانات العميل والفاتورة" variant="borderless" style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
                         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
                             <Form.Item
                                 label="اسم العميل"
@@ -127,7 +127,7 @@ export const InvoiceCreate: React.FC = () => {
                                 <InputNumber
                                     style={{ width: "100%" }}
                                     formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                    parser={value => Number(value!.replace(/\$\s?|(,*)/g, '')) || 0}
+                                    parser={value => (value ? value.replace(/\$\s?|(,*)/g, '') : '') as any}
                                     min={0}
                                     placeholder="0.00"
                                 />
@@ -140,7 +140,7 @@ export const InvoiceCreate: React.FC = () => {
                                 <InputNumber
                                     style={{ width: "100%" }}
                                     formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                    parser={value => Number(value!.replace(/\$\s?|(,*)/g, '')) || 0}
+                                    parser={value => (value ? value.replace(/\$\s?|(,*)/g, '') : '') as any}
                                     min={0}
                                     placeholder="0.00"
                                 />

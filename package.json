@@ -4,23 +4,23 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "vite",
+    "dev:backend": "cd backend && npm run dev",
     "build": "vite build",
     "preview": "vite preview",
     "setup": "bash setup.sh",
-    "start:prod": "serve -s dist -l tcp://0.0.0.0:4005"
+    "start": "npm run build && cd backend && npm run start"
   },
   "dependencies": {
     "@ant-design/plots": "^2.6.8",
-    "@prisma/client": "^7.2.0",
+    "@prisma/client": "^6.1.0",
     "@refinedev/antd": "^5.43.1",
     "@refinedev/core": "^4.54.2",
     "@refinedev/devtools": "^1.2.9",
     "@refinedev/kbar": "^1.3.13",
     "@refinedev/react-router-v6": "^4.5.8",
     "@refinedev/simple-rest": "^5.0.8",
-    "@refinedev/supabase": "^5.9.4",
-    "@supabase/supabase-js": "^2.47.10",
     "@uiw/react-md-editor": "^4.0.11",
     "antd": "^5.22.5",
     "qrcode.react": "^4.2.0",
@@ -38,11 +38,12 @@
     "@typescript-eslint/eslint-plugin": "^8.18.1",
     "@typescript-eslint/parser": "^8.18.1",
     "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.2.1",
     "dotenv": "^17.2.3",
     "eslint": "^9.17.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
-    "prisma": "^7.2.0",
+    "prisma": "^6.1.0",
     "typescript": "^5.7.2",
     "vite": "^6.0.3"
   }

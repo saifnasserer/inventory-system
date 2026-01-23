@@ -21,7 +21,7 @@ export const DeviceEdit: React.FC = () => {
     return (
         <Edit saveButtonProps={saveButtonProps}>
             <Form {...formProps} layout="vertical">
-                <Card title="المعلومات الأساسية" style={{ marginBottom: 16 }}>
+                <Card variant="outlined" title="المعلومات الأساسية" style={{ marginBottom: 16 }}>
                     <Row gutter={16}>
                         <Col xs={24} md={12}>
                             <Form.Item
@@ -92,7 +92,7 @@ export const DeviceEdit: React.FC = () => {
                     </Row>
                 </Card>
 
-                <Card title="المواصفات الفنية" style={{ marginBottom: 16 }}>
+                <Card variant="outlined" title="المواصفات الفنية" style={{ marginBottom: 16 }}>
                     <Row gutter={16}>
                         <Col xs={24} md={12}>
                             <Form.Item
@@ -112,7 +112,7 @@ export const DeviceEdit: React.FC = () => {
                         </Col>
                     </Row>
 
-                    <Card type="inner" title="الرامات (RAM)" style={{ marginBottom: 16 }}>
+                    <Card variant="outlined" type="inner" title="الرامات (RAM)" style={{ marginBottom: 16 }}>
                         <Row gutter={16}>
                             <Col xs={24} md={8}>
                                 <Form.Item
@@ -152,7 +152,7 @@ export const DeviceEdit: React.FC = () => {
                         </Row>
                     </Card>
 
-                    <Card type="inner" title="التخزين (Storage)">
+                    <Card variant="outlined" type="inner" title="التخزين (Storage)">
                         <Row gutter={16}>
                             <Col xs={24} md={8}>
                                 <Form.Item

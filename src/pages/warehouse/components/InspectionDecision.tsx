@@ -11,13 +11,21 @@ interface InspectionDecisionProps {
     onFinish: (values: any) => void;
     onBack: () => void;
     loading?: boolean;
+    formRef?: React.MutableRefObject<any>;
 }
 
 export const InspectionDecision: React.FC<InspectionDecisionProps> = ({
     physicalData,
     onFinish,
+    formRef,
 }) => {
     const [form] = Form.useForm();
+
+    React.useEffect(() => {
+        if (formRef) {
+            formRef.current = form;
+        }
+    }, [form, formRef]);
     const [decision, setDecision] = React.useState<string>();
 
     return (

@@ -20,11 +20,12 @@ export const accessControlProvider: AccessControlProvider = {
         const permissions = await authProvider.getPermissions?.();
         const role = (permissions as any)?.role;
 
-        console.log(`🔐 Access Control Check: resource="${resource}", action="${action}", role="${role}"`);
+        // Silenced verbose logging for cleaner console
+        // console.log(`🔐 Access Control Check: resource="${resource}", action="${action}", role="${role}"`);
 
         // If no role, deny access
         if (!role) {
-            console.log('❌ No role assigned');
+            // console.log('❌ No role assigned');
             return { can: false, reason: "No role assigned" };
         }
 
@@ -56,8 +57,8 @@ export const accessControlProvider: AccessControlProvider = {
             };
         }
 
-        const accessDecision = hasAccess ? '✅ Access granted' : '❌ Access denied';
-        console.log(`${accessDecision}: resource="${resource}", role="${role}", allowedRoles=[${allowedRoles.join(', ')}]`);
+        // const accessDecision = hasAccess ? '✅ Access granted' : '❌ Access denied';
+        // console.log(`${accessDecision}: resource="${resource}", role="${role}", allowedRoles=[${allowedRoles.join(', ')}]`);
 
         return {
             can: hasAccess,

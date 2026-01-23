@@ -95,10 +95,10 @@ export const DeviceShow: React.FC = () => {
             key: "overview",
             label: "نظرة عامة",
             children: (
-                <Card>
+                <Card variant="outlined">
                     <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
                         <Col xs={24} md={8}>
-                            <Card>
+                            <Card variant="outlined">
                                 <Statistic
                                     title="الحالة"
                                     value={device ? getStatusLabel(device.status) : "-"}
@@ -109,7 +109,7 @@ export const DeviceShow: React.FC = () => {
                             </Card>
                         </Col>
                         <Col xs={24} md={8}>
-                            <Card>
+                            <Card variant="outlined">
                                 <Statistic
                                     title="الموقع الحالي"
                                     value={device?.current_location || "-"}
@@ -117,12 +117,12 @@ export const DeviceShow: React.FC = () => {
                             </Card>
                         </Col>
                         <Col xs={24} md={8}>
-                            <Card>
+                            <Card variant="outlined">
                                 <Statistic
                                     title="تاريخ الإضافة"
                                     value={
                                         device?.created_at
-                                            ? new Date(device.created_at).toLocaleDateString("ar-EG")
+                                            ? new Date(device.created_at).toLocaleString("ar-EG")
                                             : "-"
                                     }
                                 />
@@ -164,7 +164,7 @@ export const DeviceShow: React.FC = () => {
             key: "specs",
             label: "المواصفات",
             children: (
-                <Card>
+                <Card variant="outlined">
                     <Descriptions bordered column={{ xs: 1, sm: 2 }}>
                         <Descriptions.Item label="المعالج (CPU)">
                             {device?.cpu_model || "-"}
@@ -205,7 +205,7 @@ export const DeviceShow: React.FC = () => {
             key: "history",
             label: "السجل",
             children: (
-                <Card>
+                <Card variant="outlined">
                     <Timeline
                         items={[
                             {

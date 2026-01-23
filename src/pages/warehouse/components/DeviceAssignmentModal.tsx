@@ -93,7 +93,7 @@ export const DeviceAssignmentModal: React.FC<DeviceAssignmentModalProps> = ({
             okText="تعيين"
             cancelText="إلغاء"
             width={500}
-            destroyOnClose
+            destroyOnHidden
         >
             <Form form={form} layout="vertical">
                 <Form.Item

@@ -142,12 +142,12 @@ export const DiagnosticReportViewer: React.FC<DiagnosticReportViewerProps> = ({
     const latestReport = reports[0];
 
     if (isLoading) {
-        return <Card loading />;
+        return <Card variant="outlined" loading />;
     }
 
     if (!latestReport) {
         return (
-            <Card>
+            <Card variant="outlined">
                 <Empty
                     description="لا يوجد تقارير تشخيص لهذا الجهاز"
                     image={Empty.PRESENTED_IMAGE_SIMPLE}
@@ -171,7 +171,7 @@ export const DiagnosticReportViewer: React.FC<DiagnosticReportViewerProps> = ({
             {/* Summary Cards */}
             <Row gutter={[16, 16]}>
                 <Col xs={24} sm={12} md={6}>
-                    <Card>
+                    <Card variant="outlined">
                         <Statistic
                             title="نتيجة الفحص"
                             value={latestReport.score_percent}
@@ -199,7 +199,7 @@ export const DiagnosticReportViewer: React.FC<DiagnosticReportViewerProps> = ({
                     </Card>
                 </Col>
                 <Col xs={24} sm={12} md={6}>
-                    <Card>
+                    <Card variant="outlined">
                         <Statistic
                             title="التقييم الخارجي"
                             value={latestReport.cosmetic_grade || "-"}
@@ -218,7 +218,7 @@ export const DiagnosticReportViewer: React.FC<DiagnosticReportViewerProps> = ({
                     </Card>
                 </Col>
                 <Col xs={24} sm={12} md={6}>
-                    <Card>
+                    <Card variant="outlined">
                         <Statistic
                             title="الاختبارات"
                             value={`${latestReport.passed_tests}/${latestReport.total_tests}`}
@@ -231,7 +231,7 @@ export const DiagnosticReportViewer: React.FC<DiagnosticReportViewerProps> = ({
                     </Card>
                 </Col>
                 <Col xs={24} sm={12} md={6}>
-                    <Card>
+                    <Card variant="outlined">
                         <Statistic
                             title="مدة الفحص"
                             value={formatDuration(latestReport.scan_duration_seconds || 0)}
@@ -261,7 +261,7 @@ export const DiagnosticReportViewer: React.FC<DiagnosticReportViewerProps> = ({
             )}
 
             {/* Thermal Summary */}
-            <Card title="درجات الحرارة" size="small">
+            <Card variant="outlined" title="درجات الحرارة" size="small">
                 <Row gutter={16}>
                     <Col span={12}>
                         <Descriptions
@@ -318,7 +318,7 @@ export const DiagnosticReportViewer: React.FC<DiagnosticReportViewerProps> = ({
             </Card>
 
             {/* Test Results */}
-            <Card title="نتائج الاختبارات" size="small">
+            <Card variant="outlined" title="نتائج الاختبارات" size="small">
                 <Table
                     dataSource={testResults}
                     rowKey="id"
@@ -378,14 +378,14 @@ export const DiagnosticReportViewer: React.FC<DiagnosticReportViewerProps> = ({
                                 </pre>
                             ) : null,
                         rowExpandable: (record) =>
-                            record.details && Object.keys(record.details).length > 0,
+                            !!(record.details && Object.keys(record.details).length > 0),
                     }}
                 />
             </Card>
 
             {/* Hardware Specs */}
             {hwSpecs && (
-                <Card title="المواصفات التفصيلية" size="small">
+                <Card variant="outlined" title="المواصفات التفصيلية" size="small">
                     <Collapse
                         items={[
                             {
@@ -508,7 +508,7 @@ export const DiagnosticReportViewer: React.FC<DiagnosticReportViewerProps> = ({
 
             {/* Report History */}
             {reports.length > 1 && (
-                <Card title="سجل التقارير السابقة" size="small">
+                <Card variant="outlined" title="سجل التقارير السابقة" size="small">
                     <Table
                         dataSource={reports.slice(1)}
                         rowKey="id"
@@ -544,7 +544,7 @@ export const DiagnosticReportViewer: React.FC<DiagnosticReportViewerProps> = ({
             )}
 
             {/* Report Metadata */}
-            <Card size="small">
+            <Card variant="outlined" size="small">
                 <Descriptions size="small" column={3}>
                     <Descriptions.Item label="Report ID">
                         <Text code style={{ fontSize: 10 }}>

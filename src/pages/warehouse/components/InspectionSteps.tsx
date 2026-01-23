@@ -16,6 +16,7 @@ export const InspectionSteps: React.FC<InspectionStepsProps> = ({ device }) => {
     const [currentStep, setCurrentStep] = useState(0);
     const [physicalData, setPhysicalData] = useState<any>(null);
     const [hardwareData, setHardwareData] = useState<any>(null);
+    const formRef = React.useRef<any>(null);
 
     const { mutate: updateDevice, isLoading } = useUpdate();
 
@@ -55,7 +56,11 @@ export const InspectionSteps: React.FC<InspectionStepsProps> = ({ device }) => {
     };
 
     // Form submit triggers
-    const triggerSubmit = () => document.querySelector<HTMLFormElement>('form')?.requestSubmit();
+    const triggerSubmit = () => {
+        if (formRef.current) {
+            formRef.current.submit();
+        }
+    };
 
     const steps = [
         { title: "الظاهري" },
@@ -82,6 +87,7 @@ export const InspectionSteps: React.FC<InspectionStepsProps> = ({ device }) => {
                         <PhysicalConditionForm
                             onFinish={handlePhysicalFinish}
                             initialValues={physicalData}
+                            formRef={formRef}
                         />
                     </div>
                 )}
@@ -93,6 +99,7 @@ export const InspectionSteps: React.FC<InspectionStepsProps> = ({ device }) => {
                             onFinish={handleHardwareFinish}
                             onBack={() => setCurrentStep(0)}
                             initialValues={hardwareData}
+                            formRef={formRef}
                         />
                     </div>
                 )}
@@ -105,6 +112,7 @@ export const InspectionSteps: React.FC<InspectionStepsProps> = ({ device }) => {
                             onFinish={handleDecisionFinish}
                             onBack={() => setCurrentStep(1)}
                             loading={isLoading}
+                            formRef={formRef}
                         />
                     </div>
                 )}

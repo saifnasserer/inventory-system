@@ -1,249 +1,208 @@
+import { useCreate, useList } from "@refinedev/core";
 import { useForm } from "@refinedev/antd";
-import { Form, Input, InputNumber, DatePicker, Button, Card, Row, Col, Typography, Divider, Space, message, Modal } from "antd";
+import { Modal, Form, Input, InputNumber, DatePicker, Button, Card, Row, Col, Typography, Divider, Space, App, Select } from "antd";
 import { useNavigate } from "react-router";
 import {
     BarcodeOutlined,
     UserOutlined,
-    PhoneOutlined,
-    CalendarOutlined,
     NumberOutlined,
-    FileTextOutlined,
     PlusCircleOutlined,
-    ArrowRightOutlined
+    FolderAddOutlined,
+    PlusOutlined
 } from "@ant-design/icons";
-import { supabaseClient } from "../../utility/supabaseClient";
 import dayjs from "dayjs";
+import { useState } from "react";
+import { VendorCreateModal } from "./components/VendorCreateModal";
 
 const { Title, Text } = Typography;
 
 export const ShipmentCreate: React.FC = () => {
     const navigate = useNavigate();
-    const { formProps, onFinish, formLoading } = useForm({
+    const { formProps, formLoading } = useForm({
         resource: "shipments",
         action: "create",
         redirect: "list",
-        warnWhenUnsavedChanges: false,
+    });
+    const [form] = Form.useForm(); // Added this line
+
+    const { mutateAsync: createShipment } = useCreate();
+    const { mutate: createVendor, isLoading } = useCreate(); // Added this line
+    const { message } = App.useApp();
+    const [vendorModalVisible, setVendorModalVisible] = useState(false);
+
+    const { data: vendorsData } = useList({
+        resource: "vendors",
     });
 
     const handleFinish = async (values: any) => {
         try {
-            // Create shipment
-            const { data: shipmentData, error: shipmentError } = await supabaseClient
-                .from("shipments")
-                .insert({
-                    shipment_code: values.shipment_code,
-                    supplier_name: values.supplier_name,
-                    supplier_contact: values.supplier_contact,
+            await createShipment({
+                resource: "shipments",
+                values: {
+                    shipment_name: values.shipment_name,
+                    vendor_id: values.vendor_id,
                     delivery_date: values.delivery_date.format("YYYY-MM-DD"),
                     device_count: values.device_count,
                     notes: values.notes,
-                })
-                .select()
-                .single();
+                },
+            });
 
-            if (shipmentError) throw shipmentError;
-
-            // Generate Asset IDs for devices
-            const devices = [];
-            for (let i = 1; i <= values.device_count; i++) {
-                const assetId = `${values.shipment_code}-${String(i).padStart(4, "0")}`;
-                devices.push({
-                    asset_id: assetId,
-                    shipment_id: shipmentData.id,
-                    status: "received",
-                    current_location: "warehouse",
-                });
-            }
-
-            // Insert devices
-            const { error: devicesError } = await supabaseClient
-                .from("devices")
-                .insert(devices);
-
-            if (devicesError) throw devicesError;
-
-            // Show success message and navigate
-            message.success(`تم إضافة الشحنة بنجاح! تم إنشاء ${values.device_count} سجلات.`);
+            message.success(`تم إضافة الشحنة بنجاح! وجاري إنشاء ${values.device_count} سجل جهاز.`);
             navigate("/receiving/shipments");
 
         } catch (error: any) {
-            console.error("Error creating shipment:", error);
-            if (error.code === "23505") {
-                message.error("رمز الشحنة موجود بالفعل. الرجاء استخدام رمز آخر.");
-            } else if (error.code === "42501") {
-                message.error("ليس لديك صلاحية لإضافة شحنات. الرجاء التحقق من الصلاحيات.");
+            console.error('Error creating shipment:', error);
+            if (error?.statusCode === 401 || error?.statusCode === 403 || error?.message === 'Invalid or expired token') {
+                message.error("انتهت صلاحية الجلسة أو غير مصرح لك. يرجى تسجيل الدخول مرة أخرى.");
+                navigate('/login'); // Redirect to login page
             } else {
-                message.error("حدث خطأ أثناء إنشاء الشحنة");
+                message.error(error.message || "حدث خطأ أثناء إنشاء الشحنة");
             }
         }
     };
 
     return (
-        <div style={{ maxWidth: 800, margin: "24px auto", padding: "0 24px" }}>
-            <div style={{ marginBottom: 32, textAlign: "center" }}>
-                <Title level={2}>استلام شحنة جديدة</Title>
-                <Text type="secondary">أدخل بيانات الشحنة والأجهزة المستلمة لإنشاء سجل جديد</Text>
+        <div style={{ maxWidth: 700, margin: "40px auto", padding: "0 24px" }}>
+            <div style={{ marginBottom: 40, textAlign: "center" }}>
+                <Title level={2} style={{ margin: 0 }}>إنشاء شحنة جديدة</Title>
+                <Text type="secondary">أكمل الخطوات الثلاث التالية لتعريف الشحنة وجدولة الأجهزة</Text>
             </div>
 
-            <Card
-                bordered={false}
-                style={{
-                    borderRadius: "16px",
-                    boxShadow: "0 4px 20px rgba(0,0,0,0.03)"
+            <Form
+                {...formProps}
+                layout="vertical"
+                onFinish={handleFinish}
+                initialValues={{
+                    delivery_date: dayjs()
                 }}
             >
-                <Form {...formProps} layout="vertical" onFinish={handleFinish} initialValues={{
-                    delivery_date: dayjs(),
-                    shipment_code: `SHP-${Date.now().toString().slice(-6)}`
-                }}>
-                    <div style={{ marginBottom: 24 }}>
-                        <Title level={5} style={{ marginBottom: 16, color: "#1890ff" }}>
-                            <BarcodeOutlined /> بيانات الشحنة الأساسية
-                        </Title>
-                        <Row gutter={24}>
-                            <Col xs={24} md={12}>
-                                <Form.Item
-                                    label="رمز الشحنة"
-                                    name="shipment_code"
-                                    rules={[{ required: true, message: "مطلوب" }]}
-                                >
-                                    <Input
-                                        size="large"
-                                        prefix={<BarcodeOutlined style={{ color: "#bfbfbf" }} />}
-                                        placeholder="SHP-2024-XXX"
-                                        style={{ borderRadius: "8px" }}
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col xs={24} md={12}>
-                                <Form.Item
-                                    label="تاريخ الاستلام"
-                                    name="delivery_date"
-                                    rules={[{ required: true, message: "مطلوب" }]}
-                                >
-                                    <DatePicker
-                                        size="large"
-                                        style={{ width: "100%", borderRadius: "8px" }}
-                                        format="YYYY-MM-DD"
-                                    />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                    </div>
-
-                    <Divider dashed />
-
-                    <div style={{ marginBottom: 24 }}>
-                        <Title level={5} style={{ marginBottom: 16, color: "#1890ff" }}>
-                            <UserOutlined /> بيانات المورد
-                        </Title>
-                        <Row gutter={24}>
-                            <Col xs={24} md={12}>
-                                <Form.Item
-                                    label="اسم المورد"
-                                    name="supplier_name"
-                                    rules={[{ required: true, message: "مطلوب" }]}
-                                >
-                                    <Input
-                                        size="large"
-                                        prefix={<UserOutlined style={{ color: "#bfbfbf" }} />}
-                                        placeholder="اسم الشركة أو المورد"
-                                        style={{ borderRadius: "8px" }}
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col xs={24} md={12}>
-                                <Form.Item label="معلومات الاتصال" name="supplier_contact">
-                                    <Input
-                                        size="large"
-                                        prefix={<PhoneOutlined style={{ color: "#bfbfbf" }} />}
-                                        placeholder="رقم الهاتف"
-                                        style={{ borderRadius: "8px" }}
-                                    />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                    </div>
-
-                    <Divider dashed />
-
-                    <div style={{ marginBottom: 24 }}>
-                        <Title level={5} style={{ marginBottom: 16, color: "#1890ff" }}>
-                            <NumberOutlined /> تفاصيل المخزون
-                        </Title>
-                        <Row gutter={24}>
-                            <Col xs={24}>
-                                <div style={{
-                                    backgroundColor: "#f9f9f9",
-                                    padding: "20px",
-                                    borderRadius: "12px",
-                                    border: "1px solid #f0f0f0"
-                                }}>
-                                    <Form.Item
-                                        label="عدد الأجهزة في الشحنة"
-                                        name="device_count"
-                                        rules={[
-                                            { required: true, message: "الرجاء إدخال العدد" },
-                                            { type: "number", min: 1, message: "يجب أن يكون 1 على الأقل" },
-                                        ]}
-                                        extra="سيتم إنشاء سجلات أجهزة تلقائية بهذا العدد"
-                                        style={{ marginBottom: 0 }}
-                                    >
-                                        <InputNumber
-                                            size="large"
-                                            min={1}
-                                            style={{ width: "100%", borderRadius: "8px" }}
-                                            placeholder="0"
-                                        />
-                                    </Form.Item>
-                                </div>
-                            </Col>
-                        </Row>
-                    </div>
-
-                    <Form.Item label="ملاحظات إضافية" name="notes" style={{ marginTop: 24 }}>
-                        <Input.TextArea
-                            rows={4}
-                            placeholder="أي تفاصيل أخرى حول الشحنة..."
-                            style={{ borderRadius: "12px", padding: "12px" }}
+                {/* SECTION 1: Shipment Name */}
+                <Card
+                    title={<Space><FolderAddOutlined /> الخطوة 1: اسم الشحنة (المجلد)</Space>}
+                    variant="borderless"
+                    style={{ borderRadius: 16, marginBottom: 24, boxShadow: "0 2px 10px rgba(0,0,0,0.02)" }}
+                >
+                    <Form.Item
+                        name="shipment_name"
+                        label="اسم الشحنة / المجلد"
+                        rules={[{ required: true, message: "يرجى إدخال اسم الشحنة" }]}
+                        extra="سيتم استخدام أول حرف من هذا الاسم لتعريف الأجهزة إذا لم يتم اختيار مورد"
+                    >
+                        <Input
+                            size="large"
+                            placeholder="مثال: شحنة لابتوبات - يناير"
+                            style={{ borderRadius: 8 }}
                         />
                     </Form.Item>
+                    <Form.Item
+                        name="delivery_date"
+                        label="تاريخ وصول الشحنة"
+                        rules={[{ required: true, message: "يرجى تحديد التاريخ" }]}
+                    >
+                        <DatePicker size="large" style={{ width: "100%", borderRadius: 8 }} />
+                    </Form.Item>
+                </Card>
 
-                    <div style={{
-                        marginTop: 40,
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        gap: "12px",
-                        borderTop: "1px solid #f0f0f0",
-                        paddingTop: "24px"
-                    }}>
-                        <Button
+                {/* SECTION 2: Vendor Selection */}
+                <Card
+                    title={<Space><UserOutlined /> الخطوة 2: تحديد المورد (اختياري)</Space>}
+                    variant="borderless"
+                    style={{ borderRadius: 16, marginBottom: 24, boxShadow: "0 2px 10px rgba(0,0,0,0.02)" }}
+                >
+                    <Form.Item name="vendor_id" label="اختر المورد">
+                        <Select
                             size="large"
-                            onClick={() => navigate("/receiving/shipments")}
-                            style={{ borderRadius: "50px", height: "48px", minWidth: "100px" }}
-                        >
-                            إلغاء
-                        </Button>
-                        <Button
-                            type="primary"
-                            htmlType="submit"
+                            placeholder="اختر المورد..."
+                            allowClear
+                            style={{ borderRadius: 8 }}
+                            popupRender={(menu) => (
+                                <>
+                                    {menu}
+                                    <Divider style={{ margin: '8px 0' }} />
+                                    <Space style={{ padding: '0 8px 4px' }}>
+                                        <Button
+                                            type="text"
+                                            icon={<PlusOutlined />}
+                                            onClick={() => setVendorModalVisible(true)}
+                                            style={{ width: '100%', textAlign: 'left' }}
+                                        >
+                                            إضافة مورد جديد
+                                        </Button>
+                                    </Space>
+                                </>
+                            )}
+                            options={vendorsData?.data?.map((vendor: any) => ({
+                                label: vendor.name,
+                                value: vendor.id,
+                            }))}
+                        />
+                    </Form.Item>
+                </Card>
+
+                {/* SECTION 3: Device Count */}
+                <Card
+                    title={<Space><NumberOutlined /> الخطوة 3: عدد الأجهزة</Space>}
+                    variant="borderless"
+                    style={{ borderRadius: 16, marginBottom: 32, boxShadow: "0 2px 10px rgba(0,0,0,0.02)" }}
+                >
+                    <Form.Item
+                        name="device_count"
+                        label="إجمالي عدد الأجهزة المستلمة"
+                        rules={[
+                            { required: true, message: "يرجى إدخال عدد الأجهزة" },
+                            { type: "number", min: 1, message: "يجب أن يكون جهاز واحد على الأقل" }
+                        ]}
+                    >
+                        <InputNumber
                             size="large"
-                            icon={<PlusCircleOutlined />}
-                            loading={formLoading}
-                            style={{
-                                borderRadius: "50px",
-                                height: "48px",
-                                minWidth: "160px",
-                                background: "linear-gradient(90deg, #1890ff 0%, #096dd9 100%)",
-                                border: "none",
-                                boxShadow: "0 4px 14px rgba(24, 144, 255, 0.3)"
-                            }}
-                        >
-                            إضافة الشحنة
-                        </Button>
-                    </div>
-                </Form>
-            </Card>
+                            style={{ width: "100%", borderRadius: 8 }}
+                            placeholder="0"
+                        />
+                    </Form.Item>
+                    <Text type="secondary">
+                        <PlusCircleOutlined /> سيتم إنشاء معرفات (Asset IDs) تلقائية وفريدة لجميع الأجهزة بناءً على مدخلاتك.
+                    </Text>
+                </Card>
+
+                <Form.Item name="notes" label="ملاحظات إضافية">
+                    <Input.TextArea rows={3} style={{ borderRadius: 12 }} />
+                </Form.Item>
+
+                <div style={{ display: "flex", justifyContent: "flex-end", gap: 12 }}>
+                    <Button
+                        size="large"
+                        onClick={() => navigate("/receiving/shipments")}
+                        style={{ borderRadius: 50, paddingInline: 24 }}
+                    >
+                        إلغاء
+                    </Button>
+                    <Button
+                        type="primary"
+                        htmlType="submit"
+                        size="large"
+                        loading={formLoading}
+                        style={{
+                            borderRadius: 50,
+                            paddingInline: 32,
+                            background: "linear-gradient(90deg, #1890ff 0%, #001529 100%)",
+                            border: "none"
+                        }}
+                    >
+                        إنشاء الشحنة والأجهزة
+                    </Button>
+                </div>
+            </Form>
+
+            <VendorCreateModal
+                visible={vendorModalVisible}
+                onCancel={() => setVendorModalVisible(false)}
+                onSuccess={(vendor) => {
+                    setVendorModalVisible(false);
+                    // Force refresh or manually append? useList handles auto refresh usually.
+                    // But we can manually select it:
+                    formProps.form?.setFieldsValue({ vendor_id: vendor.id });
+                }}
+            />
         </div>
     );
 };

@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  mysql-local:
+    image: mysql:8.0
+    container_name: inventory-mysql-local
+    environment:
+      MYSQL_ROOT_PASSWORD: local123
+      MYSQL_DATABASE: inventory_system
+      MYSQL_USER: inventory_user
+      MYSQL_PASSWORD: inventory_pass
+    ports:
+      - "3307:3306"  # Use 3307 to avoid conflicts
+    volumes:
+      - mysql_local_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+
+volumes:
+  mysql_local_data:

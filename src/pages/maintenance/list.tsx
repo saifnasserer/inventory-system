@@ -19,8 +19,7 @@ import {
     EditOutlined
 } from "@ant-design/icons";
 import { Input, Typography, Tooltip, Button } from "antd";
-import { Device, User } from "../../types";
-import { supabaseClient } from "../../utility/supabaseClient";
+import { Device, User, Repair } from "../../types";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { DeviceAssignmentModal } from "../warehouse/components/DeviceAssignmentModal";
 import { useList } from "@refinedev/core";
@@ -90,28 +89,32 @@ export const MaintenanceList: React.FC = () => {
     // Debounced Search
     useEffect(() => {
         const timer = setTimeout(() => {
-            setFilters([
-                {
-                    operator: "or",
-                    value: [
-                        {
-                            field: "asset_id",
-                            operator: "contains",
-                            value: searchText,
-                        },
-                        {
-                            field: "serial_number",
-                            operator: "contains",
-                            value: searchText,
-                        },
-                        {
-                            field: "model",
-                            operator: "contains",
-                            value: searchText,
-                        },
-                    ],
-                },
-            ], "merge");
+            if (searchText) {
+                setFilters([
+                    {
+                        operator: "or",
+                        value: [
+                            {
+                                field: "asset_id",
+                                operator: "contains",
+                                value: searchText,
+                            },
+                            {
+                                field: "serial_number",
+                                operator: "contains",
+                                value: searchText,
+                            },
+                            {
+                                field: "model",
+                                operator: "contains",
+                                value: searchText,
+                            },
+                        ],
+                    },
+                ], "merge");
+            } else {
+                setFilters([], "merge");
+            }
         }, 500);
 
         return () => clearTimeout(timer);
@@ -137,28 +140,35 @@ export const MaintenanceList: React.FC = () => {
 
 
     // Fetch repair statuses for all devices
-    React.useEffect(() => {
-        const fetchRepairStatuses = async () => {
-            if (devices.length === 0) return;
-
-            const deviceIds = devices.map(d => d.id);
-            const { data } = await supabaseClient
-                .from("repairs")
-                .select("device_id, status")
-                .in("device_id", deviceIds)
-                .neq("status", "completed");
-
-            if (data) {
-                const statusMap: Record<string, string> = {};
-                data.forEach(repair => {
-                    statusMap[repair.device_id] = repair.status;
-                });
-                setRepairStatuses(statusMap);
+    const { data: repairsData } = useList<Repair>({
+        resource: "repairs",
+        filters: [
+            {
+                field: "device_id",
+                operator: "in",
+                value: devices.map(d => d.id),
+            },
+            {
+                field: "status",
+                operator: "ne",
+                value: "completed",
             }
-        };
+        ],
+        pagination: { mode: "off" },
+        queryOptions: {
+            enabled: devices.length > 0,
+        }
+    });
 
-        fetchRepairStatuses();
-    }, [devices.length]); // Re-run when devices list grows
+    React.useEffect(() => {
+        if (repairsData?.data) {
+            const statusMap: Record<string, string> = {};
+            repairsData.data.forEach(repair => {
+                statusMap[repair.device_id] = repair.status;
+            });
+            setRepairStatuses(statusMap);
+        }
+    }, [repairsData]);
 
     const needsRepairCount = devices.filter((d) => d.status === "needs_repair").length;
     const inRepairCount = devices.filter((d) => d.status === "in_repair").length;

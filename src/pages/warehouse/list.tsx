@@ -73,28 +73,32 @@ export const DeviceList: React.FC = () => {
     // Debounced Search
     useEffect(() => {
         const timer = setTimeout(() => {
-            setFilters([
-                {
-                    operator: "or",
-                    value: [
-                        {
-                            field: "asset_id",
-                            operator: "contains",
-                            value: searchText,
-                        },
-                        {
-                            field: "serial_number",
-                            operator: "contains",
-                            value: searchText,
-                        },
-                        {
-                            field: "model",
-                            operator: "contains",
-                            value: searchText,
-                        },
-                    ],
-                },
-            ], "merge");
+            if (searchText) {
+                setFilters([
+                    {
+                        operator: "or",
+                        value: [
+                            {
+                                field: "asset_id",
+                                operator: "contains",
+                                value: searchText,
+                            },
+                            {
+                                field: "serial_number",
+                                operator: "contains",
+                                value: searchText,
+                            },
+                            {
+                                field: "model",
+                                operator: "contains",
+                                value: searchText,
+                            },
+                        ],
+                    },
+                ], "merge");
+            } else {
+                setFilters([], "merge");
+            }
         }, 500);
 
         return () => clearTimeout(timer);

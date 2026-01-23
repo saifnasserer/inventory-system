@@ -1,39 +1,43 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider   = "prisma-client-js"
+  output     = "../backend/src/generated/prisma"
+  engineType = "binary"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model announcements {
-  id               String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id               String     @id @default(cuid())
   title            String     @db.VarChar(255)
   content          String
-  created_by       String?    @db.Uuid
+  created_by       String?
   target_role      user_role?
-  target_branch_id String?    @db.Uuid
+  target_branch_id String?
   is_active        Boolean?   @default(true)
   priority         String?    @default("normal") @db.VarChar(20)
-  expires_at       DateTime?  @db.Timestamptz(6)
-  created_at       DateTime?  @default(now()) @db.Timestamptz(6)
-  updated_at       DateTime?  @default(now()) @db.Timestamptz(6)
+  expires_at       DateTime?  @db.DateTime(0)
+  created_at       DateTime?  @default(now()) @db.DateTime(0)
+  updated_at       DateTime?  @default(now()) @db.DateTime(0)
   users            users?     @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   branches         branches?  @relation(fields: [target_branch_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([is_active], map: "idx_announcements_active")
+  @@index([created_by], map: "announcements_created_by_fkey")
+  @@index([target_branch_id], map: "announcements_target_branch_id_fkey")
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model branches {
-  id                                           String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                                           String          @id @default(cuid())
   name                                         String          @db.VarChar(255)
   location                                     String?         @db.VarChar(500)
-  manager_id                                   String?         @db.Uuid
-  created_at                                   DateTime?       @default(now()) @db.Timestamptz(6)
-  updated_at                                   DateTime?       @default(now()) @db.Timestamptz(6)
+  manager_id                                   String?
+  created_at                                   DateTime?       @default(now()) @db.DateTime(0)
+  updated_at                                   DateTime?       @default(now()) @db.DateTime(0)
   announcements                                announcements[]
   users_branches_manager_idTousers             users?          @relation("branches_manager_idTousers", fields: [manager_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   devices                                      devices[]
@@ -41,86 +45,104 @@ model branches {
   transfers_transfers_from_branch_idTobranches transfers[]     @relation("transfers_from_branch_idTobranches")
   transfers_transfers_to_branch_idTobranches   transfers[]     @relation("transfers_to_branch_idTobranches")
   users_users_branch_idTobranches              users[]         @relation("users_branch_idTobranches")
+
+  @@index([manager_id], map: "branches_manager_id_fkey")
+}
+
+model vendors {
+  id             String      @id @default(cuid())
+  name           String      @db.VarChar(255)
+  contact_person String?     @db.VarChar(255)
+  contact_phone  String?     @db.VarChar(50)
+  contact_email  String?     @db.VarChar(255)
+  category       String?     @db.VarChar(100)
+  created_at     DateTime?   @default(now()) @db.DateTime(0)
+  updated_at     DateTime?   @default(now()) @db.DateTime(0)
+  company_id     String      @default("default-company-id")
+  shipments      shipments[]
+  companies      companies   @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model companies {
-  id                String      @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  id                String      @id @default(cuid())
   name              String
   status            String      @default("active")
   subscription_plan String?     @default("free")
-  created_at        DateTime    @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
-  updated_at        DateTime    @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  created_at        DateTime    @default(now()) @db.DateTime(0)
+  updated_at        DateTime    @default(now()) @db.DateTime(0)
   devices           devices[]
   shipments         shipments[]
   users             users[]
+  vendors           vendors[]
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model devices {
-  id                      String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  asset_id                String                  @unique @db.VarChar(100)
-  shipment_id             String?                 @db.Uuid
-  status                  device_status?          @default(received)
-  model                   String?                 @db.VarChar(255)
-  serial_number           String?                 @db.VarChar(255)
-  manufacturer            String?                 @db.VarChar(255)
-  ram_size                Int?
-  ram_count               Int?
-  ram_models              String[]
-  storage_size            Int?
-  storage_count           Int?
-  storage_types           String[]
-  storage_models          String[]
-  gpu_model               String?                 @db.VarChar(255)
-  cpu_model               String?                 @db.VarChar(255)
-  current_location        String?                 @db.VarChar(50)
-  branch_id               String?                 @db.Uuid
-  assigned_to             String?                 @db.Uuid
-  created_at              DateTime?               @default(now()) @db.Timestamptz(6)
-  updated_at              DateTime?               @default(now()) @db.Timestamptz(6)
-  company_id              String                  @db.Uuid
-  // Agent diagnostic fields
-  latest_report_id        String?                 @db.Uuid
-  last_diagnostic_at      DateTime?               @db.Timestamptz(6)
-  diagnostic_score        Int?
-  bios_serial             String?                 @db.VarChar(100)
-  os                      String?                 @db.VarChar(100)
-  battery_health_percent  Decimal?                @db.Decimal(5, 2)
-  storage_health_percent  Decimal?                @db.Decimal(5, 2)
-  // Relations
-  users                   users?                  @relation(fields: [assigned_to], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  branches                branches?               @relation(fields: [branch_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  companies               companies               @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  shipments               shipments?              @relation(fields: [shipment_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  latest_report           diagnostic_reports?     @relation("devices_latest_report", fields: [latest_report_id], references: [id])
-  invoices                invoices[]
-  physical_inspections    physical_inspections[]
-  repairs                 repairs[]
-  technical_inspections   technical_inspections[]
-  transfers               transfers[]
-  device_assignments      device_assignments[]
-  diagnostic_reports      diagnostic_reports[]
-  hardware_specs          device_hardware_specs[]
+  id                     String                  @id @default(cuid())
+  asset_id               String                  @unique @db.VarChar(100)
+  shipment_id            String?
+  status                 device_status?          @default(received)
+  model                  String?                 @db.VarChar(255)
+  serial_number          String?                 @db.VarChar(255)
+  manufacturer           String?                 @db.VarChar(255)
+  ram_size               Int?
+  ram_count              Int?
+  ram_models             Json?
+  storage_size           Int?
+  storage_count          Int?
+  storage_types          Json?
+  storage_models         Json?
+  gpu_model              String?                 @db.VarChar(255)
+  cpu_model              String?                 @db.VarChar(255)
+  current_location       String?                 @db.VarChar(50)
+  branch_id              String?
+  assigned_to            String?
+  created_at             DateTime?               @default(now()) @db.DateTime(0)
+  updated_at             DateTime?               @default(now()) @db.DateTime(0)
+  company_id             String
+  latest_report_id       String?
+  last_diagnostic_at     DateTime?               @db.DateTime(0)
+  diagnostic_score       Int?
+  bios_serial            String?                 @db.VarChar(100)
+  os                     String?                 @db.VarChar(100)
+  battery_health_percent Decimal?                @db.Decimal(5, 2)
+  storage_health_percent Decimal?                @db.Decimal(5, 2)
+  device_assignments     device_assignments[]
+  hardware_specs         device_hardware_specs[]
+  users                  users?                  @relation(fields: [assigned_to], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  branches               branches?               @relation(fields: [branch_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  companies              companies               @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  latest_report          diagnostic_reports?     @relation("devices_latest_report", fields: [latest_report_id], references: [id])
+  shipments              shipments?              @relation(fields: [shipment_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  diagnostic_reports     diagnostic_reports[]
+  invoices               invoices[]
+  physical_inspections   physical_inspections[]
+  repairs                repairs[]
+  technical_inspections  technical_inspections[]
+  transfers              transfers[]
 
   @@index([asset_id], map: "idx_devices_asset_id")
   @@index([assigned_to], map: "idx_devices_assigned")
   @@index([branch_id], map: "idx_devices_branch")
   @@index([status], map: "idx_devices_status")
+  @@index([company_id], map: "devices_company_id_fkey")
+  @@index([latest_report_id], map: "devices_latest_report_id_fkey")
+  @@index([shipment_id], map: "devices_shipment_id_fkey")
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model device_assignments {
-  id                                          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  device_id                                   String    @db.Uuid
-  assigned_to                                 String    @db.Uuid
-  assigned_by                                 String    @db.Uuid
-  assigned_at                                 DateTime? @default(now()) @db.Timestamptz(6)
-  completed_at                                DateTime? @db.Timestamptz(6)
+  id                                          String    @id @default(cuid())
+  device_id                                   String
+  assigned_to                                 String
+  assigned_by                                 String
+  assigned_at                                 DateTime? @default(now()) @db.DateTime(0)
+  completed_at                                DateTime? @db.DateTime(0)
   status                                      String    @default("active") @db.VarChar(50)
   notes                                       String?
-  created_at                                  DateTime? @default(now()) @db.Timestamptz(6)
-  updated_at                                  DateTime? @default(now()) @db.Timestamptz(6)
+  created_at                                  DateTime? @default(now()) @db.DateTime(0)
+  updated_at                                  DateTime? @default(now()) @db.DateTime(0)
   users_device_assignments_assigned_byTousers users     @relation("device_assignments_assigned_byTousers", fields: [assigned_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   users_device_assignments_assigned_toTousers users     @relation("device_assignments_assigned_toTousers", fields: [assigned_to], references: [id], onDelete: NoAction, onUpdate: NoAction)
   devices                                     devices   @relation(fields: [device_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
@@ -129,61 +151,67 @@ model device_assignments {
   @@index([assigned_to], map: "idx_device_assignments_assigned_to")
   @@index([status], map: "idx_device_assignments_status")
   @@index([assigned_at(sort: Desc)], map: "idx_device_assignments_assigned_at")
+  @@index([assigned_by], map: "device_assignments_assigned_by_fkey")
 }
 
-/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
-
 model invoices {
-  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id               String    @id @default(cuid())
   invoice_number   String    @unique @db.VarChar(100)
-  device_id        String?   @db.Uuid
-  branch_id        String?   @db.Uuid
+  device_id        String?
+  branch_id        String?
   customer_name    String    @db.VarChar(255)
   customer_contact String?   @db.VarChar(255)
   customer_email   String?   @db.VarChar(255)
   sale_price       Decimal   @db.Decimal(10, 2)
   tax_amount       Decimal?  @db.Decimal(10, 2)
   total_amount     Decimal   @db.Decimal(10, 2)
-  sold_by          String?   @db.Uuid
-  sale_date        DateTime? @default(now()) @db.Timestamptz(6)
+  sold_by          String?
+  sale_date        DateTime? @default(now()) @db.DateTime(0)
   notes            String?
-  created_at       DateTime? @default(now()) @db.Timestamptz(6)
-  updated_at       DateTime? @default(now()) @db.Timestamptz(6)
+  created_at       DateTime? @default(now()) @db.DateTime(0)
+  updated_at       DateTime? @default(now()) @db.DateTime(0)
   branches         branches? @relation(fields: [branch_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   devices          devices?  @relation(fields: [device_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   users            users?    @relation(fields: [sold_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([branch_id], map: "invoices_branch_id_fkey")
+  @@index([device_id], map: "invoices_device_id_fkey")
+  @@index([sold_by], map: "invoices_sold_by_fkey")
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model physical_inspections {
-  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  device_id         String?   @db.Uuid
-  inspector_id      String?   @db.Uuid
+  id                String    @id @default(cuid())
+  device_id         String?
+  inspector_id      String?
   has_scratches     Boolean?  @default(false)
   has_cracks        Boolean?  @default(false)
   has_dents         Boolean?  @default(false)
   overall_condition String?   @db.VarChar(50)
   notes             String?
-  photos            String[]
-  inspected_at      DateTime? @default(now()) @db.Timestamptz(6)
-  created_at        DateTime? @default(now()) @db.Timestamptz(6)
+  photos            Json?
+  inspected_at      DateTime? @default(now()) @db.DateTime(0)
+  created_at        DateTime? @default(now()) @db.DateTime(0)
   devices           devices?  @relation(fields: [device_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   users             users?    @relation(fields: [inspector_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([device_id], map: "physical_inspections_device_id_fkey")
+  @@index([inspector_id], map: "physical_inspections_inspector_id_fkey")
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model repairs {
-  id                               String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  device_id                        String?                @db.Uuid
-  assigned_to                      String?                @db.Uuid
-  assigned_by                      String?                @db.Uuid
+  id                               String                 @id @default(cuid())
+  device_id                        String?
+  assigned_to                      String?
+  assigned_by                      String?
   issue_description                String?
-  work_log                         String[]
+  work_log                         Json?
   status                           String?                @default("pending") @db.VarChar(50)
-  assigned_at                      DateTime?              @db.Timestamptz(6)
-  completed_at                     DateTime?              @db.Timestamptz(6)
-  created_at                       DateTime?              @default(now()) @db.Timestamptz(6)
-  updated_at                       DateTime?              @default(now()) @db.Timestamptz(6)
+  assigned_at                      DateTime?              @db.DateTime(0)
+  completed_at                     DateTime?              @db.DateTime(0)
+  created_at                       DateTime?              @default(now()) @db.DateTime(0)
+  updated_at                       DateTime?              @default(now()) @db.DateTime(0)
   users_repairs_assigned_byTousers users?                 @relation("repairs_assigned_byTousers", fields: [assigned_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   users_repairs_assigned_toTousers users?                 @relation("repairs_assigned_toTousers", fields: [assigned_to], references: [id], onDelete: NoAction, onUpdate: NoAction)
   devices                          devices?               @relation(fields: [device_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -191,50 +219,63 @@ model repairs {
 
   @@index([assigned_to], map: "idx_repairs_assigned")
   @@index([status], map: "idx_repairs_status")
+  @@index([assigned_by], map: "repairs_assigned_by_fkey")
+  @@index([device_id], map: "repairs_device_id_fkey")
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model shipments {
-  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id               String    @id @default(cuid())
   shipment_code    String    @unique @db.VarChar(100)
-  supplier_name    String    @db.VarChar(255)
+  supplier_name    String?   @db.VarChar(255)
   supplier_contact String?   @db.VarChar(255)
   delivery_date    DateTime  @db.Date
   device_count     Int
   notes            String?
-  created_by       String?   @db.Uuid
-  created_at       DateTime? @default(now()) @db.Timestamptz(6)
-  updated_at       DateTime? @default(now()) @db.Timestamptz(6)
-  company_id       String    @db.Uuid
+  created_by       String?
+  created_at       DateTime? @default(now()) @db.DateTime(0)
+  updated_at       DateTime? @default(now()) @db.DateTime(0)
+  company_id       String
+  shipment_name    String?   @db.VarChar(255)
+  vendor_id        String?
   devices          devices[]
   companies        companies @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   users            users?    @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  vendors          vendors?  @relation(fields: [vendor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([company_id], map: "shipments_company_id_fkey")
+  @@index([created_by], map: "shipments_created_by_fkey")
+  @@index([vendor_id], map: "shipments_vendor_id_fkey")
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model spare_parts_requests {
-  id                                             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  repair_id                                      String?   @db.Uuid
-  requested_by                                   String?   @db.Uuid
+  id                                             String    @id @default(cuid())
+  repair_id                                      String?
+  requested_by                                   String?
   part_name                                      String    @db.VarChar(255)
   part_description                               String?
   quantity                                       Int?      @default(1)
   status                                         String?   @default("pending") @db.VarChar(50)
-  approved_by                                    String?   @db.Uuid
-  approved_at                                    DateTime? @db.Timestamptz(6)
+  approved_by                                    String?
+  approved_at                                    DateTime? @db.DateTime(0)
   notes                                          String?
-  created_at                                     DateTime? @default(now()) @db.Timestamptz(6)
-  updated_at                                     DateTime? @default(now()) @db.Timestamptz(6)
+  created_at                                     DateTime? @default(now()) @db.DateTime(0)
+  updated_at                                     DateTime? @default(now()) @db.DateTime(0)
   users_spare_parts_requests_approved_byTousers  users?    @relation("spare_parts_requests_approved_byTousers", fields: [approved_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   repairs                                        repairs?  @relation(fields: [repair_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   users_spare_parts_requests_requested_byTousers users?    @relation("spare_parts_requests_requested_byTousers", fields: [requested_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([approved_by], map: "spare_parts_requests_approved_by_fkey")
+  @@index([repair_id], map: "spare_parts_requests_repair_id_fkey")
+  @@index([requested_by], map: "spare_parts_requests_requested_by_fkey")
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model technical_inspections {
-  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  device_id          String?   @db.Uuid
-  inspector_id       String?   @db.Uuid
+  id                 String    @id @default(cuid())
+  device_id          String?
+  inspector_id       String?
   stress_test_passed Boolean?
   max_temperature    Decimal?  @db.Decimal(5, 2)
   performance_score  Int?
@@ -242,49 +283,60 @@ model technical_inspections {
   needs_repair       Boolean?  @default(false)
   repair_notes       String?
   notes              String?
-  inspected_at       DateTime? @default(now()) @db.Timestamptz(6)
-  created_at         DateTime? @default(now()) @db.Timestamptz(6)
+  inspected_at       DateTime? @default(now()) @db.DateTime(0)
+  created_at         DateTime? @default(now()) @db.DateTime(0)
   devices            devices?  @relation(fields: [device_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   users              users?    @relation(fields: [inspector_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([device_id], map: "technical_inspections_device_id_fkey")
+  @@index([inspector_id], map: "technical_inspections_inspector_id_fkey")
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model transfers {
-  id                                          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  device_id                                   String?   @db.Uuid
+  id                                          String    @id @default(cuid())
+  device_id                                   String?
   from_location                               String?   @db.VarChar(50)
   to_location                                 String?   @db.VarChar(50)
-  from_branch_id                              String?   @db.Uuid
-  to_branch_id                                String?   @db.Uuid
-  initiated_by                                String?   @db.Uuid
+  from_branch_id                              String?
+  to_branch_id                                String?
+  initiated_by                                String?
   status                                      String?   @default("pending") @db.VarChar(50)
-  requested_at                                DateTime? @default(now()) @db.Timestamptz(6)
-  completed_at                                DateTime? @db.Timestamptz(6)
+  requested_at                                DateTime? @default(now()) @db.DateTime(0)
+  completed_at                                DateTime? @db.DateTime(0)
   notes                                       String?
-  created_at                                  DateTime? @default(now()) @db.Timestamptz(6)
-  updated_at                                  DateTime? @default(now()) @db.Timestamptz(6)
+  created_at                                  DateTime? @default(now()) @db.DateTime(0)
+  updated_at                                  DateTime? @default(now()) @db.DateTime(0)
   devices                                     devices?  @relation(fields: [device_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   branches_transfers_from_branch_idTobranches branches? @relation("transfers_from_branch_idTobranches", fields: [from_branch_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   users                                       users?    @relation(fields: [initiated_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
   branches_transfers_to_branch_idTobranches   branches? @relation("transfers_to_branch_idTobranches", fields: [to_branch_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([status], map: "idx_transfers_status")
+  @@index([device_id], map: "transfers_device_id_fkey")
+  @@index([from_branch_id], map: "transfers_from_branch_id_fkey")
+  @@index([initiated_by], map: "transfers_initiated_by_fkey")
+  @@index([to_branch_id], map: "transfers_to_branch_id_fkey")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model users {
-  id                                                            String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                                                            String                  @id @default(cuid())
   email                                                         String                  @unique @db.VarChar(255)
   full_name                                                     String                  @db.VarChar(255)
   role                                                          user_role
-  branch_id                                                     String?                 @db.Uuid
-  created_at                                                    DateTime?               @default(now()) @db.Timestamptz(6)
-  updated_at                                                    DateTime?               @default(now()) @db.Timestamptz(6)
-  company_id                                                    String?                 @db.Uuid
+  branch_id                                                     String?
+  created_at                                                    DateTime?               @default(now()) @db.DateTime(0)
+  updated_at                                                    DateTime?               @default(now()) @db.DateTime(0)
+  company_id                                                    String?
+  password_hash                                                 String?                 @db.VarChar(255)
   announcements                                                 announcements[]
   branches_branches_manager_idTousers                           branches[]              @relation("branches_manager_idTousers")
+  device_assignments_device_assignments_assigned_byTousers      device_assignments[]    @relation("device_assignments_assigned_byTousers")
+  device_assignments_device_assignments_assigned_toTousers      device_assignments[]    @relation("device_assignments_assigned_toTousers")
   devices                                                       devices[]
+  diagnostic_reports                                            diagnostic_reports[]
   invoices                                                      invoices[]
   physical_inspections                                          physical_inspections[]
   repairs_repairs_assigned_byTousers                            repairs[]               @relation("repairs_assigned_byTousers")
@@ -294,69 +346,70 @@ model users {
   spare_parts_requests_spare_parts_requests_requested_byTousers spare_parts_requests[]  @relation("spare_parts_requests_requested_byTousers")
   technical_inspections                                         technical_inspections[]
   transfers                                                     transfers[]
-  device_assignments_device_assignments_assigned_byTousers      device_assignments[]    @relation("device_assignments_assigned_byTousers")
-  device_assignments_device_assignments_assigned_toTousers      device_assignments[]    @relation("device_assignments_assigned_toTousers")
   branches_users_branch_idTobranches                            branches?               @relation("users_branch_idTobranches", fields: [branch_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_branch")
   companies                                                     companies?              @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  diagnostic_reports                                            diagnostic_reports[]
+
+  @@index([branch_id], map: "fk_branch")
+  @@index([company_id], map: "users_company_id_fkey")
 }
 
 /// Stores diagnostic reports from TechFlow Hardware Agent
 model diagnostic_reports {
-  id                    String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  device_id             String                     @db.Uuid
-  report_id             String                     @unique @db.Uuid
-  asset_id              String                     @db.VarChar(100)
-  timestamp             String?                    @db.VarChar(50)
-  production_mode       Boolean?                   @default(false)
-  upload_status         String?                    @db.VarChar(50)
-  scan_started_at       DateTime?                  @db.Timestamptz(6)
-  scan_completed_at     DateTime?                  @db.Timestamptz(6)
-  scan_duration_seconds Decimal?                   @db.Decimal(10, 2)
-  agent_version         String?                    @db.VarChar(20)
-  cosmetic_grade        String?                    @db.VarChar(5)
+  id                    String                    @id @default(cuid())
+  device_id             String
+  report_id             String                    @unique
+  asset_id              String                    @db.VarChar(100)
+  timestamp             String?                   @db.VarChar(50)
+  production_mode       Boolean?                  @default(false)
+  upload_status         String?                   @db.VarChar(50)
+  scan_started_at       DateTime?                 @db.DateTime(0)
+  scan_completed_at     DateTime?                 @db.DateTime(0)
+  scan_duration_seconds Decimal?                  @db.Decimal(10, 2)
+  agent_version         String?                   @db.VarChar(20)
+  cosmetic_grade        String?                   @db.VarChar(5)
   cosmetic_comments     String?
-  thermal_cpu_min       Decimal?                   @db.Decimal(5, 2)
-  thermal_cpu_max       Decimal?                   @db.Decimal(5, 2)
-  thermal_cpu_avg       Decimal?                   @db.Decimal(5, 2)
-  thermal_gpu_min       Decimal?                   @db.Decimal(5, 2)
-  thermal_gpu_max       Decimal?                   @db.Decimal(5, 2)
-  thermal_gpu_avg       Decimal?                   @db.Decimal(5, 2)
+  thermal_cpu_min       Decimal?                  @db.Decimal(5, 2)
+  thermal_cpu_max       Decimal?                  @db.Decimal(5, 2)
+  thermal_cpu_avg       Decimal?                  @db.Decimal(5, 2)
+  thermal_gpu_min       Decimal?                  @db.Decimal(5, 2)
+  thermal_gpu_max       Decimal?                  @db.Decimal(5, 2)
+  thermal_gpu_avg       Decimal?                  @db.Decimal(5, 2)
   warnings              Json?
-  signature_algorithm   String?                    @db.VarChar(20)
-  signature_hash        String?                    @db.VarChar(100)
-  signature_signed_at   DateTime?                  @db.Timestamptz(6)
-  technician_id         String?                    @db.Uuid
+  signature_algorithm   String?                   @db.VarChar(20)
+  signature_hash        String?                   @db.VarChar(100)
+  signature_signed_at   DateTime?                 @db.DateTime(0)
+  technician_id         String?
   total_tests           Int?
   passed_tests          Int?
   failed_tests          Int?
   score_percent         Int?
   raw_json              Json
-  created_at            DateTime?                  @default(now()) @db.Timestamptz(6)
-  updated_at            DateTime?                  @default(now()) @db.Timestamptz(6)
-  devices               devices                    @relation(fields: [device_id], references: [id], onDelete: Cascade)
-  users                 users?                     @relation(fields: [technician_id], references: [id])
-  test_results          diagnostic_test_results[]
+  created_at            DateTime?                 @default(now()) @db.DateTime(0)
+  updated_at            DateTime?                 @default(now()) @db.DateTime(0)
   hardware_specs        device_hardware_specs?
-  devices_latest        devices[]                  @relation("devices_latest_report")
+  devices_latest        devices[]                 @relation("devices_latest_report")
+  devices               devices                   @relation(fields: [device_id], references: [id], onDelete: Cascade)
+  users                 users?                    @relation(fields: [technician_id], references: [id])
+  test_results          diagnostic_test_results[]
 
   @@index([device_id], map: "idx_reports_device")
   @@index([asset_id], map: "idx_reports_asset")
   @@index([created_at(sort: Desc)], map: "idx_reports_created")
   @@index([cosmetic_grade], map: "idx_reports_grade")
+  @@index([technician_id], map: "diagnostic_reports_technician_id_fkey")
 }
 
 /// Individual test results from Agent diagnostics
 model diagnostic_test_results {
-  id         String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  report_id  String              @db.Uuid
-  test_id    String              @db.VarChar(50)
-  test_name  String?             @db.VarChar(100)
-  status     String              @db.VarChar(20)
+  id         String             @id @default(cuid())
+  report_id  String
+  test_id    String             @db.VarChar(50)
+  test_name  String?            @db.VarChar(100)
+  status     String             @db.VarChar(20)
   message    String?
   details    Json?
-  created_at DateTime?           @default(now()) @db.Timestamptz(6)
-  report     diagnostic_reports  @relation(fields: [report_id], references: [id], onDelete: Cascade)
+  created_at DateTime?          @default(now()) @db.DateTime(0)
+  report     diagnostic_reports @relation(fields: [report_id], references: [id], onDelete: Cascade)
 
   @@index([report_id], map: "idx_test_results_report")
   @@index([test_id], map: "idx_test_results_test_id")
@@ -365,58 +418,58 @@ model diagnostic_test_results {
 
 /// Normalized hardware specs from Agent device section
 model device_hardware_specs {
-  id                        String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  report_id                 String             @unique @db.Uuid
-  device_id                 String             @db.Uuid
-  bios_date                 String?            @db.VarChar(50)
-  bios_manufacturer         String?            @db.VarChar(100)
-  bios_serial               String?            @db.VarChar(100)
-  bios_version              String?            @db.VarChar(50)
-  manufacturer              String?            @db.VarChar(100)
-  model                     String?            @db.VarChar(100)
-  os                        String?            @db.VarChar(100)
-  system_name               String?            @db.VarChar(100)
-  uuid                      String?            @db.VarChar(100)
-  uptime                    String?            @db.VarChar(50)
-  tpm                       String?            @db.VarChar(50)
-  motherboard_manufacturer  String?            @db.VarChar(100)
-  motherboard_product       String?            @db.VarChar(100)
-  motherboard_serial        String?            @db.VarChar(100)
-  motherboard_version       String?            @db.VarChar(50)
-  cpu_name                  String?            @db.VarChar(255)
-  cpu_physical_cores        Int?
-  cpu_logical_cores         Int?
-  cpu_threads               Int?
-  cpu_base_speed_ghz        Decimal?           @db.Decimal(5, 2)
-  cpu_boost_speed_ghz       Decimal?           @db.Decimal(5, 2)
-  cpu_l2_cache_mb           Decimal?           @db.Decimal(5, 2)
-  cpu_l3_cache_mb           Decimal?           @db.Decimal(5, 2)
-  cpu_socket                String?            @db.VarChar(50)
-  cpu_virtualization        Boolean?
-  cpu_features              String?
-  memory_total_gb           Decimal?           @db.Decimal(10, 2)
-  memory_type               String?            @db.VarChar(20)
-  memory_max_capacity       String?            @db.VarChar(20)
-  memory_channel_mode       String?            @db.VarChar(20)
-  memory_slots_total        Int?
-  memory_slots_used         Int?
-  memory_slots              Json?
-  gpus                      Json?
-  storage_devices           Json?
-  battery_status            Int?
-  battery_health_percent    Decimal?           @db.Decimal(5, 2)
-  battery_cycle_count       Int?
-  battery_design_capacity   String?            @db.VarChar(50)
-  battery_full_charge_capacity String?         @db.VarChar(50)
-  battery_chemistry         String?            @db.VarChar(20)
-  network_adapters          Json?
-  monitors                  Json?
-  usb_controllers           Json?
-  usb_devices               Json?
-  created_at                DateTime?          @default(now()) @db.Timestamptz(6)
-  updated_at                DateTime?          @default(now()) @db.Timestamptz(6)
-  report                    diagnostic_reports @relation(fields: [report_id], references: [id], onDelete: Cascade)
-  device                    devices            @relation(fields: [device_id], references: [id], onDelete: Cascade)
+  id                           String             @id @default(cuid())
+  report_id                    String             @unique
+  device_id                    String
+  bios_date                    String?            @db.VarChar(50)
+  bios_manufacturer            String?            @db.VarChar(100)
+  bios_serial                  String?            @db.VarChar(100)
+  bios_version                 String?            @db.VarChar(50)
+  manufacturer                 String?            @db.VarChar(100)
+  model                        String?            @db.VarChar(100)
+  os                           String?            @db.VarChar(100)
+  system_name                  String?            @db.VarChar(100)
+  uuid                         String?            @db.VarChar(100)
+  uptime                       String?            @db.VarChar(50)
+  tpm                          String?            @db.VarChar(50)
+  motherboard_manufacturer     String?            @db.VarChar(100)
+  motherboard_product          String?            @db.VarChar(100)
+  motherboard_serial           String?            @db.VarChar(100)
+  motherboard_version          String?            @db.VarChar(50)
+  cpu_name                     String?            @db.VarChar(255)
+  cpu_physical_cores           Int?
+  cpu_logical_cores            Int?
+  cpu_threads                  Int?
+  cpu_base_speed_ghz           Decimal?           @db.Decimal(5, 2)
+  cpu_boost_speed_ghz          Decimal?           @db.Decimal(5, 2)
+  cpu_l2_cache_mb              Decimal?           @db.Decimal(5, 2)
+  cpu_l3_cache_mb              Decimal?           @db.Decimal(5, 2)
+  cpu_socket                   String?            @db.VarChar(50)
+  cpu_virtualization           Boolean?
+  cpu_features                 String?
+  memory_total_gb              Decimal?           @db.Decimal(10, 2)
+  memory_type                  String?            @db.VarChar(20)
+  memory_max_capacity          String?            @db.VarChar(20)
+  memory_channel_mode          String?            @db.VarChar(20)
+  memory_slots_total           Int?
+  memory_slots_used            Int?
+  memory_slots                 Json?
+  gpus                         Json?
+  storage_devices              Json?
+  battery_status               Int?
+  battery_health_percent       Decimal?           @db.Decimal(5, 2)
+  battery_cycle_count          Int?
+  battery_design_capacity      String?            @db.VarChar(50)
+  battery_full_charge_capacity String?            @db.VarChar(50)
+  battery_chemistry            String?            @db.VarChar(20)
+  network_adapters             Json?
+  monitors                     Json?
+  usb_controllers              Json?
+  usb_devices                  Json?
+  created_at                   DateTime?          @default(now()) @db.DateTime(0)
+  updated_at                   DateTime?          @default(now()) @db.DateTime(0)
+  device                       devices            @relation(fields: [device_id], references: [id], onDelete: Cascade)
+  report                       diagnostic_reports @relation(fields: [report_id], references: [id], onDelete: Cascade)
 
   @@index([device_id], map: "idx_hw_specs_device")
   @@index([report_id], map: "idx_hw_specs_report")
@@ -424,6 +477,7 @@ model device_hardware_specs {
 
 enum device_status {
   received
+  diagnosed
   pending_inspection
   in_physical_inspection
   in_technical_inspection

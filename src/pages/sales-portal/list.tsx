@@ -34,7 +34,7 @@ export const SalesPortalList: React.FC = () => {
                 {
                     field: "status",
                     operator: "in",
-                    value: ["in_branch", "ready_for_sale"],
+                    value: "in_branch",
                 },
             ],
         },
@@ -89,28 +89,32 @@ export const SalesPortalList: React.FC = () => {
     // Debounced Search
     useEffect(() => {
         const timer = setTimeout(() => {
-            setFilters([
-                {
-                    operator: "or",
-                    value: [
-                        {
-                            field: "asset_id",
-                            operator: "contains",
-                            value: searchText,
-                        },
-                        {
-                            field: "serial_number",
-                            operator: "contains",
-                            value: searchText,
-                        },
-                        {
-                            field: "model",
-                            operator: "contains",
-                            value: searchText,
-                        },
-                    ],
-                },
-            ], "merge");
+            if (searchText) {
+                setFilters([
+                    {
+                        operator: "or",
+                        value: [
+                            {
+                                field: "asset_id",
+                                operator: "contains",
+                                value: searchText,
+                            },
+                            {
+                                field: "serial_number",
+                                operator: "contains",
+                                value: searchText,
+                            },
+                            {
+                                field: "model",
+                                operator: "contains",
+                                value: searchText,
+                            },
+                        ],
+                    },
+                ], "merge");
+            } else {
+                setFilters([], "merge");
+            }
         }, 500);
 
         return () => clearTimeout(timer);

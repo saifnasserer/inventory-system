@@ -82,9 +82,9 @@ export const DashboardPage: React.FC = () => {
                 <Row gutter={[24, 24]}>
                     <Col xs={24} sm={12} lg={6}>
                         <Card
-                            bordered={false}
+                            variant="borderless"
                             style={{ boxShadow: "none", height: '100%', borderRadius: 24, background: "#f9f9f9" }}
-                            bodyStyle={{ padding: 24 }}
+                            styles={{ body: { padding: 24 } }}
                         >
                             <Statistic
                                 title={<Text type="secondary">في الفحص</Text>}
@@ -96,9 +96,9 @@ export const DashboardPage: React.FC = () => {
                     </Col>
                     <Col xs={24} sm={12} lg={6}>
                         <Card
-                            bordered={false}
+                            variant="borderless"
                             style={{ boxShadow: "none", height: '100%', borderRadius: 24, background: "#f9f9f9" }}
-                            bodyStyle={{ padding: 24 }}
+                            styles={{ body: { padding: 24 } }}
                         >
                             <Statistic
                                 title={<Text type="secondary">في المخزن</Text>}
@@ -110,9 +110,9 @@ export const DashboardPage: React.FC = () => {
                     </Col>
                     <Col xs={24} sm={12} lg={6}>
                         <Card
-                            bordered={false}
+                            variant="borderless"
                             style={{ boxShadow: "none", height: '100%', borderRadius: 24, background: "#f9f9f9" }}
-                            bodyStyle={{ padding: 24 }}
+                            styles={{ body: { padding: 24 } }}
                         >
                             <Statistic
                                 title={<Text type="secondary">في الصيانة</Text>}
@@ -124,9 +124,9 @@ export const DashboardPage: React.FC = () => {
                     </Col>
                     <Col xs={24} sm={12} lg={6}>
                         <Card
-                            bordered={false}
+                            variant="borderless"
                             style={{ boxShadow: "none", height: '100%', borderRadius: 24, background: "#f9f9f9" }}
-                            bodyStyle={{ padding: 24 }}
+                            styles={{ body: { padding: 24 } }}
                         >
                             <Statistic
                                 title={<Text type="secondary">جاهز للبيع</Text>}
@@ -139,7 +139,7 @@ export const DashboardPage: React.FC = () => {
                 </Row>
             </Spin>
 
-            <Card bordered={false} style={{ marginTop: 24, boxShadow: "none", borderRadius: 24 }}>
+            <Card variant="borderless" style={{ marginTop: 24, boxShadow: "none", borderRadius: 24 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
                     <Title level={4} style={{ margin: 0, fontWeight: 600 }}>نظرة عامة على النظام</Title>
                 </div>

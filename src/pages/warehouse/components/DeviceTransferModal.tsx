@@ -1,5 +1,6 @@
-import { Modal, Form, Radio, Select, Input, message } from "antd";
-import { useUpdateMany, useList } from "@refinedev/core";
+import { Modal, Form, Radio, Select, Input, message, Button, Space, Divider } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import { useUpdateMany, useList, useCreate } from "@refinedev/core";
 import { useEffect, useState } from "react";
 
 interface DeviceTransferModalProps {
@@ -16,8 +17,11 @@ export const DeviceTransferModal: React.FC<DeviceTransferModalProps> = ({
     deviceIds,
 }) => {
     const [form] = Form.useForm();
+    const [branchForm] = Form.useForm();
     const { mutate: updateMany, isLoading } = useUpdateMany();
+    const { mutate: createBranch, isLoading: isCreatingBranch } = useCreate();
     const [destination, setDestination] = useState<"maintenance" | "branch" | "warehouse">("warehouse");
+    const [branchModalVisible, setBranchModalVisible] = useState(false);
 
     // Fetch branches if destination is branch
     // Assuming 'branches' resource exists. If not, this might need adjustment.
@@ -63,10 +67,11 @@ export const DeviceTransferModal: React.FC<DeviceTransferModalProps> = ({
                     current_location: "Maintenance Center", // Or keep previous?
                 };
             } else if (destination === "branch") {
+                const selectedBranch = (branchesData?.data as any[])?.find((b: any) => b.id === values.branch_id);
                 updateData = {
                     status: "in_branch",
                     branch_id: values.branch_id,
-                    current_location: "Branch", // Ideally fetch branch name
+                    current_location: selectedBranch ? `الفرع: ${selectedBranch.name}` : "Branch",
                     notes: values.notes,
                 };
             } else if (destination === "warehouse") {
@@ -115,7 +120,7 @@ export const DeviceTransferModal: React.FC<DeviceTransferModalProps> = ({
             confirmLoading={isLoading}
             okText="نقل"
             cancelText="إلغاء"
-            destroyOnClose
+            destroyOnHidden
         >
             <Form form={form} layout="vertical" initialValues={{ destination: "warehouse" }}>
                 <Form.Item name="destination" label="إلى أين تريد نقل الأجهزة؟">
@@ -159,6 +164,22 @@ export const DeviceTransferModal: React.FC<DeviceTransferModalProps> = ({
                     >
                         <Select
                             placeholder="اختر الفرع..."
+                            dropdownRender={(menu) => (
+                                <>
+                                    {menu}
+                                    <Divider style={{ margin: '8px 0' }} />
+                                    <Space style={{ padding: '0 8px 4px' }}>
+                                        <Button
+                                            type="text"
+                                            icon={<PlusOutlined />}
+                                            onClick={() => setBranchModalVisible(true)}
+                                            style={{ width: '100%', textAlign: 'left' }}
+                                        >
+                                            إضافة فرع جديد
+                                        </Button>
+                                    </Space>
+                                </>
+                            )}
                             options={branchesData?.data?.map((branch: any) => ({
                                 label: branch.name,
                                 value: branch.id,
@@ -187,6 +208,54 @@ export const DeviceTransferModal: React.FC<DeviceTransferModalProps> = ({
                     />
                 </Form.Item>
             </Form>
+
+            <Modal
+                title="إضافة فرع جديد"
+                open={branchModalVisible}
+                onCancel={() => setBranchModalVisible(false)}
+                onOk={async () => {
+                    try {
+                        const values = await branchForm.validateFields();
+                        createBranch(
+                            {
+                                resource: "branches",
+                                values,
+                            },
+                            {
+                                onSuccess: (data) => {
+                                    message.success("تم إضافة الفرع بنجاح");
+                                    setBranchModalVisible(false);
+                                    branchForm.resetFields();
+                                    // Optionally select the new branch automatically
+                                    form.setFieldsValue({ branch_id: (data.data as any).id });
+                                },
+                            }
+                        );
+                    } catch (error) {
+                        console.error("Branch creation failed", error);
+                    }
+                }}
+                confirmLoading={isCreatingBranch}
+                okText="إضافة"
+                cancelText="إلغاء"
+                destroyOnHidden
+            >
+                <Form form={branchForm} layout="vertical">
+                    <Form.Item
+                        name="name"
+                        label="اسم الفرع"
+                        rules={[{ required: true, message: "يرجى إدخال اسم الفرع" }]}
+                    >
+                        <Input placeholder="مثال: فرع الرياض" />
+                    </Form.Item>
+                    <Form.Item
+                        name="location"
+                        label="الموقع"
+                    >
+                        <Input placeholder="مثال: حي الملك فهد" />
+                    </Form.Item>
+                </Form>
+            </Modal>
         </Modal>
     );
 };

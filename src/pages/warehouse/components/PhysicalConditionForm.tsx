@@ -7,6 +7,7 @@ const { Text, Title } = Typography;
 interface PhysicalConditionFormProps {
     onFinish: (values: any) => void;
     initialValues?: any;
+    formRef?: React.MutableRefObject<any>;
 }
 
 const SelectionTile = ({ value, selected, onChange, icon, label, color }: any) => (
@@ -37,8 +38,15 @@ const SelectionTile = ({ value, selected, onChange, icon, label, color }: any) =
 export const PhysicalConditionForm: React.FC<PhysicalConditionFormProps> = ({
     onFinish,
     initialValues,
+    formRef,
 }) => {
     const [form] = Form.useForm();
+
+    React.useEffect(() => {
+        if (formRef) {
+            formRef.current = form;
+        }
+    }, [form, formRef]);
 
     return (
         <Form

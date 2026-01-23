@@ -26,7 +26,7 @@ export const Login: React.FC = () => {
     return (
         <div className={styles.container}>
             <div className={styles.loginCard}>
-                <Card bordered={false} className={styles.card}>
+                <Card variant="borderless" className={styles.card}>
                     <div className={styles.header}>
                         <Title level={2} className={styles.title}>
                             نظام إدارة المخزون

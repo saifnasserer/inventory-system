@@ -11,6 +11,7 @@ interface HardwareChecklistProps {
     onFinish: (values: any) => void;
     onBack: () => void;
     initialValues?: any;
+    formRef?: React.MutableRefObject<any>;
 }
 
 export const HardwareChecklist: React.FC<HardwareChecklistProps> = ({
@@ -18,8 +19,15 @@ export const HardwareChecklist: React.FC<HardwareChecklistProps> = ({
     onFinish,
     onBack,
     initialValues,
+    formRef,
 }) => {
     const [form] = Form.useForm();
+
+    React.useEffect(() => {
+        if (formRef) {
+            formRef.current = form;
+        }
+    }, [form, formRef]);
 
     const specs = [
         {
@@ -89,7 +97,7 @@ export const HardwareChecklist: React.FC<HardwareChecklistProps> = ({
                             padding: '12px',
                             backgroundColor: '#fafafa'
                         }}
-                        bordered={false}
+                        variant="borderless"
                     />
                 </Form.Item>
             </div>

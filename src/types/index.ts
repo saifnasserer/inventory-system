@@ -26,6 +26,7 @@ export interface Device {
 
 export type DeviceStatus =
     | "received"
+    | "diagnosed"
     | "pending_inspection"
     | "in_physical_inspection"
     | "in_technical_inspection"
@@ -48,6 +49,8 @@ export type UserRole =
 export interface Shipment {
     id: string;
     shipment_code: string;
+    shipment_name?: string;
+    vendor_id?: string;
     supplier_name: string;
     supplier_contact?: string;
     delivery_date: string;
@@ -57,6 +60,10 @@ export interface Shipment {
     created_at: string;
     updated_at: string;
     company_id?: string;
+    vendors?: {
+        name: string;
+    };
+    devices?: Device[];
 }
 
 export interface PhysicalInspection {
