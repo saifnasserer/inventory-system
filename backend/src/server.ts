@@ -16,10 +16,6 @@ import usersRoutes from './routes/users.js';
 import branchesRoutes from './routes/branches.js';
 import vendorsRoutes from './routes/vendors.js';
 import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app: Express = express();
 const PORT = process.env.PORT || 4006;
