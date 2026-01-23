@@ -1,0 +1,30 @@
+FROM node:20
+
+WORKDIR /app
+
+# Copy root package files
+COPY package*.json ./
+COPY tsconfig*.json ./
+
+# Copy backend package files
+COPY backend/package*.json ./backend/
+
+# Install dependencies (root + backend)
+RUN npm install
+RUN cd backend && npm install
+
+# Copy source code
+COPY prisma ./prisma
+COPY backend ./backend
+
+# Generate Prisma Client
+RUN cd backend && npm run prisma:generate
+
+# Build backend
+RUN cd backend && npm run build
+
+# Expose port
+EXPOSE 4006
+
+# Start server
+CMD ["node", "backend/dist/server.js"]
