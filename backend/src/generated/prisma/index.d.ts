@@ -3,7 +3,7 @@
  * Client
 **/
 
-import * as runtime from './runtime/binary.js';
+import * as runtime from './runtime/binary';
 import $Types = runtime.Types // general types
 import $Public = runtime.Types.Public
 import $Utils = runtime.Types.Utils

@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { PrismaClient } from '../generated/prisma/index.js';
-import { authenticateToken } from '../middleware/auth.js';
+import { PrismaClient } from '../generated/prisma/index';
+import { authenticateToken } from '../middleware/auth';
 import bcrypt from 'bcrypt';
 
 const router = Router();

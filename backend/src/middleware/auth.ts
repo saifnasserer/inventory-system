@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { AuthService } from '../services/authService.js';
-import { JWTPayload } from '../types/auth.js';
+import { AuthService } from '../services/authService';
+import { JWTPayload } from '../types/auth';
 
 // Extend Express Request to include user
 declare global {
