@@ -20,8 +20,11 @@ COPY backend ./backend
 # Generate Prisma Client
 RUN cd backend && npm run prisma:generate
 
-# Build backend
+# Build backend (TypeScript compilation)
 RUN cd backend && npm run build
+
+# Copy generated Prisma client to dist folder
+RUN mkdir -p backend/dist/generated && cp -r backend/src/generated backend/dist/
 
 # Expose port
 EXPOSE 4006
