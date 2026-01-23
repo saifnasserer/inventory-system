@@ -58,38 +58,50 @@ model companies {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model devices {
-  id                    String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  asset_id              String                  @unique @db.VarChar(100)
-  shipment_id           String?                 @db.Uuid
-  status                device_status?          @default(received)
-  model                 String?                 @db.VarChar(255)
-  serial_number         String?                 @db.VarChar(255)
-  manufacturer          String?                 @db.VarChar(255)
-  ram_size              Int?
-  ram_count             Int?
-  ram_models            String[]
-  storage_size          Int?
-  storage_count         Int?
-  storage_types         String[]
-  storage_models        String[]
-  gpu_model             String?                 @db.VarChar(255)
-  cpu_model             String?                 @db.VarChar(255)
-  current_location      String?                 @db.VarChar(50)
-  branch_id             String?                 @db.Uuid
-  assigned_to           String?                 @db.Uuid
-  created_at            DateTime?               @default(now()) @db.Timestamptz(6)
-  updated_at            DateTime?               @default(now()) @db.Timestamptz(6)
-  company_id            String                  @db.Uuid
-  users                 users?                  @relation(fields: [assigned_to], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  branches              branches?               @relation(fields: [branch_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  companies             companies               @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  shipments             shipments?              @relation(fields: [shipment_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  invoices              invoices[]
-  physical_inspections  physical_inspections[]
-  repairs               repairs[]
-  technical_inspections technical_inspections[]
-  transfers             transfers[]
-  device_assignments    device_assignments[]
+  id                      String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  asset_id                String                  @unique @db.VarChar(100)
+  shipment_id             String?                 @db.Uuid
+  status                  device_status?          @default(received)
+  model                   String?                 @db.VarChar(255)
+  serial_number           String?                 @db.VarChar(255)
+  manufacturer            String?                 @db.VarChar(255)
+  ram_size                Int?
+  ram_count               Int?
+  ram_models              String[]
+  storage_size            Int?
+  storage_count           Int?
+  storage_types           String[]
+  storage_models          String[]
+  gpu_model               String?                 @db.VarChar(255)
+  cpu_model               String?                 @db.VarChar(255)
+  current_location        String?                 @db.VarChar(50)
+  branch_id               String?                 @db.Uuid
+  assigned_to             String?                 @db.Uuid
+  created_at              DateTime?               @default(now()) @db.Timestamptz(6)
+  updated_at              DateTime?               @default(now()) @db.Timestamptz(6)
+  company_id              String                  @db.Uuid
+  // Agent diagnostic fields
+  latest_report_id        String?                 @db.Uuid
+  last_diagnostic_at      DateTime?               @db.Timestamptz(6)
+  diagnostic_score        Int?
+  bios_serial             String?                 @db.VarChar(100)
+  os                      String?                 @db.VarChar(100)
+  battery_health_percent  Decimal?                @db.Decimal(5, 2)
+  storage_health_percent  Decimal?                @db.Decimal(5, 2)
+  // Relations
+  users                   users?                  @relation(fields: [assigned_to], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  branches                branches?               @relation(fields: [branch_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  companies               companies               @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  shipments               shipments?              @relation(fields: [shipment_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  latest_report           diagnostic_reports?     @relation("devices_latest_report", fields: [latest_report_id], references: [id])
+  invoices                invoices[]
+  physical_inspections    physical_inspections[]
+  repairs                 repairs[]
+  technical_inspections   technical_inspections[]
+  transfers               transfers[]
+  device_assignments      device_assignments[]
+  diagnostic_reports      diagnostic_reports[]
+  hardware_specs          device_hardware_specs[]
 
   @@index([asset_id], map: "idx_devices_asset_id")
   @@index([assigned_to], map: "idx_devices_assigned")
@@ -286,6 +298,128 @@ model users {
   device_assignments_device_assignments_assigned_toTousers      device_assignments[]    @relation("device_assignments_assigned_toTousers")
   branches_users_branch_idTobranches                            branches?               @relation("users_branch_idTobranches", fields: [branch_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_branch")
   companies                                                     companies?              @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  diagnostic_reports                                            diagnostic_reports[]
+}
+
+/// Stores diagnostic reports from TechFlow Hardware Agent
+model diagnostic_reports {
+  id                    String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  device_id             String                     @db.Uuid
+  report_id             String                     @unique @db.Uuid
+  asset_id              String                     @db.VarChar(100)
+  timestamp             String?                    @db.VarChar(50)
+  production_mode       Boolean?                   @default(false)
+  upload_status         String?                    @db.VarChar(50)
+  scan_started_at       DateTime?                  @db.Timestamptz(6)
+  scan_completed_at     DateTime?                  @db.Timestamptz(6)
+  scan_duration_seconds Decimal?                   @db.Decimal(10, 2)
+  agent_version         String?                    @db.VarChar(20)
+  cosmetic_grade        String?                    @db.VarChar(5)
+  cosmetic_comments     String?
+  thermal_cpu_min       Decimal?                   @db.Decimal(5, 2)
+  thermal_cpu_max       Decimal?                   @db.Decimal(5, 2)
+  thermal_cpu_avg       Decimal?                   @db.Decimal(5, 2)
+  thermal_gpu_min       Decimal?                   @db.Decimal(5, 2)
+  thermal_gpu_max       Decimal?                   @db.Decimal(5, 2)
+  thermal_gpu_avg       Decimal?                   @db.Decimal(5, 2)
+  warnings              Json?
+  signature_algorithm   String?                    @db.VarChar(20)
+  signature_hash        String?                    @db.VarChar(100)
+  signature_signed_at   DateTime?                  @db.Timestamptz(6)
+  technician_id         String?                    @db.Uuid
+  total_tests           Int?
+  passed_tests          Int?
+  failed_tests          Int?
+  score_percent         Int?
+  raw_json              Json
+  created_at            DateTime?                  @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime?                  @default(now()) @db.Timestamptz(6)
+  devices               devices                    @relation(fields: [device_id], references: [id], onDelete: Cascade)
+  users                 users?                     @relation(fields: [technician_id], references: [id])
+  test_results          diagnostic_test_results[]
+  hardware_specs        device_hardware_specs?
+  devices_latest        devices[]                  @relation("devices_latest_report")
+
+  @@index([device_id], map: "idx_reports_device")
+  @@index([asset_id], map: "idx_reports_asset")
+  @@index([created_at(sort: Desc)], map: "idx_reports_created")
+  @@index([cosmetic_grade], map: "idx_reports_grade")
+}
+
+/// Individual test results from Agent diagnostics
+model diagnostic_test_results {
+  id         String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  report_id  String              @db.Uuid
+  test_id    String              @db.VarChar(50)
+  test_name  String?             @db.VarChar(100)
+  status     String              @db.VarChar(20)
+  message    String?
+  details    Json?
+  created_at DateTime?           @default(now()) @db.Timestamptz(6)
+  report     diagnostic_reports  @relation(fields: [report_id], references: [id], onDelete: Cascade)
+
+  @@index([report_id], map: "idx_test_results_report")
+  @@index([test_id], map: "idx_test_results_test_id")
+  @@index([status], map: "idx_test_results_status")
+}
+
+/// Normalized hardware specs from Agent device section
+model device_hardware_specs {
+  id                        String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  report_id                 String             @unique @db.Uuid
+  device_id                 String             @db.Uuid
+  bios_date                 String?            @db.VarChar(50)
+  bios_manufacturer         String?            @db.VarChar(100)
+  bios_serial               String?            @db.VarChar(100)
+  bios_version              String?            @db.VarChar(50)
+  manufacturer              String?            @db.VarChar(100)
+  model                     String?            @db.VarChar(100)
+  os                        String?            @db.VarChar(100)
+  system_name               String?            @db.VarChar(100)
+  uuid                      String?            @db.VarChar(100)
+  uptime                    String?            @db.VarChar(50)
+  tpm                       String?            @db.VarChar(50)
+  motherboard_manufacturer  String?            @db.VarChar(100)
+  motherboard_product       String?            @db.VarChar(100)
+  motherboard_serial        String?            @db.VarChar(100)
+  motherboard_version       String?            @db.VarChar(50)
+  cpu_name                  String?            @db.VarChar(255)
+  cpu_physical_cores        Int?
+  cpu_logical_cores         Int?
+  cpu_threads               Int?
+  cpu_base_speed_ghz        Decimal?           @db.Decimal(5, 2)
+  cpu_boost_speed_ghz       Decimal?           @db.Decimal(5, 2)
+  cpu_l2_cache_mb           Decimal?           @db.Decimal(5, 2)
+  cpu_l3_cache_mb           Decimal?           @db.Decimal(5, 2)
+  cpu_socket                String?            @db.VarChar(50)
+  cpu_virtualization        Boolean?
+  cpu_features              String?
+  memory_total_gb           Decimal?           @db.Decimal(10, 2)
+  memory_type               String?            @db.VarChar(20)
+  memory_max_capacity       String?            @db.VarChar(20)
+  memory_channel_mode       String?            @db.VarChar(20)
+  memory_slots_total        Int?
+  memory_slots_used         Int?
+  memory_slots              Json?
+  gpus                      Json?
+  storage_devices           Json?
+  battery_status            Int?
+  battery_health_percent    Decimal?           @db.Decimal(5, 2)
+  battery_cycle_count       Int?
+  battery_design_capacity   String?            @db.VarChar(50)
+  battery_full_charge_capacity String?         @db.VarChar(50)
+  battery_chemistry         String?            @db.VarChar(20)
+  network_adapters          Json?
+  monitors                  Json?
+  usb_controllers           Json?
+  usb_devices               Json?
+  created_at                DateTime?          @default(now()) @db.Timestamptz(6)
+  updated_at                DateTime?          @default(now()) @db.Timestamptz(6)
+  report                    diagnostic_reports @relation(fields: [report_id], references: [id], onDelete: Cascade)
+  device                    devices            @relation(fields: [device_id], references: [id], onDelete: Cascade)
+
+  @@index([device_id], map: "idx_hw_specs_device")
+  @@index([report_id], map: "idx_hw_specs_report")
 }
 
 enum device_status {

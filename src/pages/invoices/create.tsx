@@ -15,7 +15,7 @@ export const InvoiceCreate: React.FC = () => {
     const { formProps, saveButtonProps, onFinish } = useForm({
         resource: "invoices",
         redirect: "list",
-        onMutationSuccess: (data, variables) => {
+        onMutationSuccess: () => {
             // After invoice is created, mark device as sold
             if (deviceId) {
                 updateDevice({
@@ -127,7 +127,7 @@ export const InvoiceCreate: React.FC = () => {
                                 <InputNumber
                                     style={{ width: "100%" }}
                                     formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                    parser={value => value!.replace(/\$\s?|(,*)/g, '')}
+                                    parser={value => Number(value!.replace(/\$\s?|(,*)/g, '')) || 0}
                                     min={0}
                                     placeholder="0.00"
                                 />
@@ -140,7 +140,7 @@ export const InvoiceCreate: React.FC = () => {
                                 <InputNumber
                                     style={{ width: "100%" }}
                                     formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                    parser={value => value!.replace(/\$\s?|(,*)/g, '')}
+                                    parser={value => Number(value!.replace(/\$\s?|(,*)/g, '')) || 0}
                                     min={0}
                                     placeholder="0.00"
                                 />

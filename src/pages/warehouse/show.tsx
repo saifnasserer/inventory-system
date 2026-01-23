@@ -20,7 +20,7 @@ import {
     PrinterOutlined,
 } from "@ant-design/icons";
 import { Device } from "../../types";
-import { InspectionSteps, MaintenanceWorkflow } from "./components";
+import { InspectionSteps, MaintenanceWorkflow, DiagnosticReportViewer } from "./components";
 import { DeviceLabel } from "../../components/DeviceLabel";
 import { useState, useRef } from "react";
 import { useParams } from "react-router-dom";
@@ -231,6 +231,11 @@ export const DeviceShow: React.FC = () => {
                     />
                 </Card>
             ),
+        },
+        {
+            key: "diagnostics",
+            label: "تقرير الفحص",
+            children: device && <DiagnosticReportViewer deviceId={device.id} />,
         },
     ];
 
