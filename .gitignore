@@ -26,3 +26,4 @@ _.sln
 \*.sw?
 
 /src/generated/prisma
+.env
