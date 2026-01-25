@@ -22,6 +22,15 @@ export interface Device {
     updated_at: string;
     company_id?: string;
     notes?: string;
+    os?: string;
+    battery_health_percent?: number | string;
+    storage_health_percent?: number | string;
+    latest_report_id?: string;
+    diagnostic_reports?: any[];
+    branches?: {
+        id: string;
+        name: string;
+    };
 }
 
 export type DeviceStatus =
@@ -34,7 +43,9 @@ export type DeviceStatus =
     | "needs_repair"
     | "in_repair"
     | "in_branch"
-    | "sold";
+    | "sold"
+    | "returned"
+    | "scrap";
 
 export type UserRole =
     | "super_admin"

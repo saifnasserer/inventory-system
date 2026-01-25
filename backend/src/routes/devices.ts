@@ -19,6 +19,7 @@ router.get('/', authenticateToken, async (req: Request, res: Response): Promise<
             status,
             category,
             branch_id,
+            shipment_id,
             search,
         } = req.query;
 
@@ -37,6 +38,10 @@ router.get('/', authenticateToken, async (req: Request, res: Response): Promise<
 
         if (branch_id) {
             where.branch_id = Array.isArray(branch_id) ? { in: branch_id } : branch_id;
+        }
+
+        if (shipment_id) {
+            where.shipment_id = Array.isArray(shipment_id) ? { in: shipment_id } : shipment_id;
         }
 
         if (search) {
@@ -70,7 +75,16 @@ router.get('/', authenticateToken, async (req: Request, res: Response): Promise<
                         include: {
                             vendors: true,
                         }
-                    }
+                    },
+                    diagnostic_reports: {
+                        orderBy: {
+                            created_at: 'desc',
+                        },
+                        take: 1,
+                        include: {
+                            hardware_specs: true,
+                        },
+                    },
                 },
             }),
             prisma.devices.count({ where }),
@@ -117,6 +131,15 @@ router.get('/:id', authenticateToken, async (req: Request, res: Response): Promi
                         created_at: 'desc',
                     },
                     take: 10,
+                },
+                diagnostic_reports: {
+                    orderBy: {
+                        created_at: 'desc',
+                    },
+                    include: {
+                        test_results: true,
+                        hardware_specs: true,
+                    },
                 },
             },
         });

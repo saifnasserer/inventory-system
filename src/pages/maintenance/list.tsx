@@ -247,7 +247,7 @@ export const MaintenanceList: React.FC = () => {
                 )}
             </div>
 
-            <List breadcrumb={false}>
+            <List breadcrumb={false} title={false} headerButtons={null}>
                 <div id="scrollableDiv" style={{ height: "calc(100vh - 180px)", overflow: "auto", padding: "0 24px", backgroundColor: "#fff" }}>
                     <InfiniteScroll
                         dataLength={devices.length}

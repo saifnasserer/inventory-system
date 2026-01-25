@@ -131,17 +131,27 @@ export const DeviceList: React.FC = () => {
     const getStatusColor = (status: string) => {
         const colors: Record<string, string> = {
             ready_for_sale: "green",
+            needs_repair: "orange",
+            in_repair: "orange",
             in_branch: "geekblue",
             sold: "success",
+            received: "blue",
+            diagnosed: "cyan",
+            returned: "volcano",
+            scrap: "red",
         };
         return colors[status] || "default";
     };
 
     const getStatusLabel = (status: string) => {
         const labels: Record<string, string> = {
-            ready_for_sale: "جاهز للبيع",
-            in_branch: "في الفرع",
+            ready_for_sale: "في المخزن",
+            needs_repair: "في الصيانة",
+            in_repair: "في الصيانة",
+            in_branch: "في المبيعات",
             sold: "تم البيع",
+            returned: "مرجع للمورد",
+            scrap: "خردة",
         };
         return labels[status] || status;
     };
@@ -256,6 +266,16 @@ export const DeviceList: React.FC = () => {
                             title="الرقم التسلسلي"
                         />
 
+                        <Table.Column
+                            dataIndex="status"
+                            title="الحالة"
+                            render={(value) => (
+                                <Tag color={getStatusColor(value)} style={{ borderRadius: "50px", padding: "0 12px" }}>
+                                    {getStatusLabel(value)}
+                                </Tag>
+                            )}
+                            sorter={(a: Device, b: Device) => (a.status || "").localeCompare(b.status || "")}
+                        />
                         <Table.Column
                             dataIndex="current_location"
                             title="الموقع"

@@ -2,7 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const backendUrl = 'http://localhost:4006';
+const backendUrl = 'http://82.112.253.29:4006';
 
 async function testUpload() {
     console.log('Logging in...');

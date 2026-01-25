@@ -1,9 +1,9 @@
+import React, { useState } from "react";
 import { useCreate, useList } from "@refinedev/core";
 import { useForm } from "@refinedev/antd";
-import { Modal, Form, Input, InputNumber, DatePicker, Button, Card, Row, Col, Typography, Divider, Space, App, Select } from "antd";
+import { Form, Input, InputNumber, DatePicker, Button, Card, Typography, Divider, Space, App, Select } from "antd";
 import { useNavigate } from "react-router";
 import {
-    BarcodeOutlined,
     UserOutlined,
     NumberOutlined,
     PlusCircleOutlined,
@@ -11,8 +11,8 @@ import {
     PlusOutlined
 } from "@ant-design/icons";
 import dayjs from "dayjs";
-import { useState } from "react";
-import { VendorCreateModal } from "./components/VendorCreateModal";
+
+import { VendorCreateModal } from "../components/VendorCreateModal";
 
 const { Title, Text } = Typography;
 
@@ -23,10 +23,8 @@ export const ShipmentCreate: React.FC = () => {
         action: "create",
         redirect: "list",
     });
-    const [form] = Form.useForm(); // Added this line
 
     const { mutateAsync: createShipment } = useCreate();
-    const { mutate: createVendor, isLoading } = useCreate(); // Added this line
     const { message } = App.useApp();
     const [vendorModalVisible, setVendorModalVisible] = useState(false);
 
@@ -54,7 +52,7 @@ export const ShipmentCreate: React.FC = () => {
             console.error('Error creating shipment:', error);
             if (error?.statusCode === 401 || error?.statusCode === 403 || error?.message === 'Invalid or expired token') {
                 message.error("انتهت صلاحية الجلسة أو غير مصرح لك. يرجى تسجيل الدخول مرة أخرى.");
-                navigate('/login'); // Redirect to login page
+                navigate('/login');
             } else {
                 message.error(error.message || "حدث خطأ أثناء إنشاء الشحنة");
             }
@@ -91,7 +89,7 @@ export const ShipmentCreate: React.FC = () => {
                         <Input
                             size="large"
                             placeholder="مثال: شحنة لابتوبات - يناير"
-                            style={{ borderRadius: 8 }}
+                            style={{ borderRadius: "32px" }}
                         />
                     </Form.Item>
                     <Form.Item
@@ -99,7 +97,7 @@ export const ShipmentCreate: React.FC = () => {
                         label="تاريخ وصول الشحنة"
                         rules={[{ required: true, message: "يرجى تحديد التاريخ" }]}
                     >
-                        <DatePicker size="large" style={{ width: "100%", borderRadius: 8 }} />
+                        <DatePicker size="large" style={{ width: "100%", borderRadius: "32px" }} />
                     </Form.Item>
                 </Card>
 
@@ -114,7 +112,7 @@ export const ShipmentCreate: React.FC = () => {
                             size="large"
                             placeholder="اختر المورد..."
                             allowClear
-                            style={{ borderRadius: 8 }}
+                            style={{ borderRadius: "32px" }}
                             popupRender={(menu) => (
                                 <>
                                     {menu}
@@ -155,7 +153,7 @@ export const ShipmentCreate: React.FC = () => {
                     >
                         <InputNumber
                             size="large"
-                            style={{ width: "100%", borderRadius: 8 }}
+                            style={{ width: "100%", borderRadius: "32px" }}
                             placeholder="0"
                         />
                     </Form.Item>
@@ -184,7 +182,7 @@ export const ShipmentCreate: React.FC = () => {
                         style={{
                             borderRadius: 50,
                             paddingInline: 32,
-                            background: "linear-gradient(90deg, #1890ff 0%, #001529 100%)",
+                            background: "#1890ff",
                             border: "none"
                         }}
                     >
@@ -198,8 +196,6 @@ export const ShipmentCreate: React.FC = () => {
                 onCancel={() => setVendorModalVisible(false)}
                 onSuccess={(vendor) => {
                     setVendorModalVisible(false);
-                    // Force refresh or manually append? useList handles auto refresh usually.
-                    // But we can manually select it:
                     formProps.form?.setFieldsValue({ vendor_id: vendor.id });
                 }}
             />

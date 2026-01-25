@@ -166,6 +166,44 @@ export const DiagnosticReportViewer: React.FC<DiagnosticReportViewerProps> = ({
         : [];
     const hwSpecs = latestReport.hardware_specs;
 
+    const testNameMap: Record<string, string> = {
+        "sys_info": "بيانات النظام",
+        "cpu_test": "المعالج (Processor)",
+        "memory_test": "فحص الرامات (RAM)",
+        "storage_test": "فحص الهارد (Storage)",
+        "battery_test": "البطارية",
+        "display_test": "اختبار الشاشة",
+        "stress_test": "اختبار التحمل",
+        "thermal_test": "الحرارة",
+        "network_test": "الواي فاي والشبكة",
+        "camera_test": "الكاميرا",
+        "audio_test": "الصوت",
+        "keyboard_test": "لوحة المفاتيح",
+        "touchpad_test": "الماوس البديل (Touchpad)",
+        "usb_test": "فتحات USB",
+        "os_check": "نظام التشغيل",
+        "display": "الشاشة (فحص نظري)",
+        "touchscreen": "التاتش (Touch Screen)",
+        "audio": "السماعات والمايك",
+        "camera": "الكاميرا",
+        "input": "أجهزة الإدخال",
+        "sequential_stress": "اختبار ضغط متتابع",
+        "hybrid_stress": "اختبار ضغط مختلط",
+        "storage_health": "صحة الهارد (SMART)",
+        "battery_health": "حالة البطارية",
+        "network": "الواي فاي (WiFi)",
+        "fans_cooling": "المراوح والتبريد",
+        "wifi_signal": "قوة الواي فاي",
+        "thermal_status": "درجات الحرارة",
+        "usb_ports": "فتحات USB / Type-C",
+        "pcie_bus": "ناقل البيانات PCIe",
+        "bsod_history": "سجل الانهيارات (BSOD)",
+        "baseboard": "اللوحة الأم (Motherboard)",
+        "bluetooth": "البلوتوث",
+        "ethernet": "منفذ الكابل (LAN)",
+        "cosmetic": "الحالة الخارجية (Grading)",
+    };
+
     return (
         <Space direction="vertical" size="large" style={{ width: "100%" }}>
             {/* Summary Cards */}
@@ -327,12 +365,12 @@ export const DiagnosticReportViewer: React.FC<DiagnosticReportViewerProps> = ({
                     columns={[
                         {
                             title: "الاختبار",
-                            dataIndex: "test_name",
-                            key: "test_name",
-                            render: (text, record) => (
+                            dataIndex: "test_id",
+                            key: "test_id",
+                            render: (id, record) => (
                                 <Space>
                                     {getStatusIcon(record.status)}
-                                    <span>{text}</span>
+                                    <span>{testNameMap[id] || record.test_name}</span>
                                 </Space>
                             ),
                         },
@@ -382,129 +420,6 @@ export const DiagnosticReportViewer: React.FC<DiagnosticReportViewerProps> = ({
                     }}
                 />
             </Card>
-
-            {/* Hardware Specs */}
-            {hwSpecs && (
-                <Card variant="outlined" title="المواصفات التفصيلية" size="small">
-                    <Collapse
-                        items={[
-                            {
-                                key: "cpu",
-                                label: (
-                                    <Space>
-                                        <ThunderboltOutlined /> المعالج
-                                    </Space>
-                                ),
-                                children: (
-                                    <Descriptions column={2} size="small">
-                                        <Descriptions.Item label="النوع" span={2}>
-                                            {hwSpecs.cpu_name}
-                                        </Descriptions.Item>
-                                        <Descriptions.Item label="الأنوية الفعلية">
-                                            {hwSpecs.cpu_physical_cores}
-                                        </Descriptions.Item>
-                                        <Descriptions.Item label="الأنوية المنطقية">
-                                            {hwSpecs.cpu_logical_cores}
-                                        </Descriptions.Item>
-                                    </Descriptions>
-                                ),
-                            },
-                            {
-                                key: "memory",
-                                label: (
-                                    <Space>
-                                        <HddOutlined /> الذاكرة
-                                    </Space>
-                                ),
-                                children: (
-                                    <>
-                                        <Descriptions column={2} size="small">
-                                            <Descriptions.Item label="الإجمالي">
-                                                {hwSpecs.memory_total_gb} GB
-                                            </Descriptions.Item>
-                                            <Descriptions.Item label="النوع">
-                                                {hwSpecs.memory_type}
-                                            </Descriptions.Item>
-                                        </Descriptions>
-                                        {hwSpecs.memory_slots && hwSpecs.memory_slots.length > 0 && (
-                                            <Table
-                                                dataSource={hwSpecs.memory_slots}
-                                                rowKey="bank"
-                                                size="small"
-                                                pagination={false}
-                                                style={{ marginTop: 8 }}
-                                                columns={[
-                                                    { title: "الفتحة", dataIndex: "bank" },
-                                                    { title: "السعة", dataIndex: "capacity" },
-                                                    { title: "السرعة", dataIndex: "speed" },
-                                                    { title: "المصنع", dataIndex: "manufacturer" },
-                                                ]}
-                                            />
-                                        )}
-                                    </>
-                                ),
-                            },
-                            {
-                                key: "gpu",
-                                label: (
-                                    <Space>
-                                        <LaptopOutlined /> كرت الشاشة
-                                    </Space>
-                                ),
-                                children: hwSpecs.gpus && hwSpecs.gpus.length > 0 && (
-                                    <Table
-                                        dataSource={hwSpecs.gpus}
-                                        rowKey="name"
-                                        size="small"
-                                        pagination={false}
-                                        columns={[
-                                            { title: "الاسم", dataIndex: "name" },
-                                            { title: "VRAM", dataIndex: "vram" },
-                                            { title: "إصدار Driver", dataIndex: "driver_version" },
-                                        ]}
-                                    />
-                                ),
-                            },
-                            {
-                                key: "storage",
-                                label: (
-                                    <Space>
-                                        <HddOutlined /> التخزين
-                                    </Space>
-                                ),
-                                children: hwSpecs.storage_devices &&
-                                    hwSpecs.storage_devices.length > 0 && (
-                                        <Table
-                                            dataSource={hwSpecs.storage_devices}
-                                            rowKey="model"
-                                            size="small"
-                                            pagination={false}
-                                            columns={[
-                                                { title: "الموديل", dataIndex: "model" },
-                                                { title: "السعة", dataIndex: "size" },
-                                                { title: "النوع", dataIndex: "type" },
-                                                {
-                                                    title: "الحالة",
-                                                    dataIndex: "health_percent",
-                                                    render: (v) =>
-                                                        v !== undefined ? (
-                                                            <Progress
-                                                                percent={v}
-                                                                size="small"
-                                                                style={{ width: 80 }}
-                                                            />
-                                                        ) : (
-                                                            "-"
-                                                        ),
-                                                },
-                                            ]}
-                                        />
-                                    ),
-                            },
-                        ]}
-                    />
-                </Card>
-            )}
 
             {/* Report History */}
             {reports.length > 1 && (

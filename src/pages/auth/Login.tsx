@@ -32,7 +32,7 @@ export const Login: React.FC = () => {
                             نظام إدارة المخزون
                         </Title>
                         <Text className={styles.subtitle}>
-                            مرحباً بك، يرجى تسجيل الدخول للمتابعة
+                            مرحباً بك مجدداً، يرجى تسجيل الدخول للمتابعة
                         </Text>
                     </div>
 

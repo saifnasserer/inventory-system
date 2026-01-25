@@ -8,6 +8,7 @@ interface DeviceTransferModalProps {
     onCancel: () => void;
     onSuccess: () => void;
     deviceIds: string[];
+    excludeDestinations?: ("maintenance" | "branch" | "warehouse")[];
 }
 
 export const DeviceTransferModal: React.FC<DeviceTransferModalProps> = ({
@@ -15,12 +16,17 @@ export const DeviceTransferModal: React.FC<DeviceTransferModalProps> = ({
     onCancel,
     onSuccess,
     deviceIds,
+    excludeDestinations = [],
 }) => {
     const [form] = Form.useForm();
     const [branchForm] = Form.useForm();
     const { mutate: updateMany, isLoading } = useUpdateMany();
     const { mutate: createBranch, isLoading: isCreatingBranch } = useCreate();
-    const [destination, setDestination] = useState<"maintenance" | "branch" | "warehouse">("warehouse");
+
+    // Default to the first non-excluded destination
+    const defaultDestination = (["warehouse", "branch", "maintenance"] as const).find(d => !excludeDestinations.includes(d)) || "warehouse";
+
+    const [destination, setDestination] = useState<"maintenance" | "branch" | "warehouse">(defaultDestination);
     const [branchModalVisible, setBranchModalVisible] = useState(false);
 
     // Fetch branches if destination is branch
@@ -41,18 +47,23 @@ export const DeviceTransferModal: React.FC<DeviceTransferModalProps> = ({
         },
     });
 
-    // Extract unique locations from devices
-    const existingLocations = Array.from(new Set(devicesData?.data?.map((d: any) => d.current_location).filter(Boolean))).map(loc => ({
-        label: loc,
-        value: loc,
+    // Extract unique locations from devices in warehouse (where branch_id is null)
+    const existingLocations = Array.from(new Set(
+        devicesData?.data
+            ?.filter((d: any) => !d.branch_id)
+            ?.map((d: any) => d.current_location)
+            .filter(Boolean)
+    )).map(loc => ({
+        label: loc as string,
+        value: loc as string,
     }));
 
     useEffect(() => {
         if (visible) {
             form.resetFields();
-            setDestination("warehouse");
+            setDestination(defaultDestination);
         }
-    }, [visible, form]);
+    }, [visible, form, defaultDestination]);
 
     const handleOk = async () => {
         try {
@@ -122,12 +133,12 @@ export const DeviceTransferModal: React.FC<DeviceTransferModalProps> = ({
             cancelText="إلغاء"
             destroyOnHidden
         >
-            <Form form={form} layout="vertical" initialValues={{ destination: "warehouse" }}>
+            <Form form={form} layout="vertical" initialValues={{ destination: defaultDestination }}>
                 <Form.Item name="destination" label="إلى أين تريد نقل الأجهزة؟">
                     <Radio.Group onChange={(e) => setDestination(e.target.value)}>
-                        <Radio.Button value="warehouse">موقع آخر بالمخزن</Radio.Button>
-                        <Radio.Button value="branch">المبيعات</Radio.Button>
-                        <Radio.Button value="maintenance">الصيانة</Radio.Button>
+                        {!excludeDestinations.includes("warehouse") && <Radio.Button value="warehouse">المخزن</Radio.Button>}
+                        {!excludeDestinations.includes("branch") && <Radio.Button value="branch">المبيعات</Radio.Button>}
+                        {!excludeDestinations.includes("maintenance") && <Radio.Button value="maintenance">الصيانة</Radio.Button>}
                     </Radio.Group>
                 </Form.Item>
 
@@ -142,6 +153,25 @@ export const DeviceTransferModal: React.FC<DeviceTransferModalProps> = ({
                                 placeholder="اختر موقع..."
                                 options={existingLocations}
                                 onChange={() => form.setFieldsValue({ location_name: undefined })}
+                                dropdownRender={(menu) => (
+                                    <>
+                                        {menu}
+                                        <Divider style={{ margin: '8px 0' }} />
+                                        <Space style={{ padding: '0 8px 4px' }}>
+                                            <Button
+                                                type="text"
+                                                icon={<PlusOutlined />}
+                                                onClick={() => {
+                                                    // Trigger the "new location" input focus or just clear existing
+                                                    form.setFieldsValue({ existing_location: undefined });
+                                                }}
+                                                style={{ width: '100%', textAlign: 'left' }}
+                                            >
+                                                إضافة موقع جديد
+                                            </Button>
+                                        </Space>
+                                    </>
+                                )}
                             />
                         </Form.Item>
                         <Form.Item

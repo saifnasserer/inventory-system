@@ -27,7 +27,7 @@ const fetchWithAuth = async (url: string, options: RequestInit = {}): Promise<Re
 const getImpersonationId = () => localStorage.getItem("impersonated_company_id");
 
 export const customDataProvider: DataProvider = {
-    getList: async ({ resource, pagination, filters, sorters }) => {
+    getList: async ({ resource, pagination, filters, sorters, meta }) => {
         const { current = 1, pageSize = 10 } = pagination ?? {};
 
         const queryFilters: Record<string, any> = {};
@@ -69,6 +69,7 @@ export const customDataProvider: DataProvider = {
             limit: pageSize,
             sort,
             order,
+            ...(meta ? { meta: JSON.stringify(meta) } : {}),
             ...queryFilters,
         };
 
@@ -93,8 +94,9 @@ export const customDataProvider: DataProvider = {
         }
     },
 
-    getOne: async ({ resource, id }) => {
-        const url = `${API_URL}/api/${resource}/${id}`;
+    getOne: async ({ resource, id, meta }) => {
+        const query = meta ? { meta: JSON.stringify(meta) } : {};
+        const url = `${API_URL}/api/${resource}/${id}${meta ? `?${stringify(query)}` : ''}`;
 
         try {
             const response = await fetchWithAuth(url);

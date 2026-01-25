@@ -15,12 +15,14 @@ import {
     UserAddOutlined,
     EditOutlined,
     ShopOutlined,
-    FileAddOutlined
+    FileAddOutlined,
+    SwapOutlined
 } from "@ant-design/icons";
 import { useNavigation } from "@refinedev/core";
 import { Device, User } from "../../types";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { DeviceAssignmentModal } from "../warehouse/components/DeviceAssignmentModal";
+import { DeviceTransferModal } from "../warehouse/components/DeviceTransferModal";
 import { useList } from "@refinedev/core";
 
 export const SalesPortalList: React.FC = () => {
@@ -38,6 +40,9 @@ export const SalesPortalList: React.FC = () => {
                 },
             ],
         },
+        meta: {
+            select: "*,diagnostic_reports(*,hardware_specs(*))",
+        },
         queryOptions: {
             onSuccess: (data) => {
                 if (current === 1) {
@@ -51,9 +56,11 @@ export const SalesPortalList: React.FC = () => {
 
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
-    // Assignment State
+    // Assignment & Transfer State
     const [assignmentModalVisible, setAssignmentModalVisible] = useState(false);
+    const [transferModalVisible, setTransferModalVisible] = useState(false);
     const [deviceToAssign, setDeviceToAssign] = useState<string[]>([]);
+    const [devicesToTransfer, setDevicesToTransfer] = useState<string[]>([]);
 
     // Fetch users for assignment display
     const { data: usersData } = useList<User>({
@@ -80,6 +87,17 @@ export const SalesPortalList: React.FC = () => {
     const handleBulkAssign = () => {
         setDeviceToAssign(selectedRowKeys as string[]);
         setAssignmentModalVisible(true);
+    };
+
+    const handleTransfer = (ids: string[]) => {
+        setDevicesToTransfer(ids);
+        setTransferModalVisible(true);
+    };
+
+    const handleTransferSuccess = () => {
+        setSelectedRowKeys([]);
+        setCurrent(1);
+        tableQueryResult?.refetch();
     };
 
     // Search state
@@ -109,6 +127,16 @@ export const SalesPortalList: React.FC = () => {
                                 operator: "contains",
                                 value: searchText,
                             },
+                            {
+                                field: "cpu_model",
+                                operator: "contains",
+                                value: searchText,
+                            },
+                            {
+                                field: "gpu_model",
+                                operator: "contains",
+                                value: searchText,
+                            },
                         ],
                     },
                 ], "merge");
@@ -132,25 +160,33 @@ export const SalesPortalList: React.FC = () => {
 
     const getStatusLabel = (status: string) => {
         const labels: Record<string, string> = {
-            in_branch: "في الفرع",
-            ready_for_sale: "جاهز للبيع",
+            in_branch: "في المبيعات",
+            ready_for_sale: "في المخزن",
             sold: "تم البيع",
+            needs_repair: "في الصيانة",
+            in_repair: "في الصيانة",
+            returned: "مرجع للمورد",
+            scrap: "خردة",
         };
         return labels[status] || status;
     };
 
     const getStatusColor = (status: string) => {
         const colors: Record<string, string> = {
-            in_branch: "blue",
+            in_branch: "geekblue",
             ready_for_sale: "green",
-            sold: "gold",
+            sold: "success",
+            needs_repair: "orange",
+            in_repair: "orange",
+            returned: "volcano",
+            scrap: "red",
         };
         return colors[status] || "default";
     };
 
     return (
         <div style={{ padding: "0px" }}>
-            {/* Custom Header Area */}
+
             <div style={{
                 marginBottom: 24,
                 display: "flex",
@@ -165,7 +201,7 @@ export const SalesPortalList: React.FC = () => {
                 </div>
                 <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
                     <Input
-                        placeholder="بحث (رقم الأصل، السيريال، الموديل)..."
+                        placeholder="Search (Model, Serial, Hardware)..."
                         allowClear
                         value={searchText}
                         onChange={(e) => setSearchText(e.target.value)}
@@ -175,7 +211,7 @@ export const SalesPortalList: React.FC = () => {
                 </div>
             </div>
 
-            <div style={{ marginBottom: 16, display: "flex", justifyContent: "center", alignItems: "center", minHeight: selectedRowKeys.length > 0 ? 32 : 0 }}>
+            <div style={{ marginBottom: 16, display: "flex", justifyContent: "center", alignItems: "center", minHeight: selectedRowKeys.length > 0 ? 32 : 0, padding: "0 24px" }}>
                 {selectedRowKeys.length > 0 && (
                     <div style={{ fontSize: "16px", fontWeight: 500 }}>
                         <Space>
@@ -187,12 +223,19 @@ export const SalesPortalList: React.FC = () => {
                             >
                                 تعيين المحدد
                             </Button>
+                            <Button
+                                type="default"
+                                icon={<SwapOutlined />}
+                                onClick={() => handleTransfer(selectedRowKeys as string[])}
+                            >
+                                نقل المحدد
+                            </Button>
                         </Space>
                     </div>
                 )}
             </div>
 
-            <List breadcrumb={false} title={null}>
+            <List breadcrumb={false} title={false} headerButtons={null}>
                 <div id="scrollableDiv" style={{ height: "calc(100vh - 180px)", overflow: "auto", padding: "0 24px", backgroundColor: "#fff" }}>
                     <InfiniteScroll
                         dataLength={devices.length}
@@ -213,13 +256,6 @@ export const SalesPortalList: React.FC = () => {
                             }}
                         >
                             <Table.Column
-                                dataIndex="asset_id"
-                                title="رقم الأصل"
-                                render={(value) => <strong>{value}</strong>}
-                                sorter={(a: Device, b: Device) => a.asset_id.localeCompare(b.asset_id)}
-                                width={100}
-                            />
-                            <Table.Column
                                 dataIndex="model"
                                 title="الموديل"
                                 sorter={(a: Device, b: Device) =>
@@ -233,17 +269,45 @@ export const SalesPortalList: React.FC = () => {
                                     (a.serial_number || "").localeCompare(b.serial_number || "")
                                 }
                             />
-
                             <Table.Column
-                                dataIndex="current_location"
-                                title="الموقع / الفرع"
-                                responsive={["md"]}
-                                render={(value, record: Device) => (
-                                    <Space>
-                                        {record.status === 'in_branch' && <ShopOutlined />}
-                                        {value || "المخزن الرئيسي"}
-                                    </Space>
-                                )}
+                                title="CPU"
+                                render={(_, record: Device) => record.diagnostic_reports?.[0]?.hardware_specs?.cpu_name || record.cpu_model || "-"}
+                            />
+                            <Table.Column
+                                title="GPU"
+                                render={(_, record: Device) => {
+                                    const gpus = record.diagnostic_reports?.[0]?.hardware_specs?.gpus;
+                                    if (Array.isArray(gpus) && gpus.length > 0) {
+                                        // Try to find a discrete GPU first
+                                        const discreteGpu = gpus.find((gpu: any) => {
+                                            const name = (gpu.model || gpu.name || "").toLowerCase();
+                                            return name.includes("nvidia") ||
+                                                name.includes("amd") ||
+                                                name.includes("geforce") ||
+                                                name.includes("radeon") ||
+                                                name.includes("rtx") ||
+                                                name.includes("gtx");
+                                        });
+                                        if (discreteGpu) return discreteGpu.model || discreteGpu.name;
+                                        return gpus[0].model || gpus[0].name;
+                                    }
+                                    return record.gpu_model || "-";
+                                }}
+                                responsive={["lg"]}
+                            />
+                            <Table.Column
+                                title="RAM"
+                                render={(_, record: Device) => {
+                                    const ram = record.diagnostic_reports?.[0]?.hardware_specs?.memory_total_gb || record.ram_size;
+                                    return ram ? `${ram} GB` : "-";
+                                }}
+                            />
+                            <Table.Column
+                                title="Storage"
+                                render={(_, record: Device) => {
+                                    const storage = record.diagnostic_reports?.[0]?.hardware_specs?.storage_devices?.[0]?.size || record.storage_size;
+                                    return storage ? `${storage} GB` : "-";
+                                }}
                             />
 
                             <Table.Column
@@ -261,6 +325,13 @@ export const SalesPortalList: React.FC = () => {
                                                 فاتورة
                                             </Button>
                                         </Tooltip>
+                                        <Tooltip title="نقل الجهاز">
+                                            <Button
+                                                size="small"
+                                                icon={<SwapOutlined />}
+                                                onClick={() => handleTransfer([record.id])}
+                                            />
+                                        </Tooltip>
                                     </Space>
                                 )}
                             />
@@ -275,6 +346,14 @@ export const SalesPortalList: React.FC = () => {
                 deviceIds={deviceToAssign}
                 onSuccess={handleAssignmentSuccess}
                 allowedRoles={["sales_staff", "branch_manager"]}
+            />
+
+            <DeviceTransferModal
+                visible={transferModalVisible}
+                onCancel={() => setTransferModalVisible(false)}
+                deviceIds={devicesToTransfer}
+                onSuccess={handleTransferSuccess}
+                excludeDestinations={["branch"]}
             />
         </div>
     );

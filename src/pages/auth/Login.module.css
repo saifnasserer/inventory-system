@@ -3,37 +3,41 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-color: #f8fafc;
+  background-image: linear-gradient(#e2e8f0 1px, transparent 1px),
+    linear-gradient(90deg, #e2e8f0 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-position: center;
   padding: 20px;
 }
 
 .loginCard {
   width: 100%;
-  max-width: 420px;
+  max-width: 440px;
 }
 
 .card {
-  border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  padding: 20px;
-  background: #ffffff;
+  padding: 0;
+  background: transparent;
+  border: none;
 }
 
 .header {
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 40px;
 }
 
 .title {
-  margin-bottom: 8px !important;
-  color: #1a1a1a;
-  font-weight: 700;
-  font-size: 28px;
+  margin-bottom: 12px !important;
+  color: #1e293b;
+  font-weight: 800;
+  font-size: 32px;
+  letter-spacing: -0.5px;
 }
 
 .subtitle {
-  color: #666;
-  font-size: 15px;
+  color: #64748b;
+  font-size: 16px;
   font-weight: 400;
 }
 
@@ -42,24 +46,37 @@
 }
 
 .input {
-  border-radius: 8px;
+  border-radius: 32px;
+  padding: 12px 20px;
   font-size: 15px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.input:hover,
+.input:focus {
+  border-color: #1890ff !important;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(24, 144, 255, 0.1);
 }
 
 .submitButton {
-  margin-top: 8px;
-  height: 48px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  margin-top: 16px;
+  height: 54px;
+  border-radius: 32px;
+  font-size: 17px;
+  font-weight: 700;
+  background: #1890ff;
   border: none;
-  transition: all 0.3s ease;
+  box-shadow: 0 8px 24px rgba(24, 144, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .submitButton:hover {
+  background: #40a9ff;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 12px 32px rgba(24, 144, 255, 0.3);
 }
 
 .submitButton:active {
@@ -70,14 +87,16 @@
 @media (max-width: 480px) {
   .container {
     padding: 16px;
+    background-size: 16px 16px;
   }
 
   .card {
-    padding: 16px;
+    padding: 24px 16px;
+    border-radius: 20px;
   }
 
   .title {
-    font-size: 24px;
+    font-size: 28px;
   }
 
   .subtitle {
@@ -88,4 +107,10 @@
 /* RTL support */
 [dir="rtl"] .input {
   text-align: right;
+}
+
+:global(.ant-form-item-label > label) {
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 8px;
 }

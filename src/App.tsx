@@ -41,7 +41,7 @@ import { ImpersonationProvider } from "./contexts/impersonation";
 
 // Import pages
 import { DashboardPage } from "./pages/dashboard";
-import { ShipmentList, ShipmentCreate, ReviewReport } from "./pages/receiving";
+import { ShipmentList, ShipmentCreate, ReviewReport, ShipmentShow } from "./pages/shipments";
 import { DeviceList, DeviceShow, DeviceEdit } from "./pages/warehouse";
 import { MaintenanceList } from "./pages/maintenance";
 import { Login } from "./pages/auth";
@@ -120,6 +120,7 @@ function App() {
                       name: "shipments",
                       list: "/receiving/shipments",
                       create: "/receiving/shipments/create",
+                      show: "/receiving/shipments/show/:id",
                       meta: {
                         label: "الشحنات",
                         icon: <ContainerOutlined />,
@@ -267,6 +268,7 @@ function App() {
                         <Route path="shipments">
                           <Route index element={<ShipmentList />} />
                           <Route path="create" element={<ShipmentCreate />} />
+                          <Route path="show/:id" element={<ShipmentShow />} />
                           <Route path="inspect/:id" element={<DeviceShow />} />
                           <Route path="review/:id" element={<ReviewReport />} />
                         </Route>
