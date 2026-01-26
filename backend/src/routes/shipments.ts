@@ -301,6 +301,9 @@ router.delete('/:id', authenticateToken, async (req: Request, res: Response): Pr
 
         const existingShipment = await prisma.shipments.findUnique({
             where: { id },
+            include: {
+                devices: true,
+            },
         });
 
         if (!existingShipment) {
@@ -319,8 +322,85 @@ router.delete('/:id', authenticateToken, async (req: Request, res: Response): Pr
             return;
         }
 
-        await prisma.shipments.delete({
-            where: { id },
+        // Delete shipment and all associated records in a transaction
+        await prisma.$transaction(async (tx) => {
+            const deviceIds = existingShipment.devices.map(d => d.id);
+
+            if (deviceIds.length > 0) {
+                // Delete all related records for these devices
+                // Order matters: delete child records first
+
+                // 1. Delete spare parts requests (related to repairs)
+                await tx.spare_parts_requests.deleteMany({
+                    where: {
+                        repair_id: {
+                            in: await tx.repairs.findMany({
+                                where: { device_id: { in: deviceIds } },
+                                select: { id: true }
+                            }).then(repairs => repairs.map(r => r.id))
+                        }
+                    }
+                });
+
+                // 2. Delete repairs
+                await tx.repairs.deleteMany({
+                    where: { device_id: { in: deviceIds } },
+                });
+
+                // 3. Delete invoices
+                await tx.invoices.deleteMany({
+                    where: { device_id: { in: deviceIds } },
+                });
+
+                // 4. Delete physical inspections
+                await tx.physical_inspections.deleteMany({
+                    where: { device_id: { in: deviceIds } },
+                });
+
+                // 5. Delete technical inspections
+                await tx.technical_inspections.deleteMany({
+                    where: { device_id: { in: deviceIds } },
+                });
+
+                // 6. Delete transfers
+                await tx.transfers.deleteMany({
+                    where: { device_id: { in: deviceIds } },
+                });
+
+                // 7. Delete diagnostic test results (related to diagnostic reports)
+                const reportIds = await tx.diagnostic_reports.findMany({
+                    where: { device_id: { in: deviceIds } },
+                    select: { id: true }
+                }).then(reports => reports.map(r => r.id));
+
+                if (reportIds.length > 0) {
+                    await tx.diagnostic_test_results.deleteMany({
+                        where: { report_id: { in: reportIds } },
+                    });
+                }
+
+                // 8. Delete hardware specs (related to diagnostic reports)
+                if (reportIds.length > 0) {
+                    await tx.device_hardware_specs.deleteMany({
+                        where: { report_id: { in: reportIds } },
+                    });
+                }
+
+                // 9. Delete diagnostic reports (this will cascade to device_assignments)
+                await tx.diagnostic_reports.deleteMany({
+                    where: { device_id: { in: deviceIds } },
+                });
+
+                // 10. Delete devices (device_assignments will cascade automatically)
+                await tx.devices.deleteMany({
+                    where: { id: { in: deviceIds } },
+                });
+            }
+
+            // Finally, delete the shipment
+            await tx.shipments.delete({
+                where: { id },
+            });
         });
 
         res.json({

@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigation } from "@refinedev/core";
-import { useTable, List } from "@refinedev/antd";
+import { useTable, List, DeleteButton } from "@refinedev/antd";
 import { Table, Space, Button, Tag, Typography } from "antd";
 import { PlusOutlined, FolderOpenOutlined, EyeOutlined } from "@ant-design/icons";
 
@@ -55,6 +55,14 @@ export const ShipmentList: React.FC = () => {
                             >
                                 عرض
                             </Button>
+                            <DeleteButton
+                                size="small"
+                                recordItemId={record.id}
+                                hideText
+                                confirmTitle="هل أنت متأكد من حذف هذه الشحنة؟"
+                                confirmOkText="نعم، احذف"
+                                confirmCancelText="إلغاء"
+                            />
                         </Space>
                     )}
                 />

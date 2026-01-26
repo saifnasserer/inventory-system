@@ -1,3 +1,4 @@
-export { DeviceList } from "./list";
-export { DeviceShow } from "./show";
-export { DeviceEdit } from "./edit";
+export * from "./list";
+export * from "./show";
+export * from "./edit";
+export * from "./grouped";

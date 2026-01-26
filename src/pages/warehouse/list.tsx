@@ -18,11 +18,13 @@ import {
     PrinterOutlined,
     ToolOutlined,
     SwapOutlined,
+    AppstoreOutlined,
 } from "@ant-design/icons";
 import { Input } from "antd";
 import { Device } from "../../types";
 import { useState, useRef, useEffect } from "react";
 import { useGetIdentity } from "@refinedev/core";
+import { useNavigate } from "react-router-dom";
 import { DeviceLabel } from "../../components/DeviceLabel";
 import { useReactToPrint } from "react-to-print";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -34,6 +36,7 @@ export const DeviceList: React.FC = () => {
     const [transferModalVisible, setTransferModalVisible] = useState(false);
     const [devicesToTransfer, setDevicesToTransfer] = useState<string[]>([]);
     const printRef = useRef<HTMLDivElement>(null);
+    const navigate = useNavigate();
 
     // Search state
     const [searchText, setSearchText] = useState("");
@@ -205,6 +208,13 @@ export const DeviceList: React.FC = () => {
                         prefix={<SearchOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
                         style={{ width: 300, borderRadius: "50px" }}
                     />
+                    <Button
+                        icon={<AppstoreOutlined />}
+                        onClick={() => navigate("/warehouse/devices")}
+                        style={{ borderRadius: "50px" }}
+                    >
+                        عرض المجموعات
+                    </Button>
                     {isAdmin && (
                         <>
                             {selectedRowKeys.length > 0 && (

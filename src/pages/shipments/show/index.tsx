@@ -1,6 +1,6 @@
 import React from "react";
 import { useShow, useNavigation } from "@refinedev/core";
-import { Show, List, useTable } from "@refinedev/antd";
+import { Show, List, useTable, DeleteButton } from "@refinedev/antd";
 import { Typography, Card, Descriptions, Table, Tag, Space, Badge, Button } from "antd";
 import { CalendarOutlined, ContainerOutlined, InfoCircleOutlined, ShopOutlined, EyeOutlined, AuditOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
@@ -38,7 +38,24 @@ export const ShipmentShow: React.FC = () => {
     });
 
     return (
-        <Show isLoading={shipmentLoading} title="تفاصيل الشحنة">
+        <Show
+            isLoading={shipmentLoading}
+            title="تفاصيل الشحنة"
+            breadcrumb={<></>}
+            headerButtons={({ defaultButtons }) => (
+                <>
+                    {defaultButtons}
+                    <DeleteButton
+                        recordItemId={record?.id}
+                        type="primary"
+                        danger
+                        confirmTitle="هل أنت متأكد من حذف هذه الشحنة؟"
+                        confirmOkText="نعم، احذف"
+                        confirmCancelText="إلغاء"
+                    />
+                </>
+            )}
+        >
             {/* Shipment Header Info */}
             <Card
                 bordered={false}
@@ -158,6 +175,16 @@ export const ShipmentShow: React.FC = () => {
                                     >
                                         مراجعة التقرير
                                     </Button>
+                                ) : record.status === "received" && !record.latest_report_id ? (
+                                    <Button
+                                        size="small"
+                                        type="primary"
+                                        icon={<AuditOutlined />}
+                                        onClick={() => navigate(`/receiving/devices/show/${record.id}`)}
+                                        style={{ backgroundColor: '#faad14', borderColor: '#faad14' }}
+                                    >
+                                        فحص يدوي
+                                    </Button>
                                 ) : (
                                     <Button
                                         size="small"
@@ -172,6 +199,6 @@ export const ShipmentShow: React.FC = () => {
                     />
                 </Table>
             </List>
-        </Show>
+        </Show >
     );
 };

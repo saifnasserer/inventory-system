@@ -42,7 +42,7 @@ import { ImpersonationProvider } from "./contexts/impersonation";
 // Import pages
 import { DashboardPage } from "./pages/dashboard";
 import { ShipmentList, ShipmentCreate, ReviewReport, ShipmentShow } from "./pages/shipments";
-import { DeviceList, DeviceShow, DeviceEdit } from "./pages/warehouse";
+import { DeviceList, DeviceShow, DeviceEdit, DeviceGroupedList } from "./pages/warehouse";
 import { MaintenanceList } from "./pages/maintenance";
 import { Login } from "./pages/auth";
 import { CompanyList, CompanyCreate, CompanyEdit, CompanyShow } from "./pages/companies";
@@ -265,10 +265,14 @@ function App() {
 
                       {/* Receiving Routes */}
                       <Route path="/receiving">
+                        <Route path="devices">
+                          <Route path="show/:id" element={<DeviceShow />} />
+                        </Route>
                         <Route path="shipments">
                           <Route index element={<ShipmentList />} />
                           <Route path="create" element={<ShipmentCreate />} />
                           <Route path="show/:id" element={<ShipmentShow />} />
+                          <Route path="devices/show/:id" element={<DeviceShow />} />
                           <Route path="inspect/:id" element={<DeviceShow />} />
                           <Route path="review/:id" element={<ReviewReport />} />
                         </Route>
@@ -277,7 +281,8 @@ function App() {
                       {/* Warehouse Routes */}
                       <Route path="/warehouse">
                         <Route path="devices">
-                          <Route index element={<DeviceList />} />
+                          <Route index element={<DeviceGroupedList />} />
+                          <Route path="all" element={<DeviceList />} />
                           <Route path="show/:id" element={<DeviceShow />} />
                           <Route path="edit/:id" element={<DeviceEdit />} />
                         </Route>
