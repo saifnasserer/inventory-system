@@ -29,9 +29,22 @@ export interface RegisterRequest {
     branch_id?: string;
 }
 
+export interface OfflineJWTPayload {
+    sub: string;
+    iss: string;
+    exp: number;
+    iat: number;
+    jti: string;
+    monotonic_start: number;
+    max_devices: number;
+    plan_type: string;
+}
+
 export interface AuthResponse {
     success: boolean;
     token?: string;
+    offline_token?: string;
+    max_devices?: number;
     user?: UserProfile;
     error?: string;
 }

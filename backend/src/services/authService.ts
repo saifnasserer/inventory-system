@@ -51,4 +51,21 @@ export class AuthService {
             return null;
         }
     }
+    /**
+     * Generate Offline JWT token
+     */
+    static generateOfflineToken(payload: any): string {
+        return jwt.sign(payload, JWT_SECRET);
+    }
+
+    /**
+     * Verify Offline JWT token
+     */
+    static verifyOfflineToken(token: string): any {
+        try {
+            return jwt.verify(token, JWT_SECRET);
+        } catch (error) {
+            throw new Error('Invalid or expired offline token');
+        }
+    }
 }

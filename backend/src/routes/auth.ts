@@ -73,9 +73,24 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
             branchId: user.branch_id || undefined,
         });
 
+        // Generate Offline Token
+        const maxDevices = user.role === 'admin' ? 50 : 20;
+        const offlineToken = AuthService.generateOfflineToken({
+            sub: user.id,
+            iss: 'TechFlow_ERP',
+            exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60),
+            iat: Math.floor(Date.now() / 1000),
+            jti: Math.random().toString(36).substring(7),
+            monotonic_start: Date.now(),
+            max_devices: maxDevices,
+            plan_type: user.role === 'admin' ? 'pro' : 'free'
+        });
+
         res.json({
             success: true,
             token,
+            offline_token: offlineToken,
+            max_devices: maxDevices,
             user: {
                 id: user.id,
                 email: user.email,
