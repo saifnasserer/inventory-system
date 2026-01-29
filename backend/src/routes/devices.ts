@@ -21,6 +21,7 @@ router.get('/', authenticateToken, async (req: Request, res: Response): Promise<
             branch_id,
             shipment_id,
             search,
+            id,
         } = req.query;
 
         const pageNum = parseInt(page as string);
@@ -31,6 +32,10 @@ router.get('/', authenticateToken, async (req: Request, res: Response): Promise<
         const where: any = {
             company_id: req.user!.companyId,
         };
+
+        if (id) {
+            where.id = Array.isArray(id) ? { in: id as string[] } : id;
+        }
 
         if (status) {
             where.status = Array.isArray(status) ? { in: status } : status;

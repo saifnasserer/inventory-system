@@ -161,6 +161,9 @@ exports.Prisma.CompaniesScalarFieldEnum = {
   name: 'name',
   status: 'status',
   subscription_plan: 'subscription_plan',
+  subscription_expiry: 'subscription_expiry',
+  max_offline_devices: 'max_offline_devices',
+  offline_scan_usage: 'offline_scan_usage',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -194,7 +197,8 @@ exports.Prisma.DevicesScalarFieldEnum = {
   bios_serial: 'bios_serial',
   os: 'os',
   battery_health_percent: 'battery_health_percent',
-  storage_health_percent: 'storage_health_percent'
+  storage_health_percent: 'storage_health_percent',
+  purchase_price: 'purchase_price'
 };
 
 exports.Prisma.Device_assignmentsScalarFieldEnum = {
@@ -213,11 +217,9 @@ exports.Prisma.Device_assignmentsScalarFieldEnum = {
 exports.Prisma.InvoicesScalarFieldEnum = {
   id: 'id',
   invoice_number: 'invoice_number',
-  device_id: 'device_id',
   branch_id: 'branch_id',
   customer_name: 'customer_name',
   customer_contact: 'customer_contact',
-  customer_email: 'customer_email',
   sale_price: 'sale_price',
   tax_amount: 'tax_amount',
   total_amount: 'total_amount',
@@ -225,7 +227,46 @@ exports.Prisma.InvoicesScalarFieldEnum = {
   sale_date: 'sale_date',
   notes: 'notes',
   created_at: 'created_at',
+  updated_at: 'updated_at',
+  amount_paid: 'amount_paid',
+  client_id: 'client_id',
+  payment_method: 'payment_method',
+  payment_status: 'payment_status'
+};
+
+exports.Prisma.Invoice_itemsScalarFieldEnum = {
+  id: 'id',
+  invoice_id: 'invoice_id',
+  device_id: 'device_id',
+  item_name: 'item_name',
+  serial_number: 'serial_number',
+  asset_id: 'asset_id',
+  quantity: 'quantity',
+  unit_price: 'unit_price',
+  total_price: 'total_price'
+};
+
+exports.Prisma.ClientsScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  phone: 'phone',
+  email: 'email',
+  address: 'address',
+  company_id: 'company_id',
+  balance: 'balance',
+  created_at: 'created_at',
   updated_at: 'updated_at'
+};
+
+exports.Prisma.Invoice_paymentsScalarFieldEnum = {
+  id: 'id',
+  invoice_id: 'invoice_id',
+  amount: 'amount',
+  payment_date: 'payment_date',
+  payment_method: 'payment_method',
+  received_by: 'received_by',
+  notes: 'notes',
+  created_at: 'created_at'
 };
 
 exports.Prisma.Physical_inspectionsScalarFieldEnum = {
@@ -521,12 +562,36 @@ exports.Prisma.device_assignmentsOrderByRelevanceFieldEnum = {
 exports.Prisma.invoicesOrderByRelevanceFieldEnum = {
   id: 'id',
   invoice_number: 'invoice_number',
-  device_id: 'device_id',
   branch_id: 'branch_id',
   customer_name: 'customer_name',
   customer_contact: 'customer_contact',
-  customer_email: 'customer_email',
   sold_by: 'sold_by',
+  notes: 'notes',
+  client_id: 'client_id'
+};
+
+exports.Prisma.invoice_itemsOrderByRelevanceFieldEnum = {
+  id: 'id',
+  invoice_id: 'invoice_id',
+  device_id: 'device_id',
+  item_name: 'item_name',
+  serial_number: 'serial_number',
+  asset_id: 'asset_id'
+};
+
+exports.Prisma.clientsOrderByRelevanceFieldEnum = {
+  id: 'id',
+  name: 'name',
+  phone: 'phone',
+  email: 'email',
+  address: 'address',
+  company_id: 'company_id'
+};
+
+exports.Prisma.invoice_paymentsOrderByRelevanceFieldEnum = {
+  id: 'id',
+  invoice_id: 'invoice_id',
+  received_by: 'received_by',
   notes: 'notes'
 };
 
@@ -676,6 +741,17 @@ exports.device_status = exports.$Enums.device_status = {
   sold: 'sold'
 };
 
+exports.payment_method = exports.$Enums.payment_method = {
+  cash: 'cash',
+  credit: 'credit'
+};
+
+exports.payment_status = exports.$Enums.payment_status = {
+  paid: 'paid',
+  partial: 'partial',
+  pending: 'pending'
+};
+
 exports.Prisma.ModelName = {
   announcements: 'announcements',
   branches: 'branches',
@@ -684,6 +760,9 @@ exports.Prisma.ModelName = {
   devices: 'devices',
   device_assignments: 'device_assignments',
   invoices: 'invoices',
+  invoice_items: 'invoice_items',
+  clients: 'clients',
+  invoice_payments: 'invoice_payments',
   physical_inspections: 'physical_inspections',
   repairs: 'repairs',
   shipments: 'shipments',

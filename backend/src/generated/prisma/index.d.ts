@@ -3,7 +3,7 @@
  * Client
 **/
 
-import * as runtime from './runtime/binary';
+import * as runtime from './runtime/binary.js';
 import $Types = runtime.Types // general types
 import $Public = runtime.Types.Public
 import $Utils = runtime.Types.Utils
@@ -48,6 +48,21 @@ export type device_assignments = $Result.DefaultSelection<Prisma.$device_assignm
  * 
  */
 export type invoices = $Result.DefaultSelection<Prisma.$invoicesPayload>
+/**
+ * Model invoice_items
+ * 
+ */
+export type invoice_items = $Result.DefaultSelection<Prisma.$invoice_itemsPayload>
+/**
+ * Model clients
+ * 
+ */
+export type clients = $Result.DefaultSelection<Prisma.$clientsPayload>
+/**
+ * Model invoice_payments
+ * 
+ */
+export type invoice_payments = $Result.DefaultSelection<Prisma.$invoice_paymentsPayload>
 /**
  * Model physical_inspections
  * This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
@@ -120,6 +135,23 @@ export namespace $Enums {
 export type device_status = (typeof device_status)[keyof typeof device_status]
 
 
+export const payment_status: {
+  paid: 'paid',
+  partial: 'partial',
+  pending: 'pending'
+};
+
+export type payment_status = (typeof payment_status)[keyof typeof payment_status]
+
+
+export const payment_method: {
+  cash: 'cash',
+  credit: 'credit'
+};
+
+export type payment_method = (typeof payment_method)[keyof typeof payment_method]
+
+
 export const user_role: {
   admin: 'admin',
   warehouse_manager: 'warehouse_manager',
@@ -138,6 +170,14 @@ export type user_role = (typeof user_role)[keyof typeof user_role]
 export type device_status = $Enums.device_status
 
 export const device_status: typeof $Enums.device_status
+
+export type payment_status = $Enums.payment_status
+
+export const payment_status: typeof $Enums.payment_status
+
+export type payment_method = $Enums.payment_method
+
+export const payment_method: typeof $Enums.payment_method
 
 export type user_role = $Enums.user_role
 
@@ -330,6 +370,36 @@ export class PrismaClient<
     * ```
     */
   get invoices(): Prisma.invoicesDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.invoice_items`: Exposes CRUD operations for the **invoice_items** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Invoice_items
+    * const invoice_items = await prisma.invoice_items.findMany()
+    * ```
+    */
+  get invoice_items(): Prisma.invoice_itemsDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.clients`: Exposes CRUD operations for the **clients** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Clients
+    * const clients = await prisma.clients.findMany()
+    * ```
+    */
+  get clients(): Prisma.clientsDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.invoice_payments`: Exposes CRUD operations for the **invoice_payments** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Invoice_payments
+    * const invoice_payments = await prisma.invoice_payments.findMany()
+    * ```
+    */
+  get invoice_payments(): Prisma.invoice_paymentsDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.physical_inspections`: Exposes CRUD operations for the **physical_inspections** model.
@@ -878,6 +948,9 @@ export namespace Prisma {
     devices: 'devices',
     device_assignments: 'device_assignments',
     invoices: 'invoices',
+    invoice_items: 'invoice_items',
+    clients: 'clients',
+    invoice_payments: 'invoice_payments',
     physical_inspections: 'physical_inspections',
     repairs: 'repairs',
     shipments: 'shipments',
@@ -906,7 +979,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "announcements" | "branches" | "vendors" | "companies" | "devices" | "device_assignments" | "invoices" | "physical_inspections" | "repairs" | "shipments" | "spare_parts_requests" | "technical_inspections" | "transfers" | "users" | "diagnostic_reports" | "diagnostic_test_results" | "device_hardware_specs"
+      modelProps: "announcements" | "branches" | "vendors" | "companies" | "devices" | "device_assignments" | "invoices" | "invoice_items" | "clients" | "invoice_payments" | "physical_inspections" | "repairs" | "shipments" | "spare_parts_requests" | "technical_inspections" | "transfers" | "users" | "diagnostic_reports" | "diagnostic_test_results" | "device_hardware_specs"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1369,6 +1442,204 @@ export namespace Prisma {
           count: {
             args: Prisma.invoicesCountArgs<ExtArgs>
             result: $Utils.Optional<InvoicesCountAggregateOutputType> | number
+          }
+        }
+      }
+      invoice_items: {
+        payload: Prisma.$invoice_itemsPayload<ExtArgs>
+        fields: Prisma.invoice_itemsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.invoice_itemsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$invoice_itemsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.invoice_itemsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$invoice_itemsPayload>
+          }
+          findFirst: {
+            args: Prisma.invoice_itemsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$invoice_itemsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.invoice_itemsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$invoice_itemsPayload>
+          }
+          findMany: {
+            args: Prisma.invoice_itemsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$invoice_itemsPayload>[]
+          }
+          create: {
+            args: Prisma.invoice_itemsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$invoice_itemsPayload>
+          }
+          createMany: {
+            args: Prisma.invoice_itemsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.invoice_itemsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$invoice_itemsPayload>
+          }
+          update: {
+            args: Prisma.invoice_itemsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$invoice_itemsPayload>
+          }
+          deleteMany: {
+            args: Prisma.invoice_itemsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.invoice_itemsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.invoice_itemsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$invoice_itemsPayload>
+          }
+          aggregate: {
+            args: Prisma.Invoice_itemsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateInvoice_items>
+          }
+          groupBy: {
+            args: Prisma.invoice_itemsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Invoice_itemsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.invoice_itemsCountArgs<ExtArgs>
+            result: $Utils.Optional<Invoice_itemsCountAggregateOutputType> | number
+          }
+        }
+      }
+      clients: {
+        payload: Prisma.$clientsPayload<ExtArgs>
+        fields: Prisma.clientsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.clientsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$clientsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.clientsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$clientsPayload>
+          }
+          findFirst: {
+            args: Prisma.clientsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$clientsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.clientsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$clientsPayload>
+          }
+          findMany: {
+            args: Prisma.clientsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$clientsPayload>[]
+          }
+          create: {
+            args: Prisma.clientsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$clientsPayload>
+          }
+          createMany: {
+            args: Prisma.clientsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.clientsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$clientsPayload>
+          }
+          update: {
+            args: Prisma.clientsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$clientsPayload>
+          }
+          deleteMany: {
+            args: Prisma.clientsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.clientsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.clientsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$clientsPayload>
+          }
+          aggregate: {
+            args: Prisma.ClientsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateClients>
+          }
+          groupBy: {
+            args: Prisma.clientsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ClientsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.clientsCountArgs<ExtArgs>
+            result: $Utils.Optional<ClientsCountAggregateOutputType> | number
+          }
+        }
+      }
+      invoice_payments: {
+        payload: Prisma.$invoice_paymentsPayload<ExtArgs>
+        fields: Prisma.invoice_paymentsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.invoice_paymentsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$invoice_paymentsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.invoice_paymentsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$invoice_paymentsPayload>
+          }
+          findFirst: {
+            args: Prisma.invoice_paymentsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$invoice_paymentsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.invoice_paymentsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$invoice_paymentsPayload>
+          }
+          findMany: {
+            args: Prisma.invoice_paymentsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$invoice_paymentsPayload>[]
+          }
+          create: {
+            args: Prisma.invoice_paymentsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$invoice_paymentsPayload>
+          }
+          createMany: {
+            args: Prisma.invoice_paymentsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.invoice_paymentsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$invoice_paymentsPayload>
+          }
+          update: {
+            args: Prisma.invoice_paymentsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$invoice_paymentsPayload>
+          }
+          deleteMany: {
+            args: Prisma.invoice_paymentsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.invoice_paymentsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.invoice_paymentsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$invoice_paymentsPayload>
+          }
+          aggregate: {
+            args: Prisma.Invoice_paymentsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateInvoice_payments>
+          }
+          groupBy: {
+            args: Prisma.invoice_paymentsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Invoice_paymentsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.invoice_paymentsCountArgs<ExtArgs>
+            result: $Utils.Optional<Invoice_paymentsCountAggregateOutputType> | number
           }
         }
       }
@@ -2131,6 +2402,9 @@ export namespace Prisma {
     devices?: devicesOmit
     device_assignments?: device_assignmentsOmit
     invoices?: invoicesOmit
+    invoice_items?: invoice_itemsOmit
+    clients?: clientsOmit
+    invoice_payments?: invoice_paymentsOmit
     physical_inspections?: physical_inspectionsOmit
     repairs?: repairsOmit
     shipments?: shipmentsOmit
@@ -2328,6 +2602,7 @@ export namespace Prisma {
    */
 
   export type CompaniesCountOutputType = {
+    clients: number
     devices: number
     shipments: number
     users: number
@@ -2335,6 +2610,7 @@ export namespace Prisma {
   }
 
   export type CompaniesCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    clients?: boolean | CompaniesCountOutputTypeCountClientsArgs
     devices?: boolean | CompaniesCountOutputTypeCountDevicesArgs
     shipments?: boolean | CompaniesCountOutputTypeCountShipmentsArgs
     users?: boolean | CompaniesCountOutputTypeCountUsersArgs
@@ -2350,6 +2626,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the CompaniesCountOutputType
      */
     select?: CompaniesCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CompaniesCountOutputType without action
+   */
+  export type CompaniesCountOutputTypeCountClientsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: clientsWhereInput
   }
 
   /**
@@ -2389,7 +2672,7 @@ export namespace Prisma {
     device_assignments: number
     hardware_specs: number
     diagnostic_reports: number
-    invoices: number
+    invoice_items: number
     physical_inspections: number
     repairs: number
     technical_inspections: number
@@ -2400,7 +2683,7 @@ export namespace Prisma {
     device_assignments?: boolean | DevicesCountOutputTypeCountDevice_assignmentsArgs
     hardware_specs?: boolean | DevicesCountOutputTypeCountHardware_specsArgs
     diagnostic_reports?: boolean | DevicesCountOutputTypeCountDiagnostic_reportsArgs
-    invoices?: boolean | DevicesCountOutputTypeCountInvoicesArgs
+    invoice_items?: boolean | DevicesCountOutputTypeCountInvoice_itemsArgs
     physical_inspections?: boolean | DevicesCountOutputTypeCountPhysical_inspectionsArgs
     repairs?: boolean | DevicesCountOutputTypeCountRepairsArgs
     technical_inspections?: boolean | DevicesCountOutputTypeCountTechnical_inspectionsArgs
@@ -2442,8 +2725,8 @@ export namespace Prisma {
   /**
    * DevicesCountOutputType without action
    */
-  export type DevicesCountOutputTypeCountInvoicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: invoicesWhereInput
+  export type DevicesCountOutputTypeCountInvoice_itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: invoice_itemsWhereInput
   }
 
   /**
@@ -2472,6 +2755,77 @@ export namespace Prisma {
    */
   export type DevicesCountOutputTypeCountTransfersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: transfersWhereInput
+  }
+
+
+  /**
+   * Count Type InvoicesCountOutputType
+   */
+
+  export type InvoicesCountOutputType = {
+    invoice_payments: number
+    invoice_items: number
+  }
+
+  export type InvoicesCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    invoice_payments?: boolean | InvoicesCountOutputTypeCountInvoice_paymentsArgs
+    invoice_items?: boolean | InvoicesCountOutputTypeCountInvoice_itemsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * InvoicesCountOutputType without action
+   */
+  export type InvoicesCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InvoicesCountOutputType
+     */
+    select?: InvoicesCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * InvoicesCountOutputType without action
+   */
+  export type InvoicesCountOutputTypeCountInvoice_paymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: invoice_paymentsWhereInput
+  }
+
+  /**
+   * InvoicesCountOutputType without action
+   */
+  export type InvoicesCountOutputTypeCountInvoice_itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: invoice_itemsWhereInput
+  }
+
+
+  /**
+   * Count Type ClientsCountOutputType
+   */
+
+  export type ClientsCountOutputType = {
+    invoices: number
+  }
+
+  export type ClientsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    invoices?: boolean | ClientsCountOutputTypeCountInvoicesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ClientsCountOutputType without action
+   */
+  export type ClientsCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ClientsCountOutputType
+     */
+    select?: ClientsCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ClientsCountOutputType without action
+   */
+  export type ClientsCountOutputTypeCountInvoicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: invoicesWhereInput
   }
 
 
@@ -2548,6 +2902,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers: number
     devices: number
     diagnostic_reports: number
+    invoice_payments: number
     invoices: number
     physical_inspections: number
     repairs_repairs_assigned_byTousers: number
@@ -2566,6 +2921,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: boolean | UsersCountOutputTypeCountDevice_assignments_device_assignments_assigned_toTousersArgs
     devices?: boolean | UsersCountOutputTypeCountDevicesArgs
     diagnostic_reports?: boolean | UsersCountOutputTypeCountDiagnostic_reportsArgs
+    invoice_payments?: boolean | UsersCountOutputTypeCountInvoice_paymentsArgs
     invoices?: boolean | UsersCountOutputTypeCountInvoicesArgs
     physical_inspections?: boolean | UsersCountOutputTypeCountPhysical_inspectionsArgs
     repairs_repairs_assigned_byTousers?: boolean | UsersCountOutputTypeCountRepairs_repairs_assigned_byTousersArgs
@@ -2628,6 +2984,13 @@ export namespace Prisma {
    */
   export type UsersCountOutputTypeCountDiagnostic_reportsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: diagnostic_reportsWhereInput
+  }
+
+  /**
+   * UsersCountOutputType without action
+   */
+  export type UsersCountOutputTypeCountInvoice_paymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: invoice_paymentsWhereInput
   }
 
   /**
@@ -5913,8 +6276,20 @@ export namespace Prisma {
 
   export type AggregateCompanies = {
     _count: CompaniesCountAggregateOutputType | null
+    _avg: CompaniesAvgAggregateOutputType | null
+    _sum: CompaniesSumAggregateOutputType | null
     _min: CompaniesMinAggregateOutputType | null
     _max: CompaniesMaxAggregateOutputType | null
+  }
+
+  export type CompaniesAvgAggregateOutputType = {
+    max_offline_devices: number | null
+    offline_scan_usage: number | null
+  }
+
+  export type CompaniesSumAggregateOutputType = {
+    max_offline_devices: number | null
+    offline_scan_usage: number | null
   }
 
   export type CompaniesMinAggregateOutputType = {
@@ -5922,6 +6297,9 @@ export namespace Prisma {
     name: string | null
     status: string | null
     subscription_plan: string | null
+    subscription_expiry: Date | null
+    max_offline_devices: number | null
+    offline_scan_usage: number | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -5931,6 +6309,9 @@ export namespace Prisma {
     name: string | null
     status: string | null
     subscription_plan: string | null
+    subscription_expiry: Date | null
+    max_offline_devices: number | null
+    offline_scan_usage: number | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -5940,17 +6321,33 @@ export namespace Prisma {
     name: number
     status: number
     subscription_plan: number
+    subscription_expiry: number
+    max_offline_devices: number
+    offline_scan_usage: number
     created_at: number
     updated_at: number
     _all: number
   }
 
 
+  export type CompaniesAvgAggregateInputType = {
+    max_offline_devices?: true
+    offline_scan_usage?: true
+  }
+
+  export type CompaniesSumAggregateInputType = {
+    max_offline_devices?: true
+    offline_scan_usage?: true
+  }
+
   export type CompaniesMinAggregateInputType = {
     id?: true
     name?: true
     status?: true
     subscription_plan?: true
+    subscription_expiry?: true
+    max_offline_devices?: true
+    offline_scan_usage?: true
     created_at?: true
     updated_at?: true
   }
@@ -5960,6 +6357,9 @@ export namespace Prisma {
     name?: true
     status?: true
     subscription_plan?: true
+    subscription_expiry?: true
+    max_offline_devices?: true
+    offline_scan_usage?: true
     created_at?: true
     updated_at?: true
   }
@@ -5969,6 +6369,9 @@ export namespace Prisma {
     name?: true
     status?: true
     subscription_plan?: true
+    subscription_expiry?: true
+    max_offline_devices?: true
+    offline_scan_usage?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -6012,6 +6415,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: CompaniesAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CompaniesSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: CompaniesMinAggregateInputType
@@ -6042,6 +6457,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: CompaniesCountAggregateInputType | true
+    _avg?: CompaniesAvgAggregateInputType
+    _sum?: CompaniesSumAggregateInputType
     _min?: CompaniesMinAggregateInputType
     _max?: CompaniesMaxAggregateInputType
   }
@@ -6051,9 +6468,14 @@ export namespace Prisma {
     name: string
     status: string
     subscription_plan: string | null
+    subscription_expiry: Date | null
+    max_offline_devices: number | null
+    offline_scan_usage: number | null
     created_at: Date
     updated_at: Date
     _count: CompaniesCountAggregateOutputType | null
+    _avg: CompaniesAvgAggregateOutputType | null
+    _sum: CompaniesSumAggregateOutputType | null
     _min: CompaniesMinAggregateOutputType | null
     _max: CompaniesMaxAggregateOutputType | null
   }
@@ -6077,8 +6499,12 @@ export namespace Prisma {
     name?: boolean
     status?: boolean
     subscription_plan?: boolean
+    subscription_expiry?: boolean
+    max_offline_devices?: boolean
+    offline_scan_usage?: boolean
     created_at?: boolean
     updated_at?: boolean
+    clients?: boolean | companies$clientsArgs<ExtArgs>
     devices?: boolean | companies$devicesArgs<ExtArgs>
     shipments?: boolean | companies$shipmentsArgs<ExtArgs>
     users?: boolean | companies$usersArgs<ExtArgs>
@@ -6093,12 +6519,16 @@ export namespace Prisma {
     name?: boolean
     status?: boolean
     subscription_plan?: boolean
+    subscription_expiry?: boolean
+    max_offline_devices?: boolean
+    offline_scan_usage?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type companiesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "status" | "subscription_plan" | "created_at" | "updated_at", ExtArgs["result"]["companies"]>
+  export type companiesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "status" | "subscription_plan" | "subscription_expiry" | "max_offline_devices" | "offline_scan_usage" | "created_at" | "updated_at", ExtArgs["result"]["companies"]>
   export type companiesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    clients?: boolean | companies$clientsArgs<ExtArgs>
     devices?: boolean | companies$devicesArgs<ExtArgs>
     shipments?: boolean | companies$shipmentsArgs<ExtArgs>
     users?: boolean | companies$usersArgs<ExtArgs>
@@ -6109,6 +6539,7 @@ export namespace Prisma {
   export type $companiesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "companies"
     objects: {
+      clients: Prisma.$clientsPayload<ExtArgs>[]
       devices: Prisma.$devicesPayload<ExtArgs>[]
       shipments: Prisma.$shipmentsPayload<ExtArgs>[]
       users: Prisma.$usersPayload<ExtArgs>[]
@@ -6119,6 +6550,9 @@ export namespace Prisma {
       name: string
       status: string
       subscription_plan: string | null
+      subscription_expiry: Date | null
+      max_offline_devices: number | null
+      offline_scan_usage: number | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["companies"]>
@@ -6461,6 +6895,7 @@ export namespace Prisma {
    */
   export interface Prisma__companiesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    clients<T extends companies$clientsArgs<ExtArgs> = {}>(args?: Subset<T, companies$clientsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$clientsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     devices<T extends companies$devicesArgs<ExtArgs> = {}>(args?: Subset<T, companies$devicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$devicesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     shipments<T extends companies$shipmentsArgs<ExtArgs> = {}>(args?: Subset<T, companies$shipmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$shipmentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     users<T extends companies$usersArgs<ExtArgs> = {}>(args?: Subset<T, companies$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -6498,6 +6933,9 @@ export namespace Prisma {
     readonly name: FieldRef<"companies", 'String'>
     readonly status: FieldRef<"companies", 'String'>
     readonly subscription_plan: FieldRef<"companies", 'String'>
+    readonly subscription_expiry: FieldRef<"companies", 'DateTime'>
+    readonly max_offline_devices: FieldRef<"companies", 'Int'>
+    readonly offline_scan_usage: FieldRef<"companies", 'Int'>
     readonly created_at: FieldRef<"companies", 'DateTime'>
     readonly updated_at: FieldRef<"companies", 'DateTime'>
   }
@@ -6843,6 +7281,30 @@ export namespace Prisma {
   }
 
   /**
+   * companies.clients
+   */
+  export type companies$clientsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the clients
+     */
+    select?: clientsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the clients
+     */
+    omit?: clientsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: clientsInclude<ExtArgs> | null
+    where?: clientsWhereInput
+    orderBy?: clientsOrderByWithRelationInput | clientsOrderByWithRelationInput[]
+    cursor?: clientsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ClientsScalarFieldEnum | ClientsScalarFieldEnum[]
+  }
+
+  /**
    * companies.devices
    */
   export type companies$devicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6977,6 +7439,7 @@ export namespace Prisma {
     diagnostic_score: number | null
     battery_health_percent: Decimal | null
     storage_health_percent: Decimal | null
+    purchase_price: Decimal | null
   }
 
   export type DevicesSumAggregateOutputType = {
@@ -6987,6 +7450,7 @@ export namespace Prisma {
     diagnostic_score: number | null
     battery_health_percent: Decimal | null
     storage_health_percent: Decimal | null
+    purchase_price: Decimal | null
   }
 
   export type DevicesMinAggregateOutputType = {
@@ -7016,6 +7480,7 @@ export namespace Prisma {
     os: string | null
     battery_health_percent: Decimal | null
     storage_health_percent: Decimal | null
+    purchase_price: Decimal | null
   }
 
   export type DevicesMaxAggregateOutputType = {
@@ -7045,6 +7510,7 @@ export namespace Prisma {
     os: string | null
     battery_health_percent: Decimal | null
     storage_health_percent: Decimal | null
+    purchase_price: Decimal | null
   }
 
   export type DevicesCountAggregateOutputType = {
@@ -7077,6 +7543,7 @@ export namespace Prisma {
     os: number
     battery_health_percent: number
     storage_health_percent: number
+    purchase_price: number
     _all: number
   }
 
@@ -7089,6 +7556,7 @@ export namespace Prisma {
     diagnostic_score?: true
     battery_health_percent?: true
     storage_health_percent?: true
+    purchase_price?: true
   }
 
   export type DevicesSumAggregateInputType = {
@@ -7099,6 +7567,7 @@ export namespace Prisma {
     diagnostic_score?: true
     battery_health_percent?: true
     storage_health_percent?: true
+    purchase_price?: true
   }
 
   export type DevicesMinAggregateInputType = {
@@ -7128,6 +7597,7 @@ export namespace Prisma {
     os?: true
     battery_health_percent?: true
     storage_health_percent?: true
+    purchase_price?: true
   }
 
   export type DevicesMaxAggregateInputType = {
@@ -7157,6 +7627,7 @@ export namespace Prisma {
     os?: true
     battery_health_percent?: true
     storage_health_percent?: true
+    purchase_price?: true
   }
 
   export type DevicesCountAggregateInputType = {
@@ -7189,6 +7660,7 @@ export namespace Prisma {
     os?: true
     battery_health_percent?: true
     storage_health_percent?: true
+    purchase_price?: true
     _all?: true
   }
 
@@ -7308,6 +7780,7 @@ export namespace Prisma {
     os: string | null
     battery_health_percent: Decimal | null
     storage_health_percent: Decimal | null
+    purchase_price: Decimal | null
     _count: DevicesCountAggregateOutputType | null
     _avg: DevicesAvgAggregateOutputType | null
     _sum: DevicesSumAggregateOutputType | null
@@ -7359,6 +7832,7 @@ export namespace Prisma {
     os?: boolean
     battery_health_percent?: boolean
     storage_health_percent?: boolean
+    purchase_price?: boolean
     device_assignments?: boolean | devices$device_assignmentsArgs<ExtArgs>
     hardware_specs?: boolean | devices$hardware_specsArgs<ExtArgs>
     users?: boolean | devices$usersArgs<ExtArgs>
@@ -7367,7 +7841,7 @@ export namespace Prisma {
     latest_report?: boolean | devices$latest_reportArgs<ExtArgs>
     shipments?: boolean | devices$shipmentsArgs<ExtArgs>
     diagnostic_reports?: boolean | devices$diagnostic_reportsArgs<ExtArgs>
-    invoices?: boolean | devices$invoicesArgs<ExtArgs>
+    invoice_items?: boolean | devices$invoice_itemsArgs<ExtArgs>
     physical_inspections?: boolean | devices$physical_inspectionsArgs<ExtArgs>
     repairs?: boolean | devices$repairsArgs<ExtArgs>
     technical_inspections?: boolean | devices$technical_inspectionsArgs<ExtArgs>
@@ -7407,9 +7881,10 @@ export namespace Prisma {
     os?: boolean
     battery_health_percent?: boolean
     storage_health_percent?: boolean
+    purchase_price?: boolean
   }
 
-  export type devicesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "asset_id" | "shipment_id" | "status" | "model" | "serial_number" | "manufacturer" | "ram_size" | "ram_count" | "ram_models" | "storage_size" | "storage_count" | "storage_types" | "storage_models" | "gpu_model" | "cpu_model" | "current_location" | "branch_id" | "assigned_to" | "created_at" | "updated_at" | "company_id" | "latest_report_id" | "last_diagnostic_at" | "diagnostic_score" | "bios_serial" | "os" | "battery_health_percent" | "storage_health_percent", ExtArgs["result"]["devices"]>
+  export type devicesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "asset_id" | "shipment_id" | "status" | "model" | "serial_number" | "manufacturer" | "ram_size" | "ram_count" | "ram_models" | "storage_size" | "storage_count" | "storage_types" | "storage_models" | "gpu_model" | "cpu_model" | "current_location" | "branch_id" | "assigned_to" | "created_at" | "updated_at" | "company_id" | "latest_report_id" | "last_diagnostic_at" | "diagnostic_score" | "bios_serial" | "os" | "battery_health_percent" | "storage_health_percent" | "purchase_price", ExtArgs["result"]["devices"]>
   export type devicesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     device_assignments?: boolean | devices$device_assignmentsArgs<ExtArgs>
     hardware_specs?: boolean | devices$hardware_specsArgs<ExtArgs>
@@ -7419,7 +7894,7 @@ export namespace Prisma {
     latest_report?: boolean | devices$latest_reportArgs<ExtArgs>
     shipments?: boolean | devices$shipmentsArgs<ExtArgs>
     diagnostic_reports?: boolean | devices$diagnostic_reportsArgs<ExtArgs>
-    invoices?: boolean | devices$invoicesArgs<ExtArgs>
+    invoice_items?: boolean | devices$invoice_itemsArgs<ExtArgs>
     physical_inspections?: boolean | devices$physical_inspectionsArgs<ExtArgs>
     repairs?: boolean | devices$repairsArgs<ExtArgs>
     technical_inspections?: boolean | devices$technical_inspectionsArgs<ExtArgs>
@@ -7438,7 +7913,7 @@ export namespace Prisma {
       latest_report: Prisma.$diagnostic_reportsPayload<ExtArgs> | null
       shipments: Prisma.$shipmentsPayload<ExtArgs> | null
       diagnostic_reports: Prisma.$diagnostic_reportsPayload<ExtArgs>[]
-      invoices: Prisma.$invoicesPayload<ExtArgs>[]
+      invoice_items: Prisma.$invoice_itemsPayload<ExtArgs>[]
       physical_inspections: Prisma.$physical_inspectionsPayload<ExtArgs>[]
       repairs: Prisma.$repairsPayload<ExtArgs>[]
       technical_inspections: Prisma.$technical_inspectionsPayload<ExtArgs>[]
@@ -7474,6 +7949,7 @@ export namespace Prisma {
       os: string | null
       battery_health_percent: Prisma.Decimal | null
       storage_health_percent: Prisma.Decimal | null
+      purchase_price: Prisma.Decimal | null
     }, ExtArgs["result"]["devices"]>
     composites: {}
   }
@@ -7822,7 +8298,7 @@ export namespace Prisma {
     latest_report<T extends devices$latest_reportArgs<ExtArgs> = {}>(args?: Subset<T, devices$latest_reportArgs<ExtArgs>>): Prisma__diagnostic_reportsClient<$Result.GetResult<Prisma.$diagnostic_reportsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     shipments<T extends devices$shipmentsArgs<ExtArgs> = {}>(args?: Subset<T, devices$shipmentsArgs<ExtArgs>>): Prisma__shipmentsClient<$Result.GetResult<Prisma.$shipmentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     diagnostic_reports<T extends devices$diagnostic_reportsArgs<ExtArgs> = {}>(args?: Subset<T, devices$diagnostic_reportsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$diagnostic_reportsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    invoices<T extends devices$invoicesArgs<ExtArgs> = {}>(args?: Subset<T, devices$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$invoicesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    invoice_items<T extends devices$invoice_itemsArgs<ExtArgs> = {}>(args?: Subset<T, devices$invoice_itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$invoice_itemsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     physical_inspections<T extends devices$physical_inspectionsArgs<ExtArgs> = {}>(args?: Subset<T, devices$physical_inspectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$physical_inspectionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     repairs<T extends devices$repairsArgs<ExtArgs> = {}>(args?: Subset<T, devices$repairsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$repairsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     technical_inspections<T extends devices$technical_inspectionsArgs<ExtArgs> = {}>(args?: Subset<T, devices$technical_inspectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$technical_inspectionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -7885,6 +8361,7 @@ export namespace Prisma {
     readonly os: FieldRef<"devices", 'String'>
     readonly battery_health_percent: FieldRef<"devices", 'Decimal'>
     readonly storage_health_percent: FieldRef<"devices", 'Decimal'>
+    readonly purchase_price: FieldRef<"devices", 'Decimal'>
   }
     
 
@@ -8376,27 +8853,27 @@ export namespace Prisma {
   }
 
   /**
-   * devices.invoices
+   * devices.invoice_items
    */
-  export type devices$invoicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type devices$invoice_itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the invoices
+     * Select specific fields to fetch from the invoice_items
      */
-    select?: invoicesSelect<ExtArgs> | null
+    select?: invoice_itemsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the invoices
+     * Omit specific fields from the invoice_items
      */
-    omit?: invoicesOmit<ExtArgs> | null
+    omit?: invoice_itemsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: invoicesInclude<ExtArgs> | null
-    where?: invoicesWhereInput
-    orderBy?: invoicesOrderByWithRelationInput | invoicesOrderByWithRelationInput[]
-    cursor?: invoicesWhereUniqueInput
+    include?: invoice_itemsInclude<ExtArgs> | null
+    where?: invoice_itemsWhereInput
+    orderBy?: invoice_itemsOrderByWithRelationInput | invoice_itemsOrderByWithRelationInput[]
+    cursor?: invoice_itemsWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: InvoicesScalarFieldEnum | InvoicesScalarFieldEnum[]
+    distinct?: Invoice_itemsScalarFieldEnum | Invoice_itemsScalarFieldEnum[]
   }
 
   /**
@@ -9522,22 +9999,22 @@ export namespace Prisma {
     sale_price: Decimal | null
     tax_amount: Decimal | null
     total_amount: Decimal | null
+    amount_paid: Decimal | null
   }
 
   export type InvoicesSumAggregateOutputType = {
     sale_price: Decimal | null
     tax_amount: Decimal | null
     total_amount: Decimal | null
+    amount_paid: Decimal | null
   }
 
   export type InvoicesMinAggregateOutputType = {
     id: string | null
     invoice_number: string | null
-    device_id: string | null
     branch_id: string | null
     customer_name: string | null
     customer_contact: string | null
-    customer_email: string | null
     sale_price: Decimal | null
     tax_amount: Decimal | null
     total_amount: Decimal | null
@@ -9546,16 +10023,18 @@ export namespace Prisma {
     notes: string | null
     created_at: Date | null
     updated_at: Date | null
+    amount_paid: Decimal | null
+    client_id: string | null
+    payment_method: $Enums.payment_method | null
+    payment_status: $Enums.payment_status | null
   }
 
   export type InvoicesMaxAggregateOutputType = {
     id: string | null
     invoice_number: string | null
-    device_id: string | null
     branch_id: string | null
     customer_name: string | null
     customer_contact: string | null
-    customer_email: string | null
     sale_price: Decimal | null
     tax_amount: Decimal | null
     total_amount: Decimal | null
@@ -9564,16 +10043,18 @@ export namespace Prisma {
     notes: string | null
     created_at: Date | null
     updated_at: Date | null
+    amount_paid: Decimal | null
+    client_id: string | null
+    payment_method: $Enums.payment_method | null
+    payment_status: $Enums.payment_status | null
   }
 
   export type InvoicesCountAggregateOutputType = {
     id: number
     invoice_number: number
-    device_id: number
     branch_id: number
     customer_name: number
     customer_contact: number
-    customer_email: number
     sale_price: number
     tax_amount: number
     total_amount: number
@@ -9582,6 +10063,10 @@ export namespace Prisma {
     notes: number
     created_at: number
     updated_at: number
+    amount_paid: number
+    client_id: number
+    payment_method: number
+    payment_status: number
     _all: number
   }
 
@@ -9590,22 +10075,22 @@ export namespace Prisma {
     sale_price?: true
     tax_amount?: true
     total_amount?: true
+    amount_paid?: true
   }
 
   export type InvoicesSumAggregateInputType = {
     sale_price?: true
     tax_amount?: true
     total_amount?: true
+    amount_paid?: true
   }
 
   export type InvoicesMinAggregateInputType = {
     id?: true
     invoice_number?: true
-    device_id?: true
     branch_id?: true
     customer_name?: true
     customer_contact?: true
-    customer_email?: true
     sale_price?: true
     tax_amount?: true
     total_amount?: true
@@ -9614,16 +10099,18 @@ export namespace Prisma {
     notes?: true
     created_at?: true
     updated_at?: true
+    amount_paid?: true
+    client_id?: true
+    payment_method?: true
+    payment_status?: true
   }
 
   export type InvoicesMaxAggregateInputType = {
     id?: true
     invoice_number?: true
-    device_id?: true
     branch_id?: true
     customer_name?: true
     customer_contact?: true
-    customer_email?: true
     sale_price?: true
     tax_amount?: true
     total_amount?: true
@@ -9632,16 +10119,18 @@ export namespace Prisma {
     notes?: true
     created_at?: true
     updated_at?: true
+    amount_paid?: true
+    client_id?: true
+    payment_method?: true
+    payment_status?: true
   }
 
   export type InvoicesCountAggregateInputType = {
     id?: true
     invoice_number?: true
-    device_id?: true
     branch_id?: true
     customer_name?: true
     customer_contact?: true
-    customer_email?: true
     sale_price?: true
     tax_amount?: true
     total_amount?: true
@@ -9650,6 +10139,10 @@ export namespace Prisma {
     notes?: true
     created_at?: true
     updated_at?: true
+    amount_paid?: true
+    client_id?: true
+    payment_method?: true
+    payment_status?: true
     _all?: true
   }
 
@@ -9742,11 +10235,9 @@ export namespace Prisma {
   export type InvoicesGroupByOutputType = {
     id: string
     invoice_number: string
-    device_id: string | null
     branch_id: string | null
-    customer_name: string
+    customer_name: string | null
     customer_contact: string | null
-    customer_email: string | null
     sale_price: Decimal
     tax_amount: Decimal | null
     total_amount: Decimal
@@ -9755,6 +10246,10 @@ export namespace Prisma {
     notes: string | null
     created_at: Date | null
     updated_at: Date | null
+    amount_paid: Decimal
+    client_id: string | null
+    payment_method: $Enums.payment_method
+    payment_status: $Enums.payment_status
     _count: InvoicesCountAggregateOutputType | null
     _avg: InvoicesAvgAggregateOutputType | null
     _sum: InvoicesSumAggregateOutputType | null
@@ -9779,11 +10274,9 @@ export namespace Prisma {
   export type invoicesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     invoice_number?: boolean
-    device_id?: boolean
     branch_id?: boolean
     customer_name?: boolean
     customer_contact?: boolean
-    customer_email?: boolean
     sale_price?: boolean
     tax_amount?: boolean
     total_amount?: boolean
@@ -9792,9 +10285,16 @@ export namespace Prisma {
     notes?: boolean
     created_at?: boolean
     updated_at?: boolean
+    amount_paid?: boolean
+    client_id?: boolean
+    payment_method?: boolean
+    payment_status?: boolean
+    invoice_payments?: boolean | invoices$invoice_paymentsArgs<ExtArgs>
+    invoice_items?: boolean | invoices$invoice_itemsArgs<ExtArgs>
     branches?: boolean | invoices$branchesArgs<ExtArgs>
-    devices?: boolean | invoices$devicesArgs<ExtArgs>
+    clients?: boolean | invoices$clientsArgs<ExtArgs>
     users?: boolean | invoices$usersArgs<ExtArgs>
+    _count?: boolean | InvoicesCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["invoices"]>
 
 
@@ -9802,11 +10302,9 @@ export namespace Prisma {
   export type invoicesSelectScalar = {
     id?: boolean
     invoice_number?: boolean
-    device_id?: boolean
     branch_id?: boolean
     customer_name?: boolean
     customer_contact?: boolean
-    customer_email?: boolean
     sale_price?: boolean
     tax_amount?: boolean
     total_amount?: boolean
@@ -9815,30 +10313,37 @@ export namespace Prisma {
     notes?: boolean
     created_at?: boolean
     updated_at?: boolean
+    amount_paid?: boolean
+    client_id?: boolean
+    payment_method?: boolean
+    payment_status?: boolean
   }
 
-  export type invoicesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "invoice_number" | "device_id" | "branch_id" | "customer_name" | "customer_contact" | "customer_email" | "sale_price" | "tax_amount" | "total_amount" | "sold_by" | "sale_date" | "notes" | "created_at" | "updated_at", ExtArgs["result"]["invoices"]>
+  export type invoicesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "invoice_number" | "branch_id" | "customer_name" | "customer_contact" | "sale_price" | "tax_amount" | "total_amount" | "sold_by" | "sale_date" | "notes" | "created_at" | "updated_at" | "amount_paid" | "client_id" | "payment_method" | "payment_status", ExtArgs["result"]["invoices"]>
   export type invoicesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    invoice_payments?: boolean | invoices$invoice_paymentsArgs<ExtArgs>
+    invoice_items?: boolean | invoices$invoice_itemsArgs<ExtArgs>
     branches?: boolean | invoices$branchesArgs<ExtArgs>
-    devices?: boolean | invoices$devicesArgs<ExtArgs>
+    clients?: boolean | invoices$clientsArgs<ExtArgs>
     users?: boolean | invoices$usersArgs<ExtArgs>
+    _count?: boolean | InvoicesCountOutputTypeDefaultArgs<ExtArgs>
   }
 
   export type $invoicesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "invoices"
     objects: {
+      invoice_payments: Prisma.$invoice_paymentsPayload<ExtArgs>[]
+      invoice_items: Prisma.$invoice_itemsPayload<ExtArgs>[]
       branches: Prisma.$branchesPayload<ExtArgs> | null
-      devices: Prisma.$devicesPayload<ExtArgs> | null
+      clients: Prisma.$clientsPayload<ExtArgs> | null
       users: Prisma.$usersPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       invoice_number: string
-      device_id: string | null
       branch_id: string | null
-      customer_name: string
+      customer_name: string | null
       customer_contact: string | null
-      customer_email: string | null
       sale_price: Prisma.Decimal
       tax_amount: Prisma.Decimal | null
       total_amount: Prisma.Decimal
@@ -9847,6 +10352,10 @@ export namespace Prisma {
       notes: string | null
       created_at: Date | null
       updated_at: Date | null
+      amount_paid: Prisma.Decimal
+      client_id: string | null
+      payment_method: $Enums.payment_method
+      payment_status: $Enums.payment_status
     }, ExtArgs["result"]["invoices"]>
     composites: {}
   }
@@ -10187,8 +10696,10 @@ export namespace Prisma {
    */
   export interface Prisma__invoicesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    invoice_payments<T extends invoices$invoice_paymentsArgs<ExtArgs> = {}>(args?: Subset<T, invoices$invoice_paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$invoice_paymentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    invoice_items<T extends invoices$invoice_itemsArgs<ExtArgs> = {}>(args?: Subset<T, invoices$invoice_itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$invoice_itemsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     branches<T extends invoices$branchesArgs<ExtArgs> = {}>(args?: Subset<T, invoices$branchesArgs<ExtArgs>>): Prisma__branchesClient<$Result.GetResult<Prisma.$branchesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    devices<T extends invoices$devicesArgs<ExtArgs> = {}>(args?: Subset<T, invoices$devicesArgs<ExtArgs>>): Prisma__devicesClient<$Result.GetResult<Prisma.$devicesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    clients<T extends invoices$clientsArgs<ExtArgs> = {}>(args?: Subset<T, invoices$clientsArgs<ExtArgs>>): Prisma__clientsClient<$Result.GetResult<Prisma.$clientsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     users<T extends invoices$usersArgs<ExtArgs> = {}>(args?: Subset<T, invoices$usersArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -10221,11 +10732,9 @@ export namespace Prisma {
   interface invoicesFieldRefs {
     readonly id: FieldRef<"invoices", 'String'>
     readonly invoice_number: FieldRef<"invoices", 'String'>
-    readonly device_id: FieldRef<"invoices", 'String'>
     readonly branch_id: FieldRef<"invoices", 'String'>
     readonly customer_name: FieldRef<"invoices", 'String'>
     readonly customer_contact: FieldRef<"invoices", 'String'>
-    readonly customer_email: FieldRef<"invoices", 'String'>
     readonly sale_price: FieldRef<"invoices", 'Decimal'>
     readonly tax_amount: FieldRef<"invoices", 'Decimal'>
     readonly total_amount: FieldRef<"invoices", 'Decimal'>
@@ -10234,6 +10743,10 @@ export namespace Prisma {
     readonly notes: FieldRef<"invoices", 'String'>
     readonly created_at: FieldRef<"invoices", 'DateTime'>
     readonly updated_at: FieldRef<"invoices", 'DateTime'>
+    readonly amount_paid: FieldRef<"invoices", 'Decimal'>
+    readonly client_id: FieldRef<"invoices", 'String'>
+    readonly payment_method: FieldRef<"invoices", 'payment_method'>
+    readonly payment_status: FieldRef<"invoices", 'payment_status'>
   }
     
 
@@ -10577,6 +11090,54 @@ export namespace Prisma {
   }
 
   /**
+   * invoices.invoice_payments
+   */
+  export type invoices$invoice_paymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the invoice_payments
+     */
+    select?: invoice_paymentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the invoice_payments
+     */
+    omit?: invoice_paymentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: invoice_paymentsInclude<ExtArgs> | null
+    where?: invoice_paymentsWhereInput
+    orderBy?: invoice_paymentsOrderByWithRelationInput | invoice_paymentsOrderByWithRelationInput[]
+    cursor?: invoice_paymentsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Invoice_paymentsScalarFieldEnum | Invoice_paymentsScalarFieldEnum[]
+  }
+
+  /**
+   * invoices.invoice_items
+   */
+  export type invoices$invoice_itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the invoice_items
+     */
+    select?: invoice_itemsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the invoice_items
+     */
+    omit?: invoice_itemsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: invoice_itemsInclude<ExtArgs> | null
+    where?: invoice_itemsWhereInput
+    orderBy?: invoice_itemsOrderByWithRelationInput | invoice_itemsOrderByWithRelationInput[]
+    cursor?: invoice_itemsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Invoice_itemsScalarFieldEnum | Invoice_itemsScalarFieldEnum[]
+  }
+
+  /**
    * invoices.branches
    */
   export type invoices$branchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10596,22 +11157,22 @@ export namespace Prisma {
   }
 
   /**
-   * invoices.devices
+   * invoices.clients
    */
-  export type invoices$devicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type invoices$clientsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the devices
+     * Select specific fields to fetch from the clients
      */
-    select?: devicesSelect<ExtArgs> | null
+    select?: clientsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the devices
+     * Omit specific fields from the clients
      */
-    omit?: devicesOmit<ExtArgs> | null
+    omit?: clientsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: devicesInclude<ExtArgs> | null
-    where?: devicesWhereInput
+    include?: clientsInclude<ExtArgs> | null
+    where?: clientsWhereInput
   }
 
   /**
@@ -10649,6 +11210,3100 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: invoicesInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model invoice_items
+   */
+
+  export type AggregateInvoice_items = {
+    _count: Invoice_itemsCountAggregateOutputType | null
+    _avg: Invoice_itemsAvgAggregateOutputType | null
+    _sum: Invoice_itemsSumAggregateOutputType | null
+    _min: Invoice_itemsMinAggregateOutputType | null
+    _max: Invoice_itemsMaxAggregateOutputType | null
+  }
+
+  export type Invoice_itemsAvgAggregateOutputType = {
+    quantity: number | null
+    unit_price: Decimal | null
+    total_price: Decimal | null
+  }
+
+  export type Invoice_itemsSumAggregateOutputType = {
+    quantity: number | null
+    unit_price: Decimal | null
+    total_price: Decimal | null
+  }
+
+  export type Invoice_itemsMinAggregateOutputType = {
+    id: string | null
+    invoice_id: string | null
+    device_id: string | null
+    item_name: string | null
+    serial_number: string | null
+    asset_id: string | null
+    quantity: number | null
+    unit_price: Decimal | null
+    total_price: Decimal | null
+  }
+
+  export type Invoice_itemsMaxAggregateOutputType = {
+    id: string | null
+    invoice_id: string | null
+    device_id: string | null
+    item_name: string | null
+    serial_number: string | null
+    asset_id: string | null
+    quantity: number | null
+    unit_price: Decimal | null
+    total_price: Decimal | null
+  }
+
+  export type Invoice_itemsCountAggregateOutputType = {
+    id: number
+    invoice_id: number
+    device_id: number
+    item_name: number
+    serial_number: number
+    asset_id: number
+    quantity: number
+    unit_price: number
+    total_price: number
+    _all: number
+  }
+
+
+  export type Invoice_itemsAvgAggregateInputType = {
+    quantity?: true
+    unit_price?: true
+    total_price?: true
+  }
+
+  export type Invoice_itemsSumAggregateInputType = {
+    quantity?: true
+    unit_price?: true
+    total_price?: true
+  }
+
+  export type Invoice_itemsMinAggregateInputType = {
+    id?: true
+    invoice_id?: true
+    device_id?: true
+    item_name?: true
+    serial_number?: true
+    asset_id?: true
+    quantity?: true
+    unit_price?: true
+    total_price?: true
+  }
+
+  export type Invoice_itemsMaxAggregateInputType = {
+    id?: true
+    invoice_id?: true
+    device_id?: true
+    item_name?: true
+    serial_number?: true
+    asset_id?: true
+    quantity?: true
+    unit_price?: true
+    total_price?: true
+  }
+
+  export type Invoice_itemsCountAggregateInputType = {
+    id?: true
+    invoice_id?: true
+    device_id?: true
+    item_name?: true
+    serial_number?: true
+    asset_id?: true
+    quantity?: true
+    unit_price?: true
+    total_price?: true
+    _all?: true
+  }
+
+  export type Invoice_itemsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which invoice_items to aggregate.
+     */
+    where?: invoice_itemsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of invoice_items to fetch.
+     */
+    orderBy?: invoice_itemsOrderByWithRelationInput | invoice_itemsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: invoice_itemsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` invoice_items from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` invoice_items.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned invoice_items
+    **/
+    _count?: true | Invoice_itemsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Invoice_itemsAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Invoice_itemsSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Invoice_itemsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Invoice_itemsMaxAggregateInputType
+  }
+
+  export type GetInvoice_itemsAggregateType<T extends Invoice_itemsAggregateArgs> = {
+        [P in keyof T & keyof AggregateInvoice_items]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateInvoice_items[P]>
+      : GetScalarType<T[P], AggregateInvoice_items[P]>
+  }
+
+
+
+
+  export type invoice_itemsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: invoice_itemsWhereInput
+    orderBy?: invoice_itemsOrderByWithAggregationInput | invoice_itemsOrderByWithAggregationInput[]
+    by: Invoice_itemsScalarFieldEnum[] | Invoice_itemsScalarFieldEnum
+    having?: invoice_itemsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Invoice_itemsCountAggregateInputType | true
+    _avg?: Invoice_itemsAvgAggregateInputType
+    _sum?: Invoice_itemsSumAggregateInputType
+    _min?: Invoice_itemsMinAggregateInputType
+    _max?: Invoice_itemsMaxAggregateInputType
+  }
+
+  export type Invoice_itemsGroupByOutputType = {
+    id: string
+    invoice_id: string
+    device_id: string | null
+    item_name: string | null
+    serial_number: string | null
+    asset_id: string | null
+    quantity: number
+    unit_price: Decimal
+    total_price: Decimal
+    _count: Invoice_itemsCountAggregateOutputType | null
+    _avg: Invoice_itemsAvgAggregateOutputType | null
+    _sum: Invoice_itemsSumAggregateOutputType | null
+    _min: Invoice_itemsMinAggregateOutputType | null
+    _max: Invoice_itemsMaxAggregateOutputType | null
+  }
+
+  type GetInvoice_itemsGroupByPayload<T extends invoice_itemsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Invoice_itemsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Invoice_itemsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Invoice_itemsGroupByOutputType[P]>
+            : GetScalarType<T[P], Invoice_itemsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type invoice_itemsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    invoice_id?: boolean
+    device_id?: boolean
+    item_name?: boolean
+    serial_number?: boolean
+    asset_id?: boolean
+    quantity?: boolean
+    unit_price?: boolean
+    total_price?: boolean
+    invoice?: boolean | invoicesDefaultArgs<ExtArgs>
+    device?: boolean | invoice_items$deviceArgs<ExtArgs>
+  }, ExtArgs["result"]["invoice_items"]>
+
+
+
+  export type invoice_itemsSelectScalar = {
+    id?: boolean
+    invoice_id?: boolean
+    device_id?: boolean
+    item_name?: boolean
+    serial_number?: boolean
+    asset_id?: boolean
+    quantity?: boolean
+    unit_price?: boolean
+    total_price?: boolean
+  }
+
+  export type invoice_itemsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "invoice_id" | "device_id" | "item_name" | "serial_number" | "asset_id" | "quantity" | "unit_price" | "total_price", ExtArgs["result"]["invoice_items"]>
+  export type invoice_itemsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    invoice?: boolean | invoicesDefaultArgs<ExtArgs>
+    device?: boolean | invoice_items$deviceArgs<ExtArgs>
+  }
+
+  export type $invoice_itemsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "invoice_items"
+    objects: {
+      invoice: Prisma.$invoicesPayload<ExtArgs>
+      device: Prisma.$devicesPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      invoice_id: string
+      device_id: string | null
+      item_name: string | null
+      serial_number: string | null
+      asset_id: string | null
+      quantity: number
+      unit_price: Prisma.Decimal
+      total_price: Prisma.Decimal
+    }, ExtArgs["result"]["invoice_items"]>
+    composites: {}
+  }
+
+  type invoice_itemsGetPayload<S extends boolean | null | undefined | invoice_itemsDefaultArgs> = $Result.GetResult<Prisma.$invoice_itemsPayload, S>
+
+  type invoice_itemsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<invoice_itemsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Invoice_itemsCountAggregateInputType | true
+    }
+
+  export interface invoice_itemsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['invoice_items'], meta: { name: 'invoice_items' } }
+    /**
+     * Find zero or one Invoice_items that matches the filter.
+     * @param {invoice_itemsFindUniqueArgs} args - Arguments to find a Invoice_items
+     * @example
+     * // Get one Invoice_items
+     * const invoice_items = await prisma.invoice_items.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends invoice_itemsFindUniqueArgs>(args: SelectSubset<T, invoice_itemsFindUniqueArgs<ExtArgs>>): Prisma__invoice_itemsClient<$Result.GetResult<Prisma.$invoice_itemsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Invoice_items that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {invoice_itemsFindUniqueOrThrowArgs} args - Arguments to find a Invoice_items
+     * @example
+     * // Get one Invoice_items
+     * const invoice_items = await prisma.invoice_items.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends invoice_itemsFindUniqueOrThrowArgs>(args: SelectSubset<T, invoice_itemsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__invoice_itemsClient<$Result.GetResult<Prisma.$invoice_itemsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Invoice_items that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {invoice_itemsFindFirstArgs} args - Arguments to find a Invoice_items
+     * @example
+     * // Get one Invoice_items
+     * const invoice_items = await prisma.invoice_items.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends invoice_itemsFindFirstArgs>(args?: SelectSubset<T, invoice_itemsFindFirstArgs<ExtArgs>>): Prisma__invoice_itemsClient<$Result.GetResult<Prisma.$invoice_itemsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Invoice_items that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {invoice_itemsFindFirstOrThrowArgs} args - Arguments to find a Invoice_items
+     * @example
+     * // Get one Invoice_items
+     * const invoice_items = await prisma.invoice_items.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends invoice_itemsFindFirstOrThrowArgs>(args?: SelectSubset<T, invoice_itemsFindFirstOrThrowArgs<ExtArgs>>): Prisma__invoice_itemsClient<$Result.GetResult<Prisma.$invoice_itemsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Invoice_items that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {invoice_itemsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Invoice_items
+     * const invoice_items = await prisma.invoice_items.findMany()
+     * 
+     * // Get first 10 Invoice_items
+     * const invoice_items = await prisma.invoice_items.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const invoice_itemsWithIdOnly = await prisma.invoice_items.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends invoice_itemsFindManyArgs>(args?: SelectSubset<T, invoice_itemsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$invoice_itemsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Invoice_items.
+     * @param {invoice_itemsCreateArgs} args - Arguments to create a Invoice_items.
+     * @example
+     * // Create one Invoice_items
+     * const Invoice_items = await prisma.invoice_items.create({
+     *   data: {
+     *     // ... data to create a Invoice_items
+     *   }
+     * })
+     * 
+     */
+    create<T extends invoice_itemsCreateArgs>(args: SelectSubset<T, invoice_itemsCreateArgs<ExtArgs>>): Prisma__invoice_itemsClient<$Result.GetResult<Prisma.$invoice_itemsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Invoice_items.
+     * @param {invoice_itemsCreateManyArgs} args - Arguments to create many Invoice_items.
+     * @example
+     * // Create many Invoice_items
+     * const invoice_items = await prisma.invoice_items.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends invoice_itemsCreateManyArgs>(args?: SelectSubset<T, invoice_itemsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Invoice_items.
+     * @param {invoice_itemsDeleteArgs} args - Arguments to delete one Invoice_items.
+     * @example
+     * // Delete one Invoice_items
+     * const Invoice_items = await prisma.invoice_items.delete({
+     *   where: {
+     *     // ... filter to delete one Invoice_items
+     *   }
+     * })
+     * 
+     */
+    delete<T extends invoice_itemsDeleteArgs>(args: SelectSubset<T, invoice_itemsDeleteArgs<ExtArgs>>): Prisma__invoice_itemsClient<$Result.GetResult<Prisma.$invoice_itemsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Invoice_items.
+     * @param {invoice_itemsUpdateArgs} args - Arguments to update one Invoice_items.
+     * @example
+     * // Update one Invoice_items
+     * const invoice_items = await prisma.invoice_items.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends invoice_itemsUpdateArgs>(args: SelectSubset<T, invoice_itemsUpdateArgs<ExtArgs>>): Prisma__invoice_itemsClient<$Result.GetResult<Prisma.$invoice_itemsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Invoice_items.
+     * @param {invoice_itemsDeleteManyArgs} args - Arguments to filter Invoice_items to delete.
+     * @example
+     * // Delete a few Invoice_items
+     * const { count } = await prisma.invoice_items.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends invoice_itemsDeleteManyArgs>(args?: SelectSubset<T, invoice_itemsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Invoice_items.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {invoice_itemsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Invoice_items
+     * const invoice_items = await prisma.invoice_items.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends invoice_itemsUpdateManyArgs>(args: SelectSubset<T, invoice_itemsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Invoice_items.
+     * @param {invoice_itemsUpsertArgs} args - Arguments to update or create a Invoice_items.
+     * @example
+     * // Update or create a Invoice_items
+     * const invoice_items = await prisma.invoice_items.upsert({
+     *   create: {
+     *     // ... data to create a Invoice_items
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Invoice_items we want to update
+     *   }
+     * })
+     */
+    upsert<T extends invoice_itemsUpsertArgs>(args: SelectSubset<T, invoice_itemsUpsertArgs<ExtArgs>>): Prisma__invoice_itemsClient<$Result.GetResult<Prisma.$invoice_itemsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Invoice_items.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {invoice_itemsCountArgs} args - Arguments to filter Invoice_items to count.
+     * @example
+     * // Count the number of Invoice_items
+     * const count = await prisma.invoice_items.count({
+     *   where: {
+     *     // ... the filter for the Invoice_items we want to count
+     *   }
+     * })
+    **/
+    count<T extends invoice_itemsCountArgs>(
+      args?: Subset<T, invoice_itemsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Invoice_itemsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Invoice_items.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Invoice_itemsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Invoice_itemsAggregateArgs>(args: Subset<T, Invoice_itemsAggregateArgs>): Prisma.PrismaPromise<GetInvoice_itemsAggregateType<T>>
+
+    /**
+     * Group by Invoice_items.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {invoice_itemsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends invoice_itemsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: invoice_itemsGroupByArgs['orderBy'] }
+        : { orderBy?: invoice_itemsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, invoice_itemsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetInvoice_itemsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the invoice_items model
+   */
+  readonly fields: invoice_itemsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for invoice_items.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__invoice_itemsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    invoice<T extends invoicesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, invoicesDefaultArgs<ExtArgs>>): Prisma__invoicesClient<$Result.GetResult<Prisma.$invoicesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    device<T extends invoice_items$deviceArgs<ExtArgs> = {}>(args?: Subset<T, invoice_items$deviceArgs<ExtArgs>>): Prisma__devicesClient<$Result.GetResult<Prisma.$devicesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the invoice_items model
+   */
+  interface invoice_itemsFieldRefs {
+    readonly id: FieldRef<"invoice_items", 'String'>
+    readonly invoice_id: FieldRef<"invoice_items", 'String'>
+    readonly device_id: FieldRef<"invoice_items", 'String'>
+    readonly item_name: FieldRef<"invoice_items", 'String'>
+    readonly serial_number: FieldRef<"invoice_items", 'String'>
+    readonly asset_id: FieldRef<"invoice_items", 'String'>
+    readonly quantity: FieldRef<"invoice_items", 'Int'>
+    readonly unit_price: FieldRef<"invoice_items", 'Decimal'>
+    readonly total_price: FieldRef<"invoice_items", 'Decimal'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * invoice_items findUnique
+   */
+  export type invoice_itemsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the invoice_items
+     */
+    select?: invoice_itemsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the invoice_items
+     */
+    omit?: invoice_itemsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: invoice_itemsInclude<ExtArgs> | null
+    /**
+     * Filter, which invoice_items to fetch.
+     */
+    where: invoice_itemsWhereUniqueInput
+  }
+
+  /**
+   * invoice_items findUniqueOrThrow
+   */
+  export type invoice_itemsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the invoice_items
+     */
+    select?: invoice_itemsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the invoice_items
+     */
+    omit?: invoice_itemsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: invoice_itemsInclude<ExtArgs> | null
+    /**
+     * Filter, which invoice_items to fetch.
+     */
+    where: invoice_itemsWhereUniqueInput
+  }
+
+  /**
+   * invoice_items findFirst
+   */
+  export type invoice_itemsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the invoice_items
+     */
+    select?: invoice_itemsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the invoice_items
+     */
+    omit?: invoice_itemsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: invoice_itemsInclude<ExtArgs> | null
+    /**
+     * Filter, which invoice_items to fetch.
+     */
+    where?: invoice_itemsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of invoice_items to fetch.
+     */
+    orderBy?: invoice_itemsOrderByWithRelationInput | invoice_itemsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for invoice_items.
+     */
+    cursor?: invoice_itemsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` invoice_items from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` invoice_items.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of invoice_items.
+     */
+    distinct?: Invoice_itemsScalarFieldEnum | Invoice_itemsScalarFieldEnum[]
+  }
+
+  /**
+   * invoice_items findFirstOrThrow
+   */
+  export type invoice_itemsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the invoice_items
+     */
+    select?: invoice_itemsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the invoice_items
+     */
+    omit?: invoice_itemsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: invoice_itemsInclude<ExtArgs> | null
+    /**
+     * Filter, which invoice_items to fetch.
+     */
+    where?: invoice_itemsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of invoice_items to fetch.
+     */
+    orderBy?: invoice_itemsOrderByWithRelationInput | invoice_itemsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for invoice_items.
+     */
+    cursor?: invoice_itemsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` invoice_items from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` invoice_items.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of invoice_items.
+     */
+    distinct?: Invoice_itemsScalarFieldEnum | Invoice_itemsScalarFieldEnum[]
+  }
+
+  /**
+   * invoice_items findMany
+   */
+  export type invoice_itemsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the invoice_items
+     */
+    select?: invoice_itemsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the invoice_items
+     */
+    omit?: invoice_itemsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: invoice_itemsInclude<ExtArgs> | null
+    /**
+     * Filter, which invoice_items to fetch.
+     */
+    where?: invoice_itemsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of invoice_items to fetch.
+     */
+    orderBy?: invoice_itemsOrderByWithRelationInput | invoice_itemsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing invoice_items.
+     */
+    cursor?: invoice_itemsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` invoice_items from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` invoice_items.
+     */
+    skip?: number
+    distinct?: Invoice_itemsScalarFieldEnum | Invoice_itemsScalarFieldEnum[]
+  }
+
+  /**
+   * invoice_items create
+   */
+  export type invoice_itemsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the invoice_items
+     */
+    select?: invoice_itemsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the invoice_items
+     */
+    omit?: invoice_itemsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: invoice_itemsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a invoice_items.
+     */
+    data: XOR<invoice_itemsCreateInput, invoice_itemsUncheckedCreateInput>
+  }
+
+  /**
+   * invoice_items createMany
+   */
+  export type invoice_itemsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many invoice_items.
+     */
+    data: invoice_itemsCreateManyInput | invoice_itemsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * invoice_items update
+   */
+  export type invoice_itemsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the invoice_items
+     */
+    select?: invoice_itemsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the invoice_items
+     */
+    omit?: invoice_itemsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: invoice_itemsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a invoice_items.
+     */
+    data: XOR<invoice_itemsUpdateInput, invoice_itemsUncheckedUpdateInput>
+    /**
+     * Choose, which invoice_items to update.
+     */
+    where: invoice_itemsWhereUniqueInput
+  }
+
+  /**
+   * invoice_items updateMany
+   */
+  export type invoice_itemsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update invoice_items.
+     */
+    data: XOR<invoice_itemsUpdateManyMutationInput, invoice_itemsUncheckedUpdateManyInput>
+    /**
+     * Filter which invoice_items to update
+     */
+    where?: invoice_itemsWhereInput
+    /**
+     * Limit how many invoice_items to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * invoice_items upsert
+   */
+  export type invoice_itemsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the invoice_items
+     */
+    select?: invoice_itemsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the invoice_items
+     */
+    omit?: invoice_itemsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: invoice_itemsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the invoice_items to update in case it exists.
+     */
+    where: invoice_itemsWhereUniqueInput
+    /**
+     * In case the invoice_items found by the `where` argument doesn't exist, create a new invoice_items with this data.
+     */
+    create: XOR<invoice_itemsCreateInput, invoice_itemsUncheckedCreateInput>
+    /**
+     * In case the invoice_items was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<invoice_itemsUpdateInput, invoice_itemsUncheckedUpdateInput>
+  }
+
+  /**
+   * invoice_items delete
+   */
+  export type invoice_itemsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the invoice_items
+     */
+    select?: invoice_itemsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the invoice_items
+     */
+    omit?: invoice_itemsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: invoice_itemsInclude<ExtArgs> | null
+    /**
+     * Filter which invoice_items to delete.
+     */
+    where: invoice_itemsWhereUniqueInput
+  }
+
+  /**
+   * invoice_items deleteMany
+   */
+  export type invoice_itemsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which invoice_items to delete
+     */
+    where?: invoice_itemsWhereInput
+    /**
+     * Limit how many invoice_items to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * invoice_items.device
+   */
+  export type invoice_items$deviceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the devices
+     */
+    select?: devicesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the devices
+     */
+    omit?: devicesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: devicesInclude<ExtArgs> | null
+    where?: devicesWhereInput
+  }
+
+  /**
+   * invoice_items without action
+   */
+  export type invoice_itemsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the invoice_items
+     */
+    select?: invoice_itemsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the invoice_items
+     */
+    omit?: invoice_itemsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: invoice_itemsInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model clients
+   */
+
+  export type AggregateClients = {
+    _count: ClientsCountAggregateOutputType | null
+    _avg: ClientsAvgAggregateOutputType | null
+    _sum: ClientsSumAggregateOutputType | null
+    _min: ClientsMinAggregateOutputType | null
+    _max: ClientsMaxAggregateOutputType | null
+  }
+
+  export type ClientsAvgAggregateOutputType = {
+    balance: Decimal | null
+  }
+
+  export type ClientsSumAggregateOutputType = {
+    balance: Decimal | null
+  }
+
+  export type ClientsMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    phone: string | null
+    email: string | null
+    address: string | null
+    company_id: string | null
+    balance: Decimal | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type ClientsMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    phone: string | null
+    email: string | null
+    address: string | null
+    company_id: string | null
+    balance: Decimal | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type ClientsCountAggregateOutputType = {
+    id: number
+    name: number
+    phone: number
+    email: number
+    address: number
+    company_id: number
+    balance: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type ClientsAvgAggregateInputType = {
+    balance?: true
+  }
+
+  export type ClientsSumAggregateInputType = {
+    balance?: true
+  }
+
+  export type ClientsMinAggregateInputType = {
+    id?: true
+    name?: true
+    phone?: true
+    email?: true
+    address?: true
+    company_id?: true
+    balance?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type ClientsMaxAggregateInputType = {
+    id?: true
+    name?: true
+    phone?: true
+    email?: true
+    address?: true
+    company_id?: true
+    balance?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type ClientsCountAggregateInputType = {
+    id?: true
+    name?: true
+    phone?: true
+    email?: true
+    address?: true
+    company_id?: true
+    balance?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type ClientsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which clients to aggregate.
+     */
+    where?: clientsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of clients to fetch.
+     */
+    orderBy?: clientsOrderByWithRelationInput | clientsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: clientsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` clients from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` clients.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned clients
+    **/
+    _count?: true | ClientsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ClientsAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ClientsSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ClientsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ClientsMaxAggregateInputType
+  }
+
+  export type GetClientsAggregateType<T extends ClientsAggregateArgs> = {
+        [P in keyof T & keyof AggregateClients]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateClients[P]>
+      : GetScalarType<T[P], AggregateClients[P]>
+  }
+
+
+
+
+  export type clientsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: clientsWhereInput
+    orderBy?: clientsOrderByWithAggregationInput | clientsOrderByWithAggregationInput[]
+    by: ClientsScalarFieldEnum[] | ClientsScalarFieldEnum
+    having?: clientsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ClientsCountAggregateInputType | true
+    _avg?: ClientsAvgAggregateInputType
+    _sum?: ClientsSumAggregateInputType
+    _min?: ClientsMinAggregateInputType
+    _max?: ClientsMaxAggregateInputType
+  }
+
+  export type ClientsGroupByOutputType = {
+    id: string
+    name: string
+    phone: string | null
+    email: string | null
+    address: string | null
+    company_id: string
+    balance: Decimal
+    created_at: Date | null
+    updated_at: Date | null
+    _count: ClientsCountAggregateOutputType | null
+    _avg: ClientsAvgAggregateOutputType | null
+    _sum: ClientsSumAggregateOutputType | null
+    _min: ClientsMinAggregateOutputType | null
+    _max: ClientsMaxAggregateOutputType | null
+  }
+
+  type GetClientsGroupByPayload<T extends clientsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ClientsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ClientsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ClientsGroupByOutputType[P]>
+            : GetScalarType<T[P], ClientsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type clientsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    phone?: boolean
+    email?: boolean
+    address?: boolean
+    company_id?: boolean
+    balance?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    companies?: boolean | companiesDefaultArgs<ExtArgs>
+    invoices?: boolean | clients$invoicesArgs<ExtArgs>
+    _count?: boolean | ClientsCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["clients"]>
+
+
+
+  export type clientsSelectScalar = {
+    id?: boolean
+    name?: boolean
+    phone?: boolean
+    email?: boolean
+    address?: boolean
+    company_id?: boolean
+    balance?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type clientsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "phone" | "email" | "address" | "company_id" | "balance" | "created_at" | "updated_at", ExtArgs["result"]["clients"]>
+  export type clientsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    companies?: boolean | companiesDefaultArgs<ExtArgs>
+    invoices?: boolean | clients$invoicesArgs<ExtArgs>
+    _count?: boolean | ClientsCountOutputTypeDefaultArgs<ExtArgs>
+  }
+
+  export type $clientsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "clients"
+    objects: {
+      companies: Prisma.$companiesPayload<ExtArgs>
+      invoices: Prisma.$invoicesPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      phone: string | null
+      email: string | null
+      address: string | null
+      company_id: string
+      balance: Prisma.Decimal
+      created_at: Date | null
+      updated_at: Date | null
+    }, ExtArgs["result"]["clients"]>
+    composites: {}
+  }
+
+  type clientsGetPayload<S extends boolean | null | undefined | clientsDefaultArgs> = $Result.GetResult<Prisma.$clientsPayload, S>
+
+  type clientsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<clientsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ClientsCountAggregateInputType | true
+    }
+
+  export interface clientsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['clients'], meta: { name: 'clients' } }
+    /**
+     * Find zero or one Clients that matches the filter.
+     * @param {clientsFindUniqueArgs} args - Arguments to find a Clients
+     * @example
+     * // Get one Clients
+     * const clients = await prisma.clients.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends clientsFindUniqueArgs>(args: SelectSubset<T, clientsFindUniqueArgs<ExtArgs>>): Prisma__clientsClient<$Result.GetResult<Prisma.$clientsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Clients that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {clientsFindUniqueOrThrowArgs} args - Arguments to find a Clients
+     * @example
+     * // Get one Clients
+     * const clients = await prisma.clients.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends clientsFindUniqueOrThrowArgs>(args: SelectSubset<T, clientsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__clientsClient<$Result.GetResult<Prisma.$clientsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Clients that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {clientsFindFirstArgs} args - Arguments to find a Clients
+     * @example
+     * // Get one Clients
+     * const clients = await prisma.clients.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends clientsFindFirstArgs>(args?: SelectSubset<T, clientsFindFirstArgs<ExtArgs>>): Prisma__clientsClient<$Result.GetResult<Prisma.$clientsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Clients that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {clientsFindFirstOrThrowArgs} args - Arguments to find a Clients
+     * @example
+     * // Get one Clients
+     * const clients = await prisma.clients.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends clientsFindFirstOrThrowArgs>(args?: SelectSubset<T, clientsFindFirstOrThrowArgs<ExtArgs>>): Prisma__clientsClient<$Result.GetResult<Prisma.$clientsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Clients that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {clientsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Clients
+     * const clients = await prisma.clients.findMany()
+     * 
+     * // Get first 10 Clients
+     * const clients = await prisma.clients.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const clientsWithIdOnly = await prisma.clients.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends clientsFindManyArgs>(args?: SelectSubset<T, clientsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$clientsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Clients.
+     * @param {clientsCreateArgs} args - Arguments to create a Clients.
+     * @example
+     * // Create one Clients
+     * const Clients = await prisma.clients.create({
+     *   data: {
+     *     // ... data to create a Clients
+     *   }
+     * })
+     * 
+     */
+    create<T extends clientsCreateArgs>(args: SelectSubset<T, clientsCreateArgs<ExtArgs>>): Prisma__clientsClient<$Result.GetResult<Prisma.$clientsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Clients.
+     * @param {clientsCreateManyArgs} args - Arguments to create many Clients.
+     * @example
+     * // Create many Clients
+     * const clients = await prisma.clients.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends clientsCreateManyArgs>(args?: SelectSubset<T, clientsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Clients.
+     * @param {clientsDeleteArgs} args - Arguments to delete one Clients.
+     * @example
+     * // Delete one Clients
+     * const Clients = await prisma.clients.delete({
+     *   where: {
+     *     // ... filter to delete one Clients
+     *   }
+     * })
+     * 
+     */
+    delete<T extends clientsDeleteArgs>(args: SelectSubset<T, clientsDeleteArgs<ExtArgs>>): Prisma__clientsClient<$Result.GetResult<Prisma.$clientsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Clients.
+     * @param {clientsUpdateArgs} args - Arguments to update one Clients.
+     * @example
+     * // Update one Clients
+     * const clients = await prisma.clients.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends clientsUpdateArgs>(args: SelectSubset<T, clientsUpdateArgs<ExtArgs>>): Prisma__clientsClient<$Result.GetResult<Prisma.$clientsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Clients.
+     * @param {clientsDeleteManyArgs} args - Arguments to filter Clients to delete.
+     * @example
+     * // Delete a few Clients
+     * const { count } = await prisma.clients.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends clientsDeleteManyArgs>(args?: SelectSubset<T, clientsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Clients.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {clientsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Clients
+     * const clients = await prisma.clients.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends clientsUpdateManyArgs>(args: SelectSubset<T, clientsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Clients.
+     * @param {clientsUpsertArgs} args - Arguments to update or create a Clients.
+     * @example
+     * // Update or create a Clients
+     * const clients = await prisma.clients.upsert({
+     *   create: {
+     *     // ... data to create a Clients
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Clients we want to update
+     *   }
+     * })
+     */
+    upsert<T extends clientsUpsertArgs>(args: SelectSubset<T, clientsUpsertArgs<ExtArgs>>): Prisma__clientsClient<$Result.GetResult<Prisma.$clientsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Clients.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {clientsCountArgs} args - Arguments to filter Clients to count.
+     * @example
+     * // Count the number of Clients
+     * const count = await prisma.clients.count({
+     *   where: {
+     *     // ... the filter for the Clients we want to count
+     *   }
+     * })
+    **/
+    count<T extends clientsCountArgs>(
+      args?: Subset<T, clientsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ClientsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Clients.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ClientsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ClientsAggregateArgs>(args: Subset<T, ClientsAggregateArgs>): Prisma.PrismaPromise<GetClientsAggregateType<T>>
+
+    /**
+     * Group by Clients.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {clientsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends clientsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: clientsGroupByArgs['orderBy'] }
+        : { orderBy?: clientsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, clientsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetClientsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the clients model
+   */
+  readonly fields: clientsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for clients.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__clientsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    companies<T extends companiesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, companiesDefaultArgs<ExtArgs>>): Prisma__companiesClient<$Result.GetResult<Prisma.$companiesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    invoices<T extends clients$invoicesArgs<ExtArgs> = {}>(args?: Subset<T, clients$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$invoicesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the clients model
+   */
+  interface clientsFieldRefs {
+    readonly id: FieldRef<"clients", 'String'>
+    readonly name: FieldRef<"clients", 'String'>
+    readonly phone: FieldRef<"clients", 'String'>
+    readonly email: FieldRef<"clients", 'String'>
+    readonly address: FieldRef<"clients", 'String'>
+    readonly company_id: FieldRef<"clients", 'String'>
+    readonly balance: FieldRef<"clients", 'Decimal'>
+    readonly created_at: FieldRef<"clients", 'DateTime'>
+    readonly updated_at: FieldRef<"clients", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * clients findUnique
+   */
+  export type clientsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the clients
+     */
+    select?: clientsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the clients
+     */
+    omit?: clientsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: clientsInclude<ExtArgs> | null
+    /**
+     * Filter, which clients to fetch.
+     */
+    where: clientsWhereUniqueInput
+  }
+
+  /**
+   * clients findUniqueOrThrow
+   */
+  export type clientsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the clients
+     */
+    select?: clientsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the clients
+     */
+    omit?: clientsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: clientsInclude<ExtArgs> | null
+    /**
+     * Filter, which clients to fetch.
+     */
+    where: clientsWhereUniqueInput
+  }
+
+  /**
+   * clients findFirst
+   */
+  export type clientsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the clients
+     */
+    select?: clientsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the clients
+     */
+    omit?: clientsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: clientsInclude<ExtArgs> | null
+    /**
+     * Filter, which clients to fetch.
+     */
+    where?: clientsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of clients to fetch.
+     */
+    orderBy?: clientsOrderByWithRelationInput | clientsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for clients.
+     */
+    cursor?: clientsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` clients from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` clients.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of clients.
+     */
+    distinct?: ClientsScalarFieldEnum | ClientsScalarFieldEnum[]
+  }
+
+  /**
+   * clients findFirstOrThrow
+   */
+  export type clientsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the clients
+     */
+    select?: clientsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the clients
+     */
+    omit?: clientsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: clientsInclude<ExtArgs> | null
+    /**
+     * Filter, which clients to fetch.
+     */
+    where?: clientsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of clients to fetch.
+     */
+    orderBy?: clientsOrderByWithRelationInput | clientsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for clients.
+     */
+    cursor?: clientsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` clients from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` clients.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of clients.
+     */
+    distinct?: ClientsScalarFieldEnum | ClientsScalarFieldEnum[]
+  }
+
+  /**
+   * clients findMany
+   */
+  export type clientsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the clients
+     */
+    select?: clientsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the clients
+     */
+    omit?: clientsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: clientsInclude<ExtArgs> | null
+    /**
+     * Filter, which clients to fetch.
+     */
+    where?: clientsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of clients to fetch.
+     */
+    orderBy?: clientsOrderByWithRelationInput | clientsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing clients.
+     */
+    cursor?: clientsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` clients from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` clients.
+     */
+    skip?: number
+    distinct?: ClientsScalarFieldEnum | ClientsScalarFieldEnum[]
+  }
+
+  /**
+   * clients create
+   */
+  export type clientsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the clients
+     */
+    select?: clientsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the clients
+     */
+    omit?: clientsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: clientsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a clients.
+     */
+    data: XOR<clientsCreateInput, clientsUncheckedCreateInput>
+  }
+
+  /**
+   * clients createMany
+   */
+  export type clientsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many clients.
+     */
+    data: clientsCreateManyInput | clientsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * clients update
+   */
+  export type clientsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the clients
+     */
+    select?: clientsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the clients
+     */
+    omit?: clientsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: clientsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a clients.
+     */
+    data: XOR<clientsUpdateInput, clientsUncheckedUpdateInput>
+    /**
+     * Choose, which clients to update.
+     */
+    where: clientsWhereUniqueInput
+  }
+
+  /**
+   * clients updateMany
+   */
+  export type clientsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update clients.
+     */
+    data: XOR<clientsUpdateManyMutationInput, clientsUncheckedUpdateManyInput>
+    /**
+     * Filter which clients to update
+     */
+    where?: clientsWhereInput
+    /**
+     * Limit how many clients to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * clients upsert
+   */
+  export type clientsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the clients
+     */
+    select?: clientsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the clients
+     */
+    omit?: clientsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: clientsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the clients to update in case it exists.
+     */
+    where: clientsWhereUniqueInput
+    /**
+     * In case the clients found by the `where` argument doesn't exist, create a new clients with this data.
+     */
+    create: XOR<clientsCreateInput, clientsUncheckedCreateInput>
+    /**
+     * In case the clients was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<clientsUpdateInput, clientsUncheckedUpdateInput>
+  }
+
+  /**
+   * clients delete
+   */
+  export type clientsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the clients
+     */
+    select?: clientsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the clients
+     */
+    omit?: clientsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: clientsInclude<ExtArgs> | null
+    /**
+     * Filter which clients to delete.
+     */
+    where: clientsWhereUniqueInput
+  }
+
+  /**
+   * clients deleteMany
+   */
+  export type clientsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which clients to delete
+     */
+    where?: clientsWhereInput
+    /**
+     * Limit how many clients to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * clients.invoices
+   */
+  export type clients$invoicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the invoices
+     */
+    select?: invoicesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the invoices
+     */
+    omit?: invoicesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: invoicesInclude<ExtArgs> | null
+    where?: invoicesWhereInput
+    orderBy?: invoicesOrderByWithRelationInput | invoicesOrderByWithRelationInput[]
+    cursor?: invoicesWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InvoicesScalarFieldEnum | InvoicesScalarFieldEnum[]
+  }
+
+  /**
+   * clients without action
+   */
+  export type clientsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the clients
+     */
+    select?: clientsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the clients
+     */
+    omit?: clientsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: clientsInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model invoice_payments
+   */
+
+  export type AggregateInvoice_payments = {
+    _count: Invoice_paymentsCountAggregateOutputType | null
+    _avg: Invoice_paymentsAvgAggregateOutputType | null
+    _sum: Invoice_paymentsSumAggregateOutputType | null
+    _min: Invoice_paymentsMinAggregateOutputType | null
+    _max: Invoice_paymentsMaxAggregateOutputType | null
+  }
+
+  export type Invoice_paymentsAvgAggregateOutputType = {
+    amount: Decimal | null
+  }
+
+  export type Invoice_paymentsSumAggregateOutputType = {
+    amount: Decimal | null
+  }
+
+  export type Invoice_paymentsMinAggregateOutputType = {
+    id: string | null
+    invoice_id: string | null
+    amount: Decimal | null
+    payment_date: Date | null
+    payment_method: $Enums.payment_method | null
+    received_by: string | null
+    notes: string | null
+    created_at: Date | null
+  }
+
+  export type Invoice_paymentsMaxAggregateOutputType = {
+    id: string | null
+    invoice_id: string | null
+    amount: Decimal | null
+    payment_date: Date | null
+    payment_method: $Enums.payment_method | null
+    received_by: string | null
+    notes: string | null
+    created_at: Date | null
+  }
+
+  export type Invoice_paymentsCountAggregateOutputType = {
+    id: number
+    invoice_id: number
+    amount: number
+    payment_date: number
+    payment_method: number
+    received_by: number
+    notes: number
+    created_at: number
+    _all: number
+  }
+
+
+  export type Invoice_paymentsAvgAggregateInputType = {
+    amount?: true
+  }
+
+  export type Invoice_paymentsSumAggregateInputType = {
+    amount?: true
+  }
+
+  export type Invoice_paymentsMinAggregateInputType = {
+    id?: true
+    invoice_id?: true
+    amount?: true
+    payment_date?: true
+    payment_method?: true
+    received_by?: true
+    notes?: true
+    created_at?: true
+  }
+
+  export type Invoice_paymentsMaxAggregateInputType = {
+    id?: true
+    invoice_id?: true
+    amount?: true
+    payment_date?: true
+    payment_method?: true
+    received_by?: true
+    notes?: true
+    created_at?: true
+  }
+
+  export type Invoice_paymentsCountAggregateInputType = {
+    id?: true
+    invoice_id?: true
+    amount?: true
+    payment_date?: true
+    payment_method?: true
+    received_by?: true
+    notes?: true
+    created_at?: true
+    _all?: true
+  }
+
+  export type Invoice_paymentsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which invoice_payments to aggregate.
+     */
+    where?: invoice_paymentsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of invoice_payments to fetch.
+     */
+    orderBy?: invoice_paymentsOrderByWithRelationInput | invoice_paymentsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: invoice_paymentsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` invoice_payments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` invoice_payments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned invoice_payments
+    **/
+    _count?: true | Invoice_paymentsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Invoice_paymentsAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Invoice_paymentsSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Invoice_paymentsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Invoice_paymentsMaxAggregateInputType
+  }
+
+  export type GetInvoice_paymentsAggregateType<T extends Invoice_paymentsAggregateArgs> = {
+        [P in keyof T & keyof AggregateInvoice_payments]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateInvoice_payments[P]>
+      : GetScalarType<T[P], AggregateInvoice_payments[P]>
+  }
+
+
+
+
+  export type invoice_paymentsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: invoice_paymentsWhereInput
+    orderBy?: invoice_paymentsOrderByWithAggregationInput | invoice_paymentsOrderByWithAggregationInput[]
+    by: Invoice_paymentsScalarFieldEnum[] | Invoice_paymentsScalarFieldEnum
+    having?: invoice_paymentsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Invoice_paymentsCountAggregateInputType | true
+    _avg?: Invoice_paymentsAvgAggregateInputType
+    _sum?: Invoice_paymentsSumAggregateInputType
+    _min?: Invoice_paymentsMinAggregateInputType
+    _max?: Invoice_paymentsMaxAggregateInputType
+  }
+
+  export type Invoice_paymentsGroupByOutputType = {
+    id: string
+    invoice_id: string
+    amount: Decimal
+    payment_date: Date
+    payment_method: $Enums.payment_method
+    received_by: string | null
+    notes: string | null
+    created_at: Date | null
+    _count: Invoice_paymentsCountAggregateOutputType | null
+    _avg: Invoice_paymentsAvgAggregateOutputType | null
+    _sum: Invoice_paymentsSumAggregateOutputType | null
+    _min: Invoice_paymentsMinAggregateOutputType | null
+    _max: Invoice_paymentsMaxAggregateOutputType | null
+  }
+
+  type GetInvoice_paymentsGroupByPayload<T extends invoice_paymentsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Invoice_paymentsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Invoice_paymentsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Invoice_paymentsGroupByOutputType[P]>
+            : GetScalarType<T[P], Invoice_paymentsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type invoice_paymentsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    invoice_id?: boolean
+    amount?: boolean
+    payment_date?: boolean
+    payment_method?: boolean
+    received_by?: boolean
+    notes?: boolean
+    created_at?: boolean
+    invoices?: boolean | invoicesDefaultArgs<ExtArgs>
+    users?: boolean | invoice_payments$usersArgs<ExtArgs>
+  }, ExtArgs["result"]["invoice_payments"]>
+
+
+
+  export type invoice_paymentsSelectScalar = {
+    id?: boolean
+    invoice_id?: boolean
+    amount?: boolean
+    payment_date?: boolean
+    payment_method?: boolean
+    received_by?: boolean
+    notes?: boolean
+    created_at?: boolean
+  }
+
+  export type invoice_paymentsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "invoice_id" | "amount" | "payment_date" | "payment_method" | "received_by" | "notes" | "created_at", ExtArgs["result"]["invoice_payments"]>
+  export type invoice_paymentsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    invoices?: boolean | invoicesDefaultArgs<ExtArgs>
+    users?: boolean | invoice_payments$usersArgs<ExtArgs>
+  }
+
+  export type $invoice_paymentsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "invoice_payments"
+    objects: {
+      invoices: Prisma.$invoicesPayload<ExtArgs>
+      users: Prisma.$usersPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      invoice_id: string
+      amount: Prisma.Decimal
+      payment_date: Date
+      payment_method: $Enums.payment_method
+      received_by: string | null
+      notes: string | null
+      created_at: Date | null
+    }, ExtArgs["result"]["invoice_payments"]>
+    composites: {}
+  }
+
+  type invoice_paymentsGetPayload<S extends boolean | null | undefined | invoice_paymentsDefaultArgs> = $Result.GetResult<Prisma.$invoice_paymentsPayload, S>
+
+  type invoice_paymentsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<invoice_paymentsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Invoice_paymentsCountAggregateInputType | true
+    }
+
+  export interface invoice_paymentsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['invoice_payments'], meta: { name: 'invoice_payments' } }
+    /**
+     * Find zero or one Invoice_payments that matches the filter.
+     * @param {invoice_paymentsFindUniqueArgs} args - Arguments to find a Invoice_payments
+     * @example
+     * // Get one Invoice_payments
+     * const invoice_payments = await prisma.invoice_payments.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends invoice_paymentsFindUniqueArgs>(args: SelectSubset<T, invoice_paymentsFindUniqueArgs<ExtArgs>>): Prisma__invoice_paymentsClient<$Result.GetResult<Prisma.$invoice_paymentsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Invoice_payments that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {invoice_paymentsFindUniqueOrThrowArgs} args - Arguments to find a Invoice_payments
+     * @example
+     * // Get one Invoice_payments
+     * const invoice_payments = await prisma.invoice_payments.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends invoice_paymentsFindUniqueOrThrowArgs>(args: SelectSubset<T, invoice_paymentsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__invoice_paymentsClient<$Result.GetResult<Prisma.$invoice_paymentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Invoice_payments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {invoice_paymentsFindFirstArgs} args - Arguments to find a Invoice_payments
+     * @example
+     * // Get one Invoice_payments
+     * const invoice_payments = await prisma.invoice_payments.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends invoice_paymentsFindFirstArgs>(args?: SelectSubset<T, invoice_paymentsFindFirstArgs<ExtArgs>>): Prisma__invoice_paymentsClient<$Result.GetResult<Prisma.$invoice_paymentsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Invoice_payments that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {invoice_paymentsFindFirstOrThrowArgs} args - Arguments to find a Invoice_payments
+     * @example
+     * // Get one Invoice_payments
+     * const invoice_payments = await prisma.invoice_payments.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends invoice_paymentsFindFirstOrThrowArgs>(args?: SelectSubset<T, invoice_paymentsFindFirstOrThrowArgs<ExtArgs>>): Prisma__invoice_paymentsClient<$Result.GetResult<Prisma.$invoice_paymentsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Invoice_payments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {invoice_paymentsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Invoice_payments
+     * const invoice_payments = await prisma.invoice_payments.findMany()
+     * 
+     * // Get first 10 Invoice_payments
+     * const invoice_payments = await prisma.invoice_payments.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const invoice_paymentsWithIdOnly = await prisma.invoice_payments.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends invoice_paymentsFindManyArgs>(args?: SelectSubset<T, invoice_paymentsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$invoice_paymentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Invoice_payments.
+     * @param {invoice_paymentsCreateArgs} args - Arguments to create a Invoice_payments.
+     * @example
+     * // Create one Invoice_payments
+     * const Invoice_payments = await prisma.invoice_payments.create({
+     *   data: {
+     *     // ... data to create a Invoice_payments
+     *   }
+     * })
+     * 
+     */
+    create<T extends invoice_paymentsCreateArgs>(args: SelectSubset<T, invoice_paymentsCreateArgs<ExtArgs>>): Prisma__invoice_paymentsClient<$Result.GetResult<Prisma.$invoice_paymentsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Invoice_payments.
+     * @param {invoice_paymentsCreateManyArgs} args - Arguments to create many Invoice_payments.
+     * @example
+     * // Create many Invoice_payments
+     * const invoice_payments = await prisma.invoice_payments.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends invoice_paymentsCreateManyArgs>(args?: SelectSubset<T, invoice_paymentsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Invoice_payments.
+     * @param {invoice_paymentsDeleteArgs} args - Arguments to delete one Invoice_payments.
+     * @example
+     * // Delete one Invoice_payments
+     * const Invoice_payments = await prisma.invoice_payments.delete({
+     *   where: {
+     *     // ... filter to delete one Invoice_payments
+     *   }
+     * })
+     * 
+     */
+    delete<T extends invoice_paymentsDeleteArgs>(args: SelectSubset<T, invoice_paymentsDeleteArgs<ExtArgs>>): Prisma__invoice_paymentsClient<$Result.GetResult<Prisma.$invoice_paymentsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Invoice_payments.
+     * @param {invoice_paymentsUpdateArgs} args - Arguments to update one Invoice_payments.
+     * @example
+     * // Update one Invoice_payments
+     * const invoice_payments = await prisma.invoice_payments.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends invoice_paymentsUpdateArgs>(args: SelectSubset<T, invoice_paymentsUpdateArgs<ExtArgs>>): Prisma__invoice_paymentsClient<$Result.GetResult<Prisma.$invoice_paymentsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Invoice_payments.
+     * @param {invoice_paymentsDeleteManyArgs} args - Arguments to filter Invoice_payments to delete.
+     * @example
+     * // Delete a few Invoice_payments
+     * const { count } = await prisma.invoice_payments.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends invoice_paymentsDeleteManyArgs>(args?: SelectSubset<T, invoice_paymentsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Invoice_payments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {invoice_paymentsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Invoice_payments
+     * const invoice_payments = await prisma.invoice_payments.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends invoice_paymentsUpdateManyArgs>(args: SelectSubset<T, invoice_paymentsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Invoice_payments.
+     * @param {invoice_paymentsUpsertArgs} args - Arguments to update or create a Invoice_payments.
+     * @example
+     * // Update or create a Invoice_payments
+     * const invoice_payments = await prisma.invoice_payments.upsert({
+     *   create: {
+     *     // ... data to create a Invoice_payments
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Invoice_payments we want to update
+     *   }
+     * })
+     */
+    upsert<T extends invoice_paymentsUpsertArgs>(args: SelectSubset<T, invoice_paymentsUpsertArgs<ExtArgs>>): Prisma__invoice_paymentsClient<$Result.GetResult<Prisma.$invoice_paymentsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Invoice_payments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {invoice_paymentsCountArgs} args - Arguments to filter Invoice_payments to count.
+     * @example
+     * // Count the number of Invoice_payments
+     * const count = await prisma.invoice_payments.count({
+     *   where: {
+     *     // ... the filter for the Invoice_payments we want to count
+     *   }
+     * })
+    **/
+    count<T extends invoice_paymentsCountArgs>(
+      args?: Subset<T, invoice_paymentsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Invoice_paymentsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Invoice_payments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Invoice_paymentsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Invoice_paymentsAggregateArgs>(args: Subset<T, Invoice_paymentsAggregateArgs>): Prisma.PrismaPromise<GetInvoice_paymentsAggregateType<T>>
+
+    /**
+     * Group by Invoice_payments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {invoice_paymentsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends invoice_paymentsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: invoice_paymentsGroupByArgs['orderBy'] }
+        : { orderBy?: invoice_paymentsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, invoice_paymentsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetInvoice_paymentsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the invoice_payments model
+   */
+  readonly fields: invoice_paymentsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for invoice_payments.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__invoice_paymentsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    invoices<T extends invoicesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, invoicesDefaultArgs<ExtArgs>>): Prisma__invoicesClient<$Result.GetResult<Prisma.$invoicesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    users<T extends invoice_payments$usersArgs<ExtArgs> = {}>(args?: Subset<T, invoice_payments$usersArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the invoice_payments model
+   */
+  interface invoice_paymentsFieldRefs {
+    readonly id: FieldRef<"invoice_payments", 'String'>
+    readonly invoice_id: FieldRef<"invoice_payments", 'String'>
+    readonly amount: FieldRef<"invoice_payments", 'Decimal'>
+    readonly payment_date: FieldRef<"invoice_payments", 'DateTime'>
+    readonly payment_method: FieldRef<"invoice_payments", 'payment_method'>
+    readonly received_by: FieldRef<"invoice_payments", 'String'>
+    readonly notes: FieldRef<"invoice_payments", 'String'>
+    readonly created_at: FieldRef<"invoice_payments", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * invoice_payments findUnique
+   */
+  export type invoice_paymentsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the invoice_payments
+     */
+    select?: invoice_paymentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the invoice_payments
+     */
+    omit?: invoice_paymentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: invoice_paymentsInclude<ExtArgs> | null
+    /**
+     * Filter, which invoice_payments to fetch.
+     */
+    where: invoice_paymentsWhereUniqueInput
+  }
+
+  /**
+   * invoice_payments findUniqueOrThrow
+   */
+  export type invoice_paymentsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the invoice_payments
+     */
+    select?: invoice_paymentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the invoice_payments
+     */
+    omit?: invoice_paymentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: invoice_paymentsInclude<ExtArgs> | null
+    /**
+     * Filter, which invoice_payments to fetch.
+     */
+    where: invoice_paymentsWhereUniqueInput
+  }
+
+  /**
+   * invoice_payments findFirst
+   */
+  export type invoice_paymentsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the invoice_payments
+     */
+    select?: invoice_paymentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the invoice_payments
+     */
+    omit?: invoice_paymentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: invoice_paymentsInclude<ExtArgs> | null
+    /**
+     * Filter, which invoice_payments to fetch.
+     */
+    where?: invoice_paymentsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of invoice_payments to fetch.
+     */
+    orderBy?: invoice_paymentsOrderByWithRelationInput | invoice_paymentsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for invoice_payments.
+     */
+    cursor?: invoice_paymentsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` invoice_payments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` invoice_payments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of invoice_payments.
+     */
+    distinct?: Invoice_paymentsScalarFieldEnum | Invoice_paymentsScalarFieldEnum[]
+  }
+
+  /**
+   * invoice_payments findFirstOrThrow
+   */
+  export type invoice_paymentsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the invoice_payments
+     */
+    select?: invoice_paymentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the invoice_payments
+     */
+    omit?: invoice_paymentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: invoice_paymentsInclude<ExtArgs> | null
+    /**
+     * Filter, which invoice_payments to fetch.
+     */
+    where?: invoice_paymentsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of invoice_payments to fetch.
+     */
+    orderBy?: invoice_paymentsOrderByWithRelationInput | invoice_paymentsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for invoice_payments.
+     */
+    cursor?: invoice_paymentsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` invoice_payments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` invoice_payments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of invoice_payments.
+     */
+    distinct?: Invoice_paymentsScalarFieldEnum | Invoice_paymentsScalarFieldEnum[]
+  }
+
+  /**
+   * invoice_payments findMany
+   */
+  export type invoice_paymentsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the invoice_payments
+     */
+    select?: invoice_paymentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the invoice_payments
+     */
+    omit?: invoice_paymentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: invoice_paymentsInclude<ExtArgs> | null
+    /**
+     * Filter, which invoice_payments to fetch.
+     */
+    where?: invoice_paymentsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of invoice_payments to fetch.
+     */
+    orderBy?: invoice_paymentsOrderByWithRelationInput | invoice_paymentsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing invoice_payments.
+     */
+    cursor?: invoice_paymentsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` invoice_payments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` invoice_payments.
+     */
+    skip?: number
+    distinct?: Invoice_paymentsScalarFieldEnum | Invoice_paymentsScalarFieldEnum[]
+  }
+
+  /**
+   * invoice_payments create
+   */
+  export type invoice_paymentsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the invoice_payments
+     */
+    select?: invoice_paymentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the invoice_payments
+     */
+    omit?: invoice_paymentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: invoice_paymentsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a invoice_payments.
+     */
+    data: XOR<invoice_paymentsCreateInput, invoice_paymentsUncheckedCreateInput>
+  }
+
+  /**
+   * invoice_payments createMany
+   */
+  export type invoice_paymentsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many invoice_payments.
+     */
+    data: invoice_paymentsCreateManyInput | invoice_paymentsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * invoice_payments update
+   */
+  export type invoice_paymentsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the invoice_payments
+     */
+    select?: invoice_paymentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the invoice_payments
+     */
+    omit?: invoice_paymentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: invoice_paymentsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a invoice_payments.
+     */
+    data: XOR<invoice_paymentsUpdateInput, invoice_paymentsUncheckedUpdateInput>
+    /**
+     * Choose, which invoice_payments to update.
+     */
+    where: invoice_paymentsWhereUniqueInput
+  }
+
+  /**
+   * invoice_payments updateMany
+   */
+  export type invoice_paymentsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update invoice_payments.
+     */
+    data: XOR<invoice_paymentsUpdateManyMutationInput, invoice_paymentsUncheckedUpdateManyInput>
+    /**
+     * Filter which invoice_payments to update
+     */
+    where?: invoice_paymentsWhereInput
+    /**
+     * Limit how many invoice_payments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * invoice_payments upsert
+   */
+  export type invoice_paymentsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the invoice_payments
+     */
+    select?: invoice_paymentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the invoice_payments
+     */
+    omit?: invoice_paymentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: invoice_paymentsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the invoice_payments to update in case it exists.
+     */
+    where: invoice_paymentsWhereUniqueInput
+    /**
+     * In case the invoice_payments found by the `where` argument doesn't exist, create a new invoice_payments with this data.
+     */
+    create: XOR<invoice_paymentsCreateInput, invoice_paymentsUncheckedCreateInput>
+    /**
+     * In case the invoice_payments was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<invoice_paymentsUpdateInput, invoice_paymentsUncheckedUpdateInput>
+  }
+
+  /**
+   * invoice_payments delete
+   */
+  export type invoice_paymentsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the invoice_payments
+     */
+    select?: invoice_paymentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the invoice_payments
+     */
+    omit?: invoice_paymentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: invoice_paymentsInclude<ExtArgs> | null
+    /**
+     * Filter which invoice_payments to delete.
+     */
+    where: invoice_paymentsWhereUniqueInput
+  }
+
+  /**
+   * invoice_payments deleteMany
+   */
+  export type invoice_paymentsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which invoice_payments to delete
+     */
+    where?: invoice_paymentsWhereInput
+    /**
+     * Limit how many invoice_payments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * invoice_payments.users
+   */
+  export type invoice_payments$usersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the users
+     */
+    select?: usersSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the users
+     */
+    omit?: usersOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: usersInclude<ExtArgs> | null
+    where?: usersWhereInput
+  }
+
+  /**
+   * invoice_payments without action
+   */
+  export type invoice_paymentsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the invoice_payments
+     */
+    select?: invoice_paymentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the invoice_payments
+     */
+    omit?: invoice_paymentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: invoice_paymentsInclude<ExtArgs> | null
   }
 
 
@@ -17396,6 +21051,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: boolean | users$device_assignments_device_assignments_assigned_toTousersArgs<ExtArgs>
     devices?: boolean | users$devicesArgs<ExtArgs>
     diagnostic_reports?: boolean | users$diagnostic_reportsArgs<ExtArgs>
+    invoice_payments?: boolean | users$invoice_paymentsArgs<ExtArgs>
     invoices?: boolean | users$invoicesArgs<ExtArgs>
     physical_inspections?: boolean | users$physical_inspectionsArgs<ExtArgs>
     repairs_repairs_assigned_byTousers?: boolean | users$repairs_repairs_assigned_byTousersArgs<ExtArgs>
@@ -17432,6 +21088,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: boolean | users$device_assignments_device_assignments_assigned_toTousersArgs<ExtArgs>
     devices?: boolean | users$devicesArgs<ExtArgs>
     diagnostic_reports?: boolean | users$diagnostic_reportsArgs<ExtArgs>
+    invoice_payments?: boolean | users$invoice_paymentsArgs<ExtArgs>
     invoices?: boolean | users$invoicesArgs<ExtArgs>
     physical_inspections?: boolean | users$physical_inspectionsArgs<ExtArgs>
     repairs_repairs_assigned_byTousers?: boolean | users$repairs_repairs_assigned_byTousersArgs<ExtArgs>
@@ -17455,6 +21112,7 @@ export namespace Prisma {
       device_assignments_device_assignments_assigned_toTousers: Prisma.$device_assignmentsPayload<ExtArgs>[]
       devices: Prisma.$devicesPayload<ExtArgs>[]
       diagnostic_reports: Prisma.$diagnostic_reportsPayload<ExtArgs>[]
+      invoice_payments: Prisma.$invoice_paymentsPayload<ExtArgs>[]
       invoices: Prisma.$invoicesPayload<ExtArgs>[]
       physical_inspections: Prisma.$physical_inspectionsPayload<ExtArgs>[]
       repairs_repairs_assigned_byTousers: Prisma.$repairsPayload<ExtArgs>[]
@@ -17823,6 +21481,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers<T extends users$device_assignments_device_assignments_assigned_toTousersArgs<ExtArgs> = {}>(args?: Subset<T, users$device_assignments_device_assignments_assigned_toTousersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$device_assignmentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     devices<T extends users$devicesArgs<ExtArgs> = {}>(args?: Subset<T, users$devicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$devicesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     diagnostic_reports<T extends users$diagnostic_reportsArgs<ExtArgs> = {}>(args?: Subset<T, users$diagnostic_reportsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$diagnostic_reportsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    invoice_payments<T extends users$invoice_paymentsArgs<ExtArgs> = {}>(args?: Subset<T, users$invoice_paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$invoice_paymentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     invoices<T extends users$invoicesArgs<ExtArgs> = {}>(args?: Subset<T, users$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$invoicesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     physical_inspections<T extends users$physical_inspectionsArgs<ExtArgs> = {}>(args?: Subset<T, users$physical_inspectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$physical_inspectionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     repairs_repairs_assigned_byTousers<T extends users$repairs_repairs_assigned_byTousersArgs<ExtArgs> = {}>(args?: Subset<T, users$repairs_repairs_assigned_byTousersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$repairsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -18356,6 +22015,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: Diagnostic_reportsScalarFieldEnum | Diagnostic_reportsScalarFieldEnum[]
+  }
+
+  /**
+   * users.invoice_payments
+   */
+  export type users$invoice_paymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the invoice_payments
+     */
+    select?: invoice_paymentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the invoice_payments
+     */
+    omit?: invoice_paymentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: invoice_paymentsInclude<ExtArgs> | null
+    where?: invoice_paymentsWhereInput
+    orderBy?: invoice_paymentsOrderByWithRelationInput | invoice_paymentsOrderByWithRelationInput[]
+    cursor?: invoice_paymentsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Invoice_paymentsScalarFieldEnum | Invoice_paymentsScalarFieldEnum[]
   }
 
   /**
@@ -22519,6 +26202,9 @@ export namespace Prisma {
     name: 'name',
     status: 'status',
     subscription_plan: 'subscription_plan',
+    subscription_expiry: 'subscription_expiry',
+    max_offline_devices: 'max_offline_devices',
+    offline_scan_usage: 'offline_scan_usage',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -22555,7 +26241,8 @@ export namespace Prisma {
     bios_serial: 'bios_serial',
     os: 'os',
     battery_health_percent: 'battery_health_percent',
-    storage_health_percent: 'storage_health_percent'
+    storage_health_percent: 'storage_health_percent',
+    purchase_price: 'purchase_price'
   };
 
   export type DevicesScalarFieldEnum = (typeof DevicesScalarFieldEnum)[keyof typeof DevicesScalarFieldEnum]
@@ -22580,11 +26267,9 @@ export namespace Prisma {
   export const InvoicesScalarFieldEnum: {
     id: 'id',
     invoice_number: 'invoice_number',
-    device_id: 'device_id',
     branch_id: 'branch_id',
     customer_name: 'customer_name',
     customer_contact: 'customer_contact',
-    customer_email: 'customer_email',
     sale_price: 'sale_price',
     tax_amount: 'tax_amount',
     total_amount: 'total_amount',
@@ -22592,10 +26277,58 @@ export namespace Prisma {
     sale_date: 'sale_date',
     notes: 'notes',
     created_at: 'created_at',
-    updated_at: 'updated_at'
+    updated_at: 'updated_at',
+    amount_paid: 'amount_paid',
+    client_id: 'client_id',
+    payment_method: 'payment_method',
+    payment_status: 'payment_status'
   };
 
   export type InvoicesScalarFieldEnum = (typeof InvoicesScalarFieldEnum)[keyof typeof InvoicesScalarFieldEnum]
+
+
+  export const Invoice_itemsScalarFieldEnum: {
+    id: 'id',
+    invoice_id: 'invoice_id',
+    device_id: 'device_id',
+    item_name: 'item_name',
+    serial_number: 'serial_number',
+    asset_id: 'asset_id',
+    quantity: 'quantity',
+    unit_price: 'unit_price',
+    total_price: 'total_price'
+  };
+
+  export type Invoice_itemsScalarFieldEnum = (typeof Invoice_itemsScalarFieldEnum)[keyof typeof Invoice_itemsScalarFieldEnum]
+
+
+  export const ClientsScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    phone: 'phone',
+    email: 'email',
+    address: 'address',
+    company_id: 'company_id',
+    balance: 'balance',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type ClientsScalarFieldEnum = (typeof ClientsScalarFieldEnum)[keyof typeof ClientsScalarFieldEnum]
+
+
+  export const Invoice_paymentsScalarFieldEnum: {
+    id: 'id',
+    invoice_id: 'invoice_id',
+    amount: 'amount',
+    payment_date: 'payment_date',
+    payment_method: 'payment_method',
+    received_by: 'received_by',
+    notes: 'notes',
+    created_at: 'created_at'
+  };
+
+  export type Invoice_paymentsScalarFieldEnum = (typeof Invoice_paymentsScalarFieldEnum)[keyof typeof Invoice_paymentsScalarFieldEnum]
 
 
   export const Physical_inspectionsScalarFieldEnum: {
@@ -22957,16 +26690,49 @@ export namespace Prisma {
   export const invoicesOrderByRelevanceFieldEnum: {
     id: 'id',
     invoice_number: 'invoice_number',
-    device_id: 'device_id',
     branch_id: 'branch_id',
     customer_name: 'customer_name',
     customer_contact: 'customer_contact',
-    customer_email: 'customer_email',
     sold_by: 'sold_by',
-    notes: 'notes'
+    notes: 'notes',
+    client_id: 'client_id'
   };
 
   export type invoicesOrderByRelevanceFieldEnum = (typeof invoicesOrderByRelevanceFieldEnum)[keyof typeof invoicesOrderByRelevanceFieldEnum]
+
+
+  export const invoice_itemsOrderByRelevanceFieldEnum: {
+    id: 'id',
+    invoice_id: 'invoice_id',
+    device_id: 'device_id',
+    item_name: 'item_name',
+    serial_number: 'serial_number',
+    asset_id: 'asset_id'
+  };
+
+  export type invoice_itemsOrderByRelevanceFieldEnum = (typeof invoice_itemsOrderByRelevanceFieldEnum)[keyof typeof invoice_itemsOrderByRelevanceFieldEnum]
+
+
+  export const clientsOrderByRelevanceFieldEnum: {
+    id: 'id',
+    name: 'name',
+    phone: 'phone',
+    email: 'email',
+    address: 'address',
+    company_id: 'company_id'
+  };
+
+  export type clientsOrderByRelevanceFieldEnum = (typeof clientsOrderByRelevanceFieldEnum)[keyof typeof clientsOrderByRelevanceFieldEnum]
+
+
+  export const invoice_paymentsOrderByRelevanceFieldEnum: {
+    id: 'id',
+    invoice_id: 'invoice_id',
+    received_by: 'received_by',
+    notes: 'notes'
+  };
+
+  export type invoice_paymentsOrderByRelevanceFieldEnum = (typeof invoice_paymentsOrderByRelevanceFieldEnum)[keyof typeof invoice_paymentsOrderByRelevanceFieldEnum]
 
 
   export const physical_inspectionsOrderByRelevanceFieldEnum: {
@@ -23156,16 +26922,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'device_status'
+   * Reference to a field of type 'Int'
    */
-  export type Enumdevice_statusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'device_status'>
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
     
 
 
   /**
-   * Reference to a field of type 'Int'
+   * Reference to a field of type 'device_status'
    */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+  export type Enumdevice_statusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'device_status'>
     
 
 
@@ -23187,6 +26953,20 @@ export namespace Prisma {
    * Reference to a field of type 'Decimal'
    */
   export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+  /**
+   * Reference to a field of type 'payment_method'
+   */
+  export type Enumpayment_methodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'payment_method'>
+    
+
+
+  /**
+   * Reference to a field of type 'payment_status'
+   */
+  export type Enumpayment_statusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'payment_status'>
     
 
 
@@ -23455,8 +27235,12 @@ export namespace Prisma {
     name?: StringFilter<"companies"> | string
     status?: StringFilter<"companies"> | string
     subscription_plan?: StringNullableFilter<"companies"> | string | null
+    subscription_expiry?: DateTimeNullableFilter<"companies"> | Date | string | null
+    max_offline_devices?: IntNullableFilter<"companies"> | number | null
+    offline_scan_usage?: IntNullableFilter<"companies"> | number | null
     created_at?: DateTimeFilter<"companies"> | Date | string
     updated_at?: DateTimeFilter<"companies"> | Date | string
+    clients?: ClientsListRelationFilter
     devices?: DevicesListRelationFilter
     shipments?: ShipmentsListRelationFilter
     users?: UsersListRelationFilter
@@ -23468,8 +27252,12 @@ export namespace Prisma {
     name?: SortOrder
     status?: SortOrder
     subscription_plan?: SortOrderInput | SortOrder
+    subscription_expiry?: SortOrderInput | SortOrder
+    max_offline_devices?: SortOrderInput | SortOrder
+    offline_scan_usage?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    clients?: clientsOrderByRelationAggregateInput
     devices?: devicesOrderByRelationAggregateInput
     shipments?: shipmentsOrderByRelationAggregateInput
     users?: usersOrderByRelationAggregateInput
@@ -23485,8 +27273,12 @@ export namespace Prisma {
     name?: StringFilter<"companies"> | string
     status?: StringFilter<"companies"> | string
     subscription_plan?: StringNullableFilter<"companies"> | string | null
+    subscription_expiry?: DateTimeNullableFilter<"companies"> | Date | string | null
+    max_offline_devices?: IntNullableFilter<"companies"> | number | null
+    offline_scan_usage?: IntNullableFilter<"companies"> | number | null
     created_at?: DateTimeFilter<"companies"> | Date | string
     updated_at?: DateTimeFilter<"companies"> | Date | string
+    clients?: ClientsListRelationFilter
     devices?: DevicesListRelationFilter
     shipments?: ShipmentsListRelationFilter
     users?: UsersListRelationFilter
@@ -23498,11 +27290,16 @@ export namespace Prisma {
     name?: SortOrder
     status?: SortOrder
     subscription_plan?: SortOrderInput | SortOrder
+    subscription_expiry?: SortOrderInput | SortOrder
+    max_offline_devices?: SortOrderInput | SortOrder
+    offline_scan_usage?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: companiesCountOrderByAggregateInput
+    _avg?: companiesAvgOrderByAggregateInput
     _max?: companiesMaxOrderByAggregateInput
     _min?: companiesMinOrderByAggregateInput
+    _sum?: companiesSumOrderByAggregateInput
   }
 
   export type companiesScalarWhereWithAggregatesInput = {
@@ -23513,6 +27310,9 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"companies"> | string
     status?: StringWithAggregatesFilter<"companies"> | string
     subscription_plan?: StringNullableWithAggregatesFilter<"companies"> | string | null
+    subscription_expiry?: DateTimeNullableWithAggregatesFilter<"companies"> | Date | string | null
+    max_offline_devices?: IntNullableWithAggregatesFilter<"companies"> | number | null
+    offline_scan_usage?: IntNullableWithAggregatesFilter<"companies"> | number | null
     created_at?: DateTimeWithAggregatesFilter<"companies"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"companies"> | Date | string
   }
@@ -23550,6 +27350,7 @@ export namespace Prisma {
     os?: StringNullableFilter<"devices"> | string | null
     battery_health_percent?: DecimalNullableFilter<"devices"> | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: DecimalNullableFilter<"devices"> | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: DecimalNullableFilter<"devices"> | Decimal | DecimalJsLike | number | string | null
     device_assignments?: Device_assignmentsListRelationFilter
     hardware_specs?: Device_hardware_specsListRelationFilter
     users?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
@@ -23558,7 +27359,7 @@ export namespace Prisma {
     latest_report?: XOR<Diagnostic_reportsNullableScalarRelationFilter, diagnostic_reportsWhereInput> | null
     shipments?: XOR<ShipmentsNullableScalarRelationFilter, shipmentsWhereInput> | null
     diagnostic_reports?: Diagnostic_reportsListRelationFilter
-    invoices?: InvoicesListRelationFilter
+    invoice_items?: Invoice_itemsListRelationFilter
     physical_inspections?: Physical_inspectionsListRelationFilter
     repairs?: RepairsListRelationFilter
     technical_inspections?: Technical_inspectionsListRelationFilter
@@ -23595,6 +27396,7 @@ export namespace Prisma {
     os?: SortOrderInput | SortOrder
     battery_health_percent?: SortOrderInput | SortOrder
     storage_health_percent?: SortOrderInput | SortOrder
+    purchase_price?: SortOrderInput | SortOrder
     device_assignments?: device_assignmentsOrderByRelationAggregateInput
     hardware_specs?: device_hardware_specsOrderByRelationAggregateInput
     users?: usersOrderByWithRelationInput
@@ -23603,7 +27405,7 @@ export namespace Prisma {
     latest_report?: diagnostic_reportsOrderByWithRelationInput
     shipments?: shipmentsOrderByWithRelationInput
     diagnostic_reports?: diagnostic_reportsOrderByRelationAggregateInput
-    invoices?: invoicesOrderByRelationAggregateInput
+    invoice_items?: invoice_itemsOrderByRelationAggregateInput
     physical_inspections?: physical_inspectionsOrderByRelationAggregateInput
     repairs?: repairsOrderByRelationAggregateInput
     technical_inspections?: technical_inspectionsOrderByRelationAggregateInput
@@ -23644,6 +27446,7 @@ export namespace Prisma {
     os?: StringNullableFilter<"devices"> | string | null
     battery_health_percent?: DecimalNullableFilter<"devices"> | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: DecimalNullableFilter<"devices"> | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: DecimalNullableFilter<"devices"> | Decimal | DecimalJsLike | number | string | null
     device_assignments?: Device_assignmentsListRelationFilter
     hardware_specs?: Device_hardware_specsListRelationFilter
     users?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
@@ -23652,7 +27455,7 @@ export namespace Prisma {
     latest_report?: XOR<Diagnostic_reportsNullableScalarRelationFilter, diagnostic_reportsWhereInput> | null
     shipments?: XOR<ShipmentsNullableScalarRelationFilter, shipmentsWhereInput> | null
     diagnostic_reports?: Diagnostic_reportsListRelationFilter
-    invoices?: InvoicesListRelationFilter
+    invoice_items?: Invoice_itemsListRelationFilter
     physical_inspections?: Physical_inspectionsListRelationFilter
     repairs?: RepairsListRelationFilter
     technical_inspections?: Technical_inspectionsListRelationFilter
@@ -23689,6 +27492,7 @@ export namespace Prisma {
     os?: SortOrderInput | SortOrder
     battery_health_percent?: SortOrderInput | SortOrder
     storage_health_percent?: SortOrderInput | SortOrder
+    purchase_price?: SortOrderInput | SortOrder
     _count?: devicesCountOrderByAggregateInput
     _avg?: devicesAvgOrderByAggregateInput
     _max?: devicesMaxOrderByAggregateInput
@@ -23729,6 +27533,7 @@ export namespace Prisma {
     os?: StringNullableWithAggregatesFilter<"devices"> | string | null
     battery_health_percent?: DecimalNullableWithAggregatesFilter<"devices"> | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: DecimalNullableWithAggregatesFilter<"devices"> | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: DecimalNullableWithAggregatesFilter<"devices"> | Decimal | DecimalJsLike | number | string | null
   }
 
   export type device_assignmentsWhereInput = {
@@ -23824,11 +27629,9 @@ export namespace Prisma {
     NOT?: invoicesWhereInput | invoicesWhereInput[]
     id?: StringFilter<"invoices"> | string
     invoice_number?: StringFilter<"invoices"> | string
-    device_id?: StringNullableFilter<"invoices"> | string | null
     branch_id?: StringNullableFilter<"invoices"> | string | null
-    customer_name?: StringFilter<"invoices"> | string
+    customer_name?: StringNullableFilter<"invoices"> | string | null
     customer_contact?: StringNullableFilter<"invoices"> | string | null
-    customer_email?: StringNullableFilter<"invoices"> | string | null
     sale_price?: DecimalFilter<"invoices"> | Decimal | DecimalJsLike | number | string
     tax_amount?: DecimalNullableFilter<"invoices"> | Decimal | DecimalJsLike | number | string | null
     total_amount?: DecimalFilter<"invoices"> | Decimal | DecimalJsLike | number | string
@@ -23837,19 +27640,23 @@ export namespace Prisma {
     notes?: StringNullableFilter<"invoices"> | string | null
     created_at?: DateTimeNullableFilter<"invoices"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"invoices"> | Date | string | null
+    amount_paid?: DecimalFilter<"invoices"> | Decimal | DecimalJsLike | number | string
+    client_id?: StringNullableFilter<"invoices"> | string | null
+    payment_method?: Enumpayment_methodFilter<"invoices"> | $Enums.payment_method
+    payment_status?: Enumpayment_statusFilter<"invoices"> | $Enums.payment_status
+    invoice_payments?: Invoice_paymentsListRelationFilter
+    invoice_items?: Invoice_itemsListRelationFilter
     branches?: XOR<BranchesNullableScalarRelationFilter, branchesWhereInput> | null
-    devices?: XOR<DevicesNullableScalarRelationFilter, devicesWhereInput> | null
+    clients?: XOR<ClientsNullableScalarRelationFilter, clientsWhereInput> | null
     users?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
   }
 
   export type invoicesOrderByWithRelationInput = {
     id?: SortOrder
     invoice_number?: SortOrder
-    device_id?: SortOrderInput | SortOrder
     branch_id?: SortOrderInput | SortOrder
-    customer_name?: SortOrder
+    customer_name?: SortOrderInput | SortOrder
     customer_contact?: SortOrderInput | SortOrder
-    customer_email?: SortOrderInput | SortOrder
     sale_price?: SortOrder
     tax_amount?: SortOrderInput | SortOrder
     total_amount?: SortOrder
@@ -23858,8 +27665,14 @@ export namespace Prisma {
     notes?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     updated_at?: SortOrderInput | SortOrder
+    amount_paid?: SortOrder
+    client_id?: SortOrderInput | SortOrder
+    payment_method?: SortOrder
+    payment_status?: SortOrder
+    invoice_payments?: invoice_paymentsOrderByRelationAggregateInput
+    invoice_items?: invoice_itemsOrderByRelationAggregateInput
     branches?: branchesOrderByWithRelationInput
-    devices?: devicesOrderByWithRelationInput
+    clients?: clientsOrderByWithRelationInput
     users?: usersOrderByWithRelationInput
     _relevance?: invoicesOrderByRelevanceInput
   }
@@ -23870,11 +27683,9 @@ export namespace Prisma {
     AND?: invoicesWhereInput | invoicesWhereInput[]
     OR?: invoicesWhereInput[]
     NOT?: invoicesWhereInput | invoicesWhereInput[]
-    device_id?: StringNullableFilter<"invoices"> | string | null
     branch_id?: StringNullableFilter<"invoices"> | string | null
-    customer_name?: StringFilter<"invoices"> | string
+    customer_name?: StringNullableFilter<"invoices"> | string | null
     customer_contact?: StringNullableFilter<"invoices"> | string | null
-    customer_email?: StringNullableFilter<"invoices"> | string | null
     sale_price?: DecimalFilter<"invoices"> | Decimal | DecimalJsLike | number | string
     tax_amount?: DecimalNullableFilter<"invoices"> | Decimal | DecimalJsLike | number | string | null
     total_amount?: DecimalFilter<"invoices"> | Decimal | DecimalJsLike | number | string
@@ -23883,19 +27694,23 @@ export namespace Prisma {
     notes?: StringNullableFilter<"invoices"> | string | null
     created_at?: DateTimeNullableFilter<"invoices"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"invoices"> | Date | string | null
+    amount_paid?: DecimalFilter<"invoices"> | Decimal | DecimalJsLike | number | string
+    client_id?: StringNullableFilter<"invoices"> | string | null
+    payment_method?: Enumpayment_methodFilter<"invoices"> | $Enums.payment_method
+    payment_status?: Enumpayment_statusFilter<"invoices"> | $Enums.payment_status
+    invoice_payments?: Invoice_paymentsListRelationFilter
+    invoice_items?: Invoice_itemsListRelationFilter
     branches?: XOR<BranchesNullableScalarRelationFilter, branchesWhereInput> | null
-    devices?: XOR<DevicesNullableScalarRelationFilter, devicesWhereInput> | null
+    clients?: XOR<ClientsNullableScalarRelationFilter, clientsWhereInput> | null
     users?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
   }, "id" | "invoice_number">
 
   export type invoicesOrderByWithAggregationInput = {
     id?: SortOrder
     invoice_number?: SortOrder
-    device_id?: SortOrderInput | SortOrder
     branch_id?: SortOrderInput | SortOrder
-    customer_name?: SortOrder
+    customer_name?: SortOrderInput | SortOrder
     customer_contact?: SortOrderInput | SortOrder
-    customer_email?: SortOrderInput | SortOrder
     sale_price?: SortOrder
     tax_amount?: SortOrderInput | SortOrder
     total_amount?: SortOrder
@@ -23904,6 +27719,10 @@ export namespace Prisma {
     notes?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     updated_at?: SortOrderInput | SortOrder
+    amount_paid?: SortOrder
+    client_id?: SortOrderInput | SortOrder
+    payment_method?: SortOrder
+    payment_status?: SortOrder
     _count?: invoicesCountOrderByAggregateInput
     _avg?: invoicesAvgOrderByAggregateInput
     _max?: invoicesMaxOrderByAggregateInput
@@ -23917,11 +27736,9 @@ export namespace Prisma {
     NOT?: invoicesScalarWhereWithAggregatesInput | invoicesScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"invoices"> | string
     invoice_number?: StringWithAggregatesFilter<"invoices"> | string
-    device_id?: StringNullableWithAggregatesFilter<"invoices"> | string | null
     branch_id?: StringNullableWithAggregatesFilter<"invoices"> | string | null
-    customer_name?: StringWithAggregatesFilter<"invoices"> | string
+    customer_name?: StringNullableWithAggregatesFilter<"invoices"> | string | null
     customer_contact?: StringNullableWithAggregatesFilter<"invoices"> | string | null
-    customer_email?: StringNullableWithAggregatesFilter<"invoices"> | string | null
     sale_price?: DecimalWithAggregatesFilter<"invoices"> | Decimal | DecimalJsLike | number | string
     tax_amount?: DecimalNullableWithAggregatesFilter<"invoices"> | Decimal | DecimalJsLike | number | string | null
     total_amount?: DecimalWithAggregatesFilter<"invoices"> | Decimal | DecimalJsLike | number | string
@@ -23930,6 +27747,248 @@ export namespace Prisma {
     notes?: StringNullableWithAggregatesFilter<"invoices"> | string | null
     created_at?: DateTimeNullableWithAggregatesFilter<"invoices"> | Date | string | null
     updated_at?: DateTimeNullableWithAggregatesFilter<"invoices"> | Date | string | null
+    amount_paid?: DecimalWithAggregatesFilter<"invoices"> | Decimal | DecimalJsLike | number | string
+    client_id?: StringNullableWithAggregatesFilter<"invoices"> | string | null
+    payment_method?: Enumpayment_methodWithAggregatesFilter<"invoices"> | $Enums.payment_method
+    payment_status?: Enumpayment_statusWithAggregatesFilter<"invoices"> | $Enums.payment_status
+  }
+
+  export type invoice_itemsWhereInput = {
+    AND?: invoice_itemsWhereInput | invoice_itemsWhereInput[]
+    OR?: invoice_itemsWhereInput[]
+    NOT?: invoice_itemsWhereInput | invoice_itemsWhereInput[]
+    id?: StringFilter<"invoice_items"> | string
+    invoice_id?: StringFilter<"invoice_items"> | string
+    device_id?: StringNullableFilter<"invoice_items"> | string | null
+    item_name?: StringNullableFilter<"invoice_items"> | string | null
+    serial_number?: StringNullableFilter<"invoice_items"> | string | null
+    asset_id?: StringNullableFilter<"invoice_items"> | string | null
+    quantity?: IntFilter<"invoice_items"> | number
+    unit_price?: DecimalFilter<"invoice_items"> | Decimal | DecimalJsLike | number | string
+    total_price?: DecimalFilter<"invoice_items"> | Decimal | DecimalJsLike | number | string
+    invoice?: XOR<InvoicesScalarRelationFilter, invoicesWhereInput>
+    device?: XOR<DevicesNullableScalarRelationFilter, devicesWhereInput> | null
+  }
+
+  export type invoice_itemsOrderByWithRelationInput = {
+    id?: SortOrder
+    invoice_id?: SortOrder
+    device_id?: SortOrderInput | SortOrder
+    item_name?: SortOrderInput | SortOrder
+    serial_number?: SortOrderInput | SortOrder
+    asset_id?: SortOrderInput | SortOrder
+    quantity?: SortOrder
+    unit_price?: SortOrder
+    total_price?: SortOrder
+    invoice?: invoicesOrderByWithRelationInput
+    device?: devicesOrderByWithRelationInput
+    _relevance?: invoice_itemsOrderByRelevanceInput
+  }
+
+  export type invoice_itemsWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: invoice_itemsWhereInput | invoice_itemsWhereInput[]
+    OR?: invoice_itemsWhereInput[]
+    NOT?: invoice_itemsWhereInput | invoice_itemsWhereInput[]
+    invoice_id?: StringFilter<"invoice_items"> | string
+    device_id?: StringNullableFilter<"invoice_items"> | string | null
+    item_name?: StringNullableFilter<"invoice_items"> | string | null
+    serial_number?: StringNullableFilter<"invoice_items"> | string | null
+    asset_id?: StringNullableFilter<"invoice_items"> | string | null
+    quantity?: IntFilter<"invoice_items"> | number
+    unit_price?: DecimalFilter<"invoice_items"> | Decimal | DecimalJsLike | number | string
+    total_price?: DecimalFilter<"invoice_items"> | Decimal | DecimalJsLike | number | string
+    invoice?: XOR<InvoicesScalarRelationFilter, invoicesWhereInput>
+    device?: XOR<DevicesNullableScalarRelationFilter, devicesWhereInput> | null
+  }, "id">
+
+  export type invoice_itemsOrderByWithAggregationInput = {
+    id?: SortOrder
+    invoice_id?: SortOrder
+    device_id?: SortOrderInput | SortOrder
+    item_name?: SortOrderInput | SortOrder
+    serial_number?: SortOrderInput | SortOrder
+    asset_id?: SortOrderInput | SortOrder
+    quantity?: SortOrder
+    unit_price?: SortOrder
+    total_price?: SortOrder
+    _count?: invoice_itemsCountOrderByAggregateInput
+    _avg?: invoice_itemsAvgOrderByAggregateInput
+    _max?: invoice_itemsMaxOrderByAggregateInput
+    _min?: invoice_itemsMinOrderByAggregateInput
+    _sum?: invoice_itemsSumOrderByAggregateInput
+  }
+
+  export type invoice_itemsScalarWhereWithAggregatesInput = {
+    AND?: invoice_itemsScalarWhereWithAggregatesInput | invoice_itemsScalarWhereWithAggregatesInput[]
+    OR?: invoice_itemsScalarWhereWithAggregatesInput[]
+    NOT?: invoice_itemsScalarWhereWithAggregatesInput | invoice_itemsScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"invoice_items"> | string
+    invoice_id?: StringWithAggregatesFilter<"invoice_items"> | string
+    device_id?: StringNullableWithAggregatesFilter<"invoice_items"> | string | null
+    item_name?: StringNullableWithAggregatesFilter<"invoice_items"> | string | null
+    serial_number?: StringNullableWithAggregatesFilter<"invoice_items"> | string | null
+    asset_id?: StringNullableWithAggregatesFilter<"invoice_items"> | string | null
+    quantity?: IntWithAggregatesFilter<"invoice_items"> | number
+    unit_price?: DecimalWithAggregatesFilter<"invoice_items"> | Decimal | DecimalJsLike | number | string
+    total_price?: DecimalWithAggregatesFilter<"invoice_items"> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type clientsWhereInput = {
+    AND?: clientsWhereInput | clientsWhereInput[]
+    OR?: clientsWhereInput[]
+    NOT?: clientsWhereInput | clientsWhereInput[]
+    id?: StringFilter<"clients"> | string
+    name?: StringFilter<"clients"> | string
+    phone?: StringNullableFilter<"clients"> | string | null
+    email?: StringNullableFilter<"clients"> | string | null
+    address?: StringNullableFilter<"clients"> | string | null
+    company_id?: StringFilter<"clients"> | string
+    balance?: DecimalFilter<"clients"> | Decimal | DecimalJsLike | number | string
+    created_at?: DateTimeNullableFilter<"clients"> | Date | string | null
+    updated_at?: DateTimeNullableFilter<"clients"> | Date | string | null
+    companies?: XOR<CompaniesScalarRelationFilter, companiesWhereInput>
+    invoices?: InvoicesListRelationFilter
+  }
+
+  export type clientsOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    phone?: SortOrderInput | SortOrder
+    email?: SortOrderInput | SortOrder
+    address?: SortOrderInput | SortOrder
+    company_id?: SortOrder
+    balance?: SortOrder
+    created_at?: SortOrderInput | SortOrder
+    updated_at?: SortOrderInput | SortOrder
+    companies?: companiesOrderByWithRelationInput
+    invoices?: invoicesOrderByRelationAggregateInput
+    _relevance?: clientsOrderByRelevanceInput
+  }
+
+  export type clientsWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: clientsWhereInput | clientsWhereInput[]
+    OR?: clientsWhereInput[]
+    NOT?: clientsWhereInput | clientsWhereInput[]
+    name?: StringFilter<"clients"> | string
+    phone?: StringNullableFilter<"clients"> | string | null
+    email?: StringNullableFilter<"clients"> | string | null
+    address?: StringNullableFilter<"clients"> | string | null
+    company_id?: StringFilter<"clients"> | string
+    balance?: DecimalFilter<"clients"> | Decimal | DecimalJsLike | number | string
+    created_at?: DateTimeNullableFilter<"clients"> | Date | string | null
+    updated_at?: DateTimeNullableFilter<"clients"> | Date | string | null
+    companies?: XOR<CompaniesScalarRelationFilter, companiesWhereInput>
+    invoices?: InvoicesListRelationFilter
+  }, "id">
+
+  export type clientsOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    phone?: SortOrderInput | SortOrder
+    email?: SortOrderInput | SortOrder
+    address?: SortOrderInput | SortOrder
+    company_id?: SortOrder
+    balance?: SortOrder
+    created_at?: SortOrderInput | SortOrder
+    updated_at?: SortOrderInput | SortOrder
+    _count?: clientsCountOrderByAggregateInput
+    _avg?: clientsAvgOrderByAggregateInput
+    _max?: clientsMaxOrderByAggregateInput
+    _min?: clientsMinOrderByAggregateInput
+    _sum?: clientsSumOrderByAggregateInput
+  }
+
+  export type clientsScalarWhereWithAggregatesInput = {
+    AND?: clientsScalarWhereWithAggregatesInput | clientsScalarWhereWithAggregatesInput[]
+    OR?: clientsScalarWhereWithAggregatesInput[]
+    NOT?: clientsScalarWhereWithAggregatesInput | clientsScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"clients"> | string
+    name?: StringWithAggregatesFilter<"clients"> | string
+    phone?: StringNullableWithAggregatesFilter<"clients"> | string | null
+    email?: StringNullableWithAggregatesFilter<"clients"> | string | null
+    address?: StringNullableWithAggregatesFilter<"clients"> | string | null
+    company_id?: StringWithAggregatesFilter<"clients"> | string
+    balance?: DecimalWithAggregatesFilter<"clients"> | Decimal | DecimalJsLike | number | string
+    created_at?: DateTimeNullableWithAggregatesFilter<"clients"> | Date | string | null
+    updated_at?: DateTimeNullableWithAggregatesFilter<"clients"> | Date | string | null
+  }
+
+  export type invoice_paymentsWhereInput = {
+    AND?: invoice_paymentsWhereInput | invoice_paymentsWhereInput[]
+    OR?: invoice_paymentsWhereInput[]
+    NOT?: invoice_paymentsWhereInput | invoice_paymentsWhereInput[]
+    id?: StringFilter<"invoice_payments"> | string
+    invoice_id?: StringFilter<"invoice_payments"> | string
+    amount?: DecimalFilter<"invoice_payments"> | Decimal | DecimalJsLike | number | string
+    payment_date?: DateTimeFilter<"invoice_payments"> | Date | string
+    payment_method?: Enumpayment_methodFilter<"invoice_payments"> | $Enums.payment_method
+    received_by?: StringNullableFilter<"invoice_payments"> | string | null
+    notes?: StringNullableFilter<"invoice_payments"> | string | null
+    created_at?: DateTimeNullableFilter<"invoice_payments"> | Date | string | null
+    invoices?: XOR<InvoicesScalarRelationFilter, invoicesWhereInput>
+    users?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
+  }
+
+  export type invoice_paymentsOrderByWithRelationInput = {
+    id?: SortOrder
+    invoice_id?: SortOrder
+    amount?: SortOrder
+    payment_date?: SortOrder
+    payment_method?: SortOrder
+    received_by?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    created_at?: SortOrderInput | SortOrder
+    invoices?: invoicesOrderByWithRelationInput
+    users?: usersOrderByWithRelationInput
+    _relevance?: invoice_paymentsOrderByRelevanceInput
+  }
+
+  export type invoice_paymentsWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: invoice_paymentsWhereInput | invoice_paymentsWhereInput[]
+    OR?: invoice_paymentsWhereInput[]
+    NOT?: invoice_paymentsWhereInput | invoice_paymentsWhereInput[]
+    invoice_id?: StringFilter<"invoice_payments"> | string
+    amount?: DecimalFilter<"invoice_payments"> | Decimal | DecimalJsLike | number | string
+    payment_date?: DateTimeFilter<"invoice_payments"> | Date | string
+    payment_method?: Enumpayment_methodFilter<"invoice_payments"> | $Enums.payment_method
+    received_by?: StringNullableFilter<"invoice_payments"> | string | null
+    notes?: StringNullableFilter<"invoice_payments"> | string | null
+    created_at?: DateTimeNullableFilter<"invoice_payments"> | Date | string | null
+    invoices?: XOR<InvoicesScalarRelationFilter, invoicesWhereInput>
+    users?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
+  }, "id">
+
+  export type invoice_paymentsOrderByWithAggregationInput = {
+    id?: SortOrder
+    invoice_id?: SortOrder
+    amount?: SortOrder
+    payment_date?: SortOrder
+    payment_method?: SortOrder
+    received_by?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    created_at?: SortOrderInput | SortOrder
+    _count?: invoice_paymentsCountOrderByAggregateInput
+    _avg?: invoice_paymentsAvgOrderByAggregateInput
+    _max?: invoice_paymentsMaxOrderByAggregateInput
+    _min?: invoice_paymentsMinOrderByAggregateInput
+    _sum?: invoice_paymentsSumOrderByAggregateInput
+  }
+
+  export type invoice_paymentsScalarWhereWithAggregatesInput = {
+    AND?: invoice_paymentsScalarWhereWithAggregatesInput | invoice_paymentsScalarWhereWithAggregatesInput[]
+    OR?: invoice_paymentsScalarWhereWithAggregatesInput[]
+    NOT?: invoice_paymentsScalarWhereWithAggregatesInput | invoice_paymentsScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"invoice_payments"> | string
+    invoice_id?: StringWithAggregatesFilter<"invoice_payments"> | string
+    amount?: DecimalWithAggregatesFilter<"invoice_payments"> | Decimal | DecimalJsLike | number | string
+    payment_date?: DateTimeWithAggregatesFilter<"invoice_payments"> | Date | string
+    payment_method?: Enumpayment_methodWithAggregatesFilter<"invoice_payments"> | $Enums.payment_method
+    received_by?: StringNullableWithAggregatesFilter<"invoice_payments"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"invoice_payments"> | string | null
+    created_at?: DateTimeNullableWithAggregatesFilter<"invoice_payments"> | Date | string | null
   }
 
   export type physical_inspectionsWhereInput = {
@@ -24542,6 +28601,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: Device_assignmentsListRelationFilter
     devices?: DevicesListRelationFilter
     diagnostic_reports?: Diagnostic_reportsListRelationFilter
+    invoice_payments?: Invoice_paymentsListRelationFilter
     invoices?: InvoicesListRelationFilter
     physical_inspections?: Physical_inspectionsListRelationFilter
     repairs_repairs_assigned_byTousers?: RepairsListRelationFilter
@@ -24571,6 +28631,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsOrderByRelationAggregateInput
     devices?: devicesOrderByRelationAggregateInput
     diagnostic_reports?: diagnostic_reportsOrderByRelationAggregateInput
+    invoice_payments?: invoice_paymentsOrderByRelationAggregateInput
     invoices?: invoicesOrderByRelationAggregateInput
     physical_inspections?: physical_inspectionsOrderByRelationAggregateInput
     repairs_repairs_assigned_byTousers?: repairsOrderByRelationAggregateInput
@@ -24604,6 +28665,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: Device_assignmentsListRelationFilter
     devices?: DevicesListRelationFilter
     diagnostic_reports?: Diagnostic_reportsListRelationFilter
+    invoice_payments?: Invoice_paymentsListRelationFilter
     invoices?: InvoicesListRelationFilter
     physical_inspections?: Physical_inspectionsListRelationFilter
     repairs_repairs_assigned_byTousers?: RepairsListRelationFilter
@@ -25478,8 +29540,12 @@ export namespace Prisma {
     name: string
     status?: string
     subscription_plan?: string | null
+    subscription_expiry?: Date | string | null
+    max_offline_devices?: number | null
+    offline_scan_usage?: number | null
     created_at?: Date | string
     updated_at?: Date | string
+    clients?: clientsCreateNestedManyWithoutCompaniesInput
     devices?: devicesCreateNestedManyWithoutCompaniesInput
     shipments?: shipmentsCreateNestedManyWithoutCompaniesInput
     users?: usersCreateNestedManyWithoutCompaniesInput
@@ -25491,8 +29557,12 @@ export namespace Prisma {
     name: string
     status?: string
     subscription_plan?: string | null
+    subscription_expiry?: Date | string | null
+    max_offline_devices?: number | null
+    offline_scan_usage?: number | null
     created_at?: Date | string
     updated_at?: Date | string
+    clients?: clientsUncheckedCreateNestedManyWithoutCompaniesInput
     devices?: devicesUncheckedCreateNestedManyWithoutCompaniesInput
     shipments?: shipmentsUncheckedCreateNestedManyWithoutCompaniesInput
     users?: usersUncheckedCreateNestedManyWithoutCompaniesInput
@@ -25504,8 +29574,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     subscription_plan?: NullableStringFieldUpdateOperationsInput | string | null
+    subscription_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    max_offline_devices?: NullableIntFieldUpdateOperationsInput | number | null
+    offline_scan_usage?: NullableIntFieldUpdateOperationsInput | number | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    clients?: clientsUpdateManyWithoutCompaniesNestedInput
     devices?: devicesUpdateManyWithoutCompaniesNestedInput
     shipments?: shipmentsUpdateManyWithoutCompaniesNestedInput
     users?: usersUpdateManyWithoutCompaniesNestedInput
@@ -25517,8 +29591,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     subscription_plan?: NullableStringFieldUpdateOperationsInput | string | null
+    subscription_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    max_offline_devices?: NullableIntFieldUpdateOperationsInput | number | null
+    offline_scan_usage?: NullableIntFieldUpdateOperationsInput | number | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    clients?: clientsUncheckedUpdateManyWithoutCompaniesNestedInput
     devices?: devicesUncheckedUpdateManyWithoutCompaniesNestedInput
     shipments?: shipmentsUncheckedUpdateManyWithoutCompaniesNestedInput
     users?: usersUncheckedUpdateManyWithoutCompaniesNestedInput
@@ -25530,6 +29608,9 @@ export namespace Prisma {
     name: string
     status?: string
     subscription_plan?: string | null
+    subscription_expiry?: Date | string | null
+    max_offline_devices?: number | null
+    offline_scan_usage?: number | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -25539,6 +29620,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     subscription_plan?: NullableStringFieldUpdateOperationsInput | string | null
+    subscription_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    max_offline_devices?: NullableIntFieldUpdateOperationsInput | number | null
+    offline_scan_usage?: NullableIntFieldUpdateOperationsInput | number | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -25548,6 +29632,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     subscription_plan?: NullableStringFieldUpdateOperationsInput | string | null
+    subscription_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    max_offline_devices?: NullableIntFieldUpdateOperationsInput | number | null
+    offline_scan_usage?: NullableIntFieldUpdateOperationsInput | number | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -25577,6 +29664,7 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsCreateNestedManyWithoutDevicesInput
     hardware_specs?: device_hardware_specsCreateNestedManyWithoutDeviceInput
     users?: usersCreateNestedOneWithoutDevicesInput
@@ -25585,7 +29673,7 @@ export namespace Prisma {
     latest_report?: diagnostic_reportsCreateNestedOneWithoutDevices_latestInput
     shipments?: shipmentsCreateNestedOneWithoutDevicesInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutDevicesInput
-    invoices?: invoicesCreateNestedManyWithoutDevicesInput
+    invoice_items?: invoice_itemsCreateNestedManyWithoutDeviceInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutDevicesInput
     repairs?: repairsCreateNestedManyWithoutDevicesInput
     technical_inspections?: technical_inspectionsCreateNestedManyWithoutDevicesInput
@@ -25622,10 +29710,11 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUncheckedCreateNestedManyWithoutDevicesInput
     hardware_specs?: device_hardware_specsUncheckedCreateNestedManyWithoutDeviceInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutDevicesInput
-    invoices?: invoicesUncheckedCreateNestedManyWithoutDevicesInput
+    invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutDeviceInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
     repairs?: repairsUncheckedCreateNestedManyWithoutDevicesInput
     technical_inspections?: technical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
@@ -25657,6 +29746,7 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUpdateManyWithoutDevicesNestedInput
     hardware_specs?: device_hardware_specsUpdateManyWithoutDeviceNestedInput
     users?: usersUpdateOneWithoutDevicesNestedInput
@@ -25665,7 +29755,7 @@ export namespace Prisma {
     latest_report?: diagnostic_reportsUpdateOneWithoutDevices_latestNestedInput
     shipments?: shipmentsUpdateOneWithoutDevicesNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutDevicesNestedInput
-    invoices?: invoicesUpdateManyWithoutDevicesNestedInput
+    invoice_items?: invoice_itemsUpdateManyWithoutDeviceNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutDevicesNestedInput
     repairs?: repairsUpdateManyWithoutDevicesNestedInput
     technical_inspections?: technical_inspectionsUpdateManyWithoutDevicesNestedInput
@@ -25702,10 +29792,11 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUncheckedUpdateManyWithoutDevicesNestedInput
     hardware_specs?: device_hardware_specsUncheckedUpdateManyWithoutDeviceNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutDevicesNestedInput
-    invoices?: invoicesUncheckedUpdateManyWithoutDevicesNestedInput
+    invoice_items?: invoice_itemsUncheckedUpdateManyWithoutDeviceNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutDevicesNestedInput
     repairs?: repairsUncheckedUpdateManyWithoutDevicesNestedInput
     technical_inspections?: technical_inspectionsUncheckedUpdateManyWithoutDevicesNestedInput
@@ -25742,6 +29833,7 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
   }
 
   export type devicesUpdateManyMutationInput = {
@@ -25769,6 +29861,7 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
   }
 
   export type devicesUncheckedUpdateManyInput = {
@@ -25801,6 +29894,7 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
   }
 
   export type device_assignmentsCreateInput = {
@@ -25894,9 +29988,8 @@ export namespace Prisma {
   export type invoicesCreateInput = {
     id?: string
     invoice_number: string
-    customer_name: string
+    customer_name?: string | null
     customer_contact?: string | null
-    customer_email?: string | null
     sale_price: Decimal | DecimalJsLike | number | string
     tax_amount?: Decimal | DecimalJsLike | number | string | null
     total_amount: Decimal | DecimalJsLike | number | string
@@ -25904,19 +29997,22 @@ export namespace Prisma {
     notes?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
+    amount_paid?: Decimal | DecimalJsLike | number | string
+    payment_method?: $Enums.payment_method
+    payment_status?: $Enums.payment_status
+    invoice_payments?: invoice_paymentsCreateNestedManyWithoutInvoicesInput
+    invoice_items?: invoice_itemsCreateNestedManyWithoutInvoiceInput
     branches?: branchesCreateNestedOneWithoutInvoicesInput
-    devices?: devicesCreateNestedOneWithoutInvoicesInput
+    clients?: clientsCreateNestedOneWithoutInvoicesInput
     users?: usersCreateNestedOneWithoutInvoicesInput
   }
 
   export type invoicesUncheckedCreateInput = {
     id?: string
     invoice_number: string
-    device_id?: string | null
     branch_id?: string | null
-    customer_name: string
+    customer_name?: string | null
     customer_contact?: string | null
-    customer_email?: string | null
     sale_price: Decimal | DecimalJsLike | number | string
     tax_amount?: Decimal | DecimalJsLike | number | string | null
     total_amount: Decimal | DecimalJsLike | number | string
@@ -25925,14 +30021,19 @@ export namespace Prisma {
     notes?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
+    amount_paid?: Decimal | DecimalJsLike | number | string
+    client_id?: string | null
+    payment_method?: $Enums.payment_method
+    payment_status?: $Enums.payment_status
+    invoice_payments?: invoice_paymentsUncheckedCreateNestedManyWithoutInvoicesInput
+    invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutInvoiceInput
   }
 
   export type invoicesUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     invoice_number?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_name?: NullableStringFieldUpdateOperationsInput | string | null
     customer_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    customer_email?: NullableStringFieldUpdateOperationsInput | string | null
     sale_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tax_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -25940,19 +30041,22 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amount_paid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    payment_status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    invoice_payments?: invoice_paymentsUpdateManyWithoutInvoicesNestedInput
+    invoice_items?: invoice_itemsUpdateManyWithoutInvoiceNestedInput
     branches?: branchesUpdateOneWithoutInvoicesNestedInput
-    devices?: devicesUpdateOneWithoutInvoicesNestedInput
+    clients?: clientsUpdateOneWithoutInvoicesNestedInput
     users?: usersUpdateOneWithoutInvoicesNestedInput
   }
 
   export type invoicesUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     invoice_number?: StringFieldUpdateOperationsInput | string
-    device_id?: NullableStringFieldUpdateOperationsInput | string | null
     branch_id?: NullableStringFieldUpdateOperationsInput | string | null
-    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_name?: NullableStringFieldUpdateOperationsInput | string | null
     customer_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    customer_email?: NullableStringFieldUpdateOperationsInput | string | null
     sale_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tax_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -25961,16 +30065,20 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amount_paid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    client_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    payment_status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    invoice_payments?: invoice_paymentsUncheckedUpdateManyWithoutInvoicesNestedInput
+    invoice_items?: invoice_itemsUncheckedUpdateManyWithoutInvoiceNestedInput
   }
 
   export type invoicesCreateManyInput = {
     id?: string
     invoice_number: string
-    device_id?: string | null
     branch_id?: string | null
-    customer_name: string
+    customer_name?: string | null
     customer_contact?: string | null
-    customer_email?: string | null
     sale_price: Decimal | DecimalJsLike | number | string
     tax_amount?: Decimal | DecimalJsLike | number | string | null
     total_amount: Decimal | DecimalJsLike | number | string
@@ -25979,14 +30087,17 @@ export namespace Prisma {
     notes?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
+    amount_paid?: Decimal | DecimalJsLike | number | string
+    client_id?: string | null
+    payment_method?: $Enums.payment_method
+    payment_status?: $Enums.payment_status
   }
 
   export type invoicesUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     invoice_number?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_name?: NullableStringFieldUpdateOperationsInput | string | null
     customer_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    customer_email?: NullableStringFieldUpdateOperationsInput | string | null
     sale_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tax_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -25994,16 +30105,17 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amount_paid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    payment_status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
   }
 
   export type invoicesUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     invoice_number?: StringFieldUpdateOperationsInput | string
-    device_id?: NullableStringFieldUpdateOperationsInput | string | null
     branch_id?: NullableStringFieldUpdateOperationsInput | string | null
-    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_name?: NullableStringFieldUpdateOperationsInput | string | null
     customer_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    customer_email?: NullableStringFieldUpdateOperationsInput | string | null
     sale_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tax_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -26012,6 +30124,254 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amount_paid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    client_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    payment_status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+  }
+
+  export type invoice_itemsCreateInput = {
+    id?: string
+    item_name?: string | null
+    serial_number?: string | null
+    asset_id?: string | null
+    quantity?: number
+    unit_price: Decimal | DecimalJsLike | number | string
+    total_price: Decimal | DecimalJsLike | number | string
+    invoice: invoicesCreateNestedOneWithoutInvoice_itemsInput
+    device?: devicesCreateNestedOneWithoutInvoice_itemsInput
+  }
+
+  export type invoice_itemsUncheckedCreateInput = {
+    id?: string
+    invoice_id: string
+    device_id?: string | null
+    item_name?: string | null
+    serial_number?: string | null
+    asset_id?: string | null
+    quantity?: number
+    unit_price: Decimal | DecimalJsLike | number | string
+    total_price: Decimal | DecimalJsLike | number | string
+  }
+
+  export type invoice_itemsUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    item_name?: NullableStringFieldUpdateOperationsInput | string | null
+    serial_number?: NullableStringFieldUpdateOperationsInput | string | null
+    asset_id?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    unit_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    invoice?: invoicesUpdateOneRequiredWithoutInvoice_itemsNestedInput
+    device?: devicesUpdateOneWithoutInvoice_itemsNestedInput
+  }
+
+  export type invoice_itemsUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoice_id?: StringFieldUpdateOperationsInput | string
+    device_id?: NullableStringFieldUpdateOperationsInput | string | null
+    item_name?: NullableStringFieldUpdateOperationsInput | string | null
+    serial_number?: NullableStringFieldUpdateOperationsInput | string | null
+    asset_id?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    unit_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type invoice_itemsCreateManyInput = {
+    id?: string
+    invoice_id: string
+    device_id?: string | null
+    item_name?: string | null
+    serial_number?: string | null
+    asset_id?: string | null
+    quantity?: number
+    unit_price: Decimal | DecimalJsLike | number | string
+    total_price: Decimal | DecimalJsLike | number | string
+  }
+
+  export type invoice_itemsUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    item_name?: NullableStringFieldUpdateOperationsInput | string | null
+    serial_number?: NullableStringFieldUpdateOperationsInput | string | null
+    asset_id?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    unit_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type invoice_itemsUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoice_id?: StringFieldUpdateOperationsInput | string
+    device_id?: NullableStringFieldUpdateOperationsInput | string | null
+    item_name?: NullableStringFieldUpdateOperationsInput | string | null
+    serial_number?: NullableStringFieldUpdateOperationsInput | string | null
+    asset_id?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    unit_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type clientsCreateInput = {
+    id?: string
+    name: string
+    phone?: string | null
+    email?: string | null
+    address?: string | null
+    balance?: Decimal | DecimalJsLike | number | string
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    companies: companiesCreateNestedOneWithoutClientsInput
+    invoices?: invoicesCreateNestedManyWithoutClientsInput
+  }
+
+  export type clientsUncheckedCreateInput = {
+    id?: string
+    name: string
+    phone?: string | null
+    email?: string | null
+    address?: string | null
+    company_id: string
+    balance?: Decimal | DecimalJsLike | number | string
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    invoices?: invoicesUncheckedCreateNestedManyWithoutClientsInput
+  }
+
+  export type clientsUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    balance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    companies?: companiesUpdateOneRequiredWithoutClientsNestedInput
+    invoices?: invoicesUpdateManyWithoutClientsNestedInput
+  }
+
+  export type clientsUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    company_id?: StringFieldUpdateOperationsInput | string
+    balance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    invoices?: invoicesUncheckedUpdateManyWithoutClientsNestedInput
+  }
+
+  export type clientsCreateManyInput = {
+    id?: string
+    name: string
+    phone?: string | null
+    email?: string | null
+    address?: string | null
+    company_id: string
+    balance?: Decimal | DecimalJsLike | number | string
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type clientsUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    balance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type clientsUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    company_id?: StringFieldUpdateOperationsInput | string
+    balance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type invoice_paymentsCreateInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    payment_date?: Date | string
+    payment_method?: $Enums.payment_method
+    notes?: string | null
+    created_at?: Date | string | null
+    invoices: invoicesCreateNestedOneWithoutInvoice_paymentsInput
+    users?: usersCreateNestedOneWithoutInvoice_paymentsInput
+  }
+
+  export type invoice_paymentsUncheckedCreateInput = {
+    id?: string
+    invoice_id: string
+    amount: Decimal | DecimalJsLike | number | string
+    payment_date?: Date | string
+    payment_method?: $Enums.payment_method
+    received_by?: string | null
+    notes?: string | null
+    created_at?: Date | string | null
+  }
+
+  export type invoice_paymentsUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    payment_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    invoices?: invoicesUpdateOneRequiredWithoutInvoice_paymentsNestedInput
+    users?: usersUpdateOneWithoutInvoice_paymentsNestedInput
+  }
+
+  export type invoice_paymentsUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoice_id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    payment_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    received_by?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type invoice_paymentsCreateManyInput = {
+    id?: string
+    invoice_id: string
+    amount: Decimal | DecimalJsLike | number | string
+    payment_date?: Date | string
+    payment_method?: $Enums.payment_method
+    received_by?: string | null
+    notes?: string | null
+    created_at?: Date | string | null
+  }
+
+  export type invoice_paymentsUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    payment_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type invoice_paymentsUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoice_id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    payment_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    received_by?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type physical_inspectionsCreateInput = {
@@ -26649,6 +31009,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsCreateNestedManyWithoutUsersInput
     invoices?: invoicesCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -26678,6 +31039,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesUncheckedCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsUncheckedCreateNestedManyWithoutUsersInput
     invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -26703,6 +31065,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -26732,6 +31095,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUncheckedUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUncheckedUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -27794,6 +32158,17 @@ export namespace Prisma {
     company_id?: SortOrder
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[]
@@ -27805,10 +32180,20 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type ClientsListRelationFilter = {
+    every?: clientsWhereInput
+    some?: clientsWhereInput
+    none?: clientsWhereInput
+  }
+
   export type VendorsListRelationFilter = {
     every?: vendorsWhereInput
     some?: vendorsWhereInput
     none?: vendorsWhereInput
+  }
+
+  export type clientsOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type vendorsOrderByRelationAggregateInput = {
@@ -27826,8 +32211,16 @@ export namespace Prisma {
     name?: SortOrder
     status?: SortOrder
     subscription_plan?: SortOrder
+    subscription_expiry?: SortOrder
+    max_offline_devices?: SortOrder
+    offline_scan_usage?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+  }
+
+  export type companiesAvgOrderByAggregateInput = {
+    max_offline_devices?: SortOrder
+    offline_scan_usage?: SortOrder
   }
 
   export type companiesMaxOrderByAggregateInput = {
@@ -27835,6 +32228,9 @@ export namespace Prisma {
     name?: SortOrder
     status?: SortOrder
     subscription_plan?: SortOrder
+    subscription_expiry?: SortOrder
+    max_offline_devices?: SortOrder
+    offline_scan_usage?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -27844,8 +32240,32 @@ export namespace Prisma {
     name?: SortOrder
     status?: SortOrder
     subscription_plan?: SortOrder
+    subscription_expiry?: SortOrder
+    max_offline_devices?: SortOrder
+    offline_scan_usage?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+  }
+
+  export type companiesSumOrderByAggregateInput = {
+    max_offline_devices?: SortOrder
+    offline_scan_usage?: SortOrder
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -27867,17 +32287,6 @@ export namespace Prisma {
     in?: $Enums.device_status[] | null
     notIn?: $Enums.device_status[] | null
     not?: NestedEnumdevice_statusNullableFilter<$PrismaModel> | $Enums.device_status | null
-  }
-
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
   export type JsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -27942,6 +32351,12 @@ export namespace Prisma {
     none?: diagnostic_reportsWhereInput
   }
 
+  export type Invoice_itemsListRelationFilter = {
+    every?: invoice_itemsWhereInput
+    some?: invoice_itemsWhereInput
+    none?: invoice_itemsWhereInput
+  }
+
   export type Physical_inspectionsListRelationFilter = {
     every?: physical_inspectionsWhereInput
     some?: physical_inspectionsWhereInput
@@ -27969,6 +32384,10 @@ export namespace Prisma {
   }
 
   export type diagnostic_reportsOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type invoice_itemsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -28020,6 +32439,7 @@ export namespace Prisma {
     os?: SortOrder
     battery_health_percent?: SortOrder
     storage_health_percent?: SortOrder
+    purchase_price?: SortOrder
   }
 
   export type devicesAvgOrderByAggregateInput = {
@@ -28030,6 +32450,7 @@ export namespace Prisma {
     diagnostic_score?: SortOrder
     battery_health_percent?: SortOrder
     storage_health_percent?: SortOrder
+    purchase_price?: SortOrder
   }
 
   export type devicesMaxOrderByAggregateInput = {
@@ -28059,6 +32480,7 @@ export namespace Prisma {
     os?: SortOrder
     battery_health_percent?: SortOrder
     storage_health_percent?: SortOrder
+    purchase_price?: SortOrder
   }
 
   export type devicesMinOrderByAggregateInput = {
@@ -28088,6 +32510,7 @@ export namespace Prisma {
     os?: SortOrder
     battery_health_percent?: SortOrder
     storage_health_percent?: SortOrder
+    purchase_price?: SortOrder
   }
 
   export type devicesSumOrderByAggregateInput = {
@@ -28098,6 +32521,7 @@ export namespace Prisma {
     diagnostic_score?: SortOrder
     battery_health_percent?: SortOrder
     storage_health_percent?: SortOrder
+    purchase_price?: SortOrder
   }
 
   export type Enumdevice_statusNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -28108,22 +32532,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumdevice_statusNullableFilter<$PrismaModel>
     _max?: NestedEnumdevice_statusNullableFilter<$PrismaModel>
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
   export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -28234,9 +32642,33 @@ export namespace Prisma {
     not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
   }
 
-  export type DevicesNullableScalarRelationFilter = {
-    is?: devicesWhereInput | null
-    isNot?: devicesWhereInput | null
+  export type Enumpayment_methodFilter<$PrismaModel = never> = {
+    equals?: $Enums.payment_method | Enumpayment_methodFieldRefInput<$PrismaModel>
+    in?: $Enums.payment_method[]
+    notIn?: $Enums.payment_method[]
+    not?: NestedEnumpayment_methodFilter<$PrismaModel> | $Enums.payment_method
+  }
+
+  export type Enumpayment_statusFilter<$PrismaModel = never> = {
+    equals?: $Enums.payment_status | Enumpayment_statusFieldRefInput<$PrismaModel>
+    in?: $Enums.payment_status[]
+    notIn?: $Enums.payment_status[]
+    not?: NestedEnumpayment_statusFilter<$PrismaModel> | $Enums.payment_status
+  }
+
+  export type Invoice_paymentsListRelationFilter = {
+    every?: invoice_paymentsWhereInput
+    some?: invoice_paymentsWhereInput
+    none?: invoice_paymentsWhereInput
+  }
+
+  export type ClientsNullableScalarRelationFilter = {
+    is?: clientsWhereInput | null
+    isNot?: clientsWhereInput | null
+  }
+
+  export type invoice_paymentsOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type invoicesOrderByRelevanceInput = {
@@ -28248,11 +32680,9 @@ export namespace Prisma {
   export type invoicesCountOrderByAggregateInput = {
     id?: SortOrder
     invoice_number?: SortOrder
-    device_id?: SortOrder
     branch_id?: SortOrder
     customer_name?: SortOrder
     customer_contact?: SortOrder
-    customer_email?: SortOrder
     sale_price?: SortOrder
     tax_amount?: SortOrder
     total_amount?: SortOrder
@@ -28261,22 +32691,25 @@ export namespace Prisma {
     notes?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    amount_paid?: SortOrder
+    client_id?: SortOrder
+    payment_method?: SortOrder
+    payment_status?: SortOrder
   }
 
   export type invoicesAvgOrderByAggregateInput = {
     sale_price?: SortOrder
     tax_amount?: SortOrder
     total_amount?: SortOrder
+    amount_paid?: SortOrder
   }
 
   export type invoicesMaxOrderByAggregateInput = {
     id?: SortOrder
     invoice_number?: SortOrder
-    device_id?: SortOrder
     branch_id?: SortOrder
     customer_name?: SortOrder
     customer_contact?: SortOrder
-    customer_email?: SortOrder
     sale_price?: SortOrder
     tax_amount?: SortOrder
     total_amount?: SortOrder
@@ -28285,16 +32718,18 @@ export namespace Prisma {
     notes?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    amount_paid?: SortOrder
+    client_id?: SortOrder
+    payment_method?: SortOrder
+    payment_status?: SortOrder
   }
 
   export type invoicesMinOrderByAggregateInput = {
     id?: SortOrder
     invoice_number?: SortOrder
-    device_id?: SortOrder
     branch_id?: SortOrder
     customer_name?: SortOrder
     customer_contact?: SortOrder
-    customer_email?: SortOrder
     sale_price?: SortOrder
     tax_amount?: SortOrder
     total_amount?: SortOrder
@@ -28303,12 +32738,17 @@ export namespace Prisma {
     notes?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    amount_paid?: SortOrder
+    client_id?: SortOrder
+    payment_method?: SortOrder
+    payment_status?: SortOrder
   }
 
   export type invoicesSumOrderByAggregateInput = {
     sale_price?: SortOrder
     tax_amount?: SortOrder
     total_amount?: SortOrder
+    amount_paid?: SortOrder
   }
 
   export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
@@ -28325,6 +32765,214 @@ export namespace Prisma {
     _sum?: NestedDecimalFilter<$PrismaModel>
     _min?: NestedDecimalFilter<$PrismaModel>
     _max?: NestedDecimalFilter<$PrismaModel>
+  }
+
+  export type Enumpayment_methodWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.payment_method | Enumpayment_methodFieldRefInput<$PrismaModel>
+    in?: $Enums.payment_method[]
+    notIn?: $Enums.payment_method[]
+    not?: NestedEnumpayment_methodWithAggregatesFilter<$PrismaModel> | $Enums.payment_method
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumpayment_methodFilter<$PrismaModel>
+    _max?: NestedEnumpayment_methodFilter<$PrismaModel>
+  }
+
+  export type Enumpayment_statusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.payment_status | Enumpayment_statusFieldRefInput<$PrismaModel>
+    in?: $Enums.payment_status[]
+    notIn?: $Enums.payment_status[]
+    not?: NestedEnumpayment_statusWithAggregatesFilter<$PrismaModel> | $Enums.payment_status
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumpayment_statusFilter<$PrismaModel>
+    _max?: NestedEnumpayment_statusFilter<$PrismaModel>
+  }
+
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type InvoicesScalarRelationFilter = {
+    is?: invoicesWhereInput
+    isNot?: invoicesWhereInput
+  }
+
+  export type DevicesNullableScalarRelationFilter = {
+    is?: devicesWhereInput | null
+    isNot?: devicesWhereInput | null
+  }
+
+  export type invoice_itemsOrderByRelevanceInput = {
+    fields: invoice_itemsOrderByRelevanceFieldEnum | invoice_itemsOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type invoice_itemsCountOrderByAggregateInput = {
+    id?: SortOrder
+    invoice_id?: SortOrder
+    device_id?: SortOrder
+    item_name?: SortOrder
+    serial_number?: SortOrder
+    asset_id?: SortOrder
+    quantity?: SortOrder
+    unit_price?: SortOrder
+    total_price?: SortOrder
+  }
+
+  export type invoice_itemsAvgOrderByAggregateInput = {
+    quantity?: SortOrder
+    unit_price?: SortOrder
+    total_price?: SortOrder
+  }
+
+  export type invoice_itemsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    invoice_id?: SortOrder
+    device_id?: SortOrder
+    item_name?: SortOrder
+    serial_number?: SortOrder
+    asset_id?: SortOrder
+    quantity?: SortOrder
+    unit_price?: SortOrder
+    total_price?: SortOrder
+  }
+
+  export type invoice_itemsMinOrderByAggregateInput = {
+    id?: SortOrder
+    invoice_id?: SortOrder
+    device_id?: SortOrder
+    item_name?: SortOrder
+    serial_number?: SortOrder
+    asset_id?: SortOrder
+    quantity?: SortOrder
+    unit_price?: SortOrder
+    total_price?: SortOrder
+  }
+
+  export type invoice_itemsSumOrderByAggregateInput = {
+    quantity?: SortOrder
+    unit_price?: SortOrder
+    total_price?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type clientsOrderByRelevanceInput = {
+    fields: clientsOrderByRelevanceFieldEnum | clientsOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type clientsCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    phone?: SortOrder
+    email?: SortOrder
+    address?: SortOrder
+    company_id?: SortOrder
+    balance?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type clientsAvgOrderByAggregateInput = {
+    balance?: SortOrder
+  }
+
+  export type clientsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    phone?: SortOrder
+    email?: SortOrder
+    address?: SortOrder
+    company_id?: SortOrder
+    balance?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type clientsMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    phone?: SortOrder
+    email?: SortOrder
+    address?: SortOrder
+    company_id?: SortOrder
+    balance?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type clientsSumOrderByAggregateInput = {
+    balance?: SortOrder
+  }
+
+  export type invoice_paymentsOrderByRelevanceInput = {
+    fields: invoice_paymentsOrderByRelevanceFieldEnum | invoice_paymentsOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type invoice_paymentsCountOrderByAggregateInput = {
+    id?: SortOrder
+    invoice_id?: SortOrder
+    amount?: SortOrder
+    payment_date?: SortOrder
+    payment_method?: SortOrder
+    received_by?: SortOrder
+    notes?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type invoice_paymentsAvgOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type invoice_paymentsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    invoice_id?: SortOrder
+    amount?: SortOrder
+    payment_date?: SortOrder
+    payment_method?: SortOrder
+    received_by?: SortOrder
+    notes?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type invoice_paymentsMinOrderByAggregateInput = {
+    id?: SortOrder
+    invoice_id?: SortOrder
+    amount?: SortOrder
+    payment_date?: SortOrder
+    payment_method?: SortOrder
+    received_by?: SortOrder
+    notes?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type invoice_paymentsSumOrderByAggregateInput = {
+    amount?: SortOrder
   }
 
   export type physical_inspectionsOrderByRelevanceInput = {
@@ -28429,17 +33077,6 @@ export namespace Prisma {
     updated_at?: SortOrder
   }
 
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
   export type VendorsNullableScalarRelationFilter = {
     is?: vendorsWhereInput | null
     isNot?: vendorsWhereInput | null
@@ -28505,22 +33142,6 @@ export namespace Prisma {
 
   export type shipmentsSumOrderByAggregateInput = {
     device_count?: SortOrder
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type RepairsNullableScalarRelationFilter = {
@@ -29573,6 +34194,13 @@ export namespace Prisma {
     deleteMany?: shipmentsScalarWhereInput | shipmentsScalarWhereInput[]
   }
 
+  export type clientsCreateNestedManyWithoutCompaniesInput = {
+    create?: XOR<clientsCreateWithoutCompaniesInput, clientsUncheckedCreateWithoutCompaniesInput> | clientsCreateWithoutCompaniesInput[] | clientsUncheckedCreateWithoutCompaniesInput[]
+    connectOrCreate?: clientsCreateOrConnectWithoutCompaniesInput | clientsCreateOrConnectWithoutCompaniesInput[]
+    createMany?: clientsCreateManyCompaniesInputEnvelope
+    connect?: clientsWhereUniqueInput | clientsWhereUniqueInput[]
+  }
+
   export type devicesCreateNestedManyWithoutCompaniesInput = {
     create?: XOR<devicesCreateWithoutCompaniesInput, devicesUncheckedCreateWithoutCompaniesInput> | devicesCreateWithoutCompaniesInput[] | devicesUncheckedCreateWithoutCompaniesInput[]
     connectOrCreate?: devicesCreateOrConnectWithoutCompaniesInput | devicesCreateOrConnectWithoutCompaniesInput[]
@@ -29599,6 +34227,13 @@ export namespace Prisma {
     connectOrCreate?: vendorsCreateOrConnectWithoutCompaniesInput | vendorsCreateOrConnectWithoutCompaniesInput[]
     createMany?: vendorsCreateManyCompaniesInputEnvelope
     connect?: vendorsWhereUniqueInput | vendorsWhereUniqueInput[]
+  }
+
+  export type clientsUncheckedCreateNestedManyWithoutCompaniesInput = {
+    create?: XOR<clientsCreateWithoutCompaniesInput, clientsUncheckedCreateWithoutCompaniesInput> | clientsCreateWithoutCompaniesInput[] | clientsUncheckedCreateWithoutCompaniesInput[]
+    connectOrCreate?: clientsCreateOrConnectWithoutCompaniesInput | clientsCreateOrConnectWithoutCompaniesInput[]
+    createMany?: clientsCreateManyCompaniesInputEnvelope
+    connect?: clientsWhereUniqueInput | clientsWhereUniqueInput[]
   }
 
   export type devicesUncheckedCreateNestedManyWithoutCompaniesInput = {
@@ -29629,8 +34264,30 @@ export namespace Prisma {
     connect?: vendorsWhereUniqueInput | vendorsWhereUniqueInput[]
   }
 
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type clientsUpdateManyWithoutCompaniesNestedInput = {
+    create?: XOR<clientsCreateWithoutCompaniesInput, clientsUncheckedCreateWithoutCompaniesInput> | clientsCreateWithoutCompaniesInput[] | clientsUncheckedCreateWithoutCompaniesInput[]
+    connectOrCreate?: clientsCreateOrConnectWithoutCompaniesInput | clientsCreateOrConnectWithoutCompaniesInput[]
+    upsert?: clientsUpsertWithWhereUniqueWithoutCompaniesInput | clientsUpsertWithWhereUniqueWithoutCompaniesInput[]
+    createMany?: clientsCreateManyCompaniesInputEnvelope
+    set?: clientsWhereUniqueInput | clientsWhereUniqueInput[]
+    disconnect?: clientsWhereUniqueInput | clientsWhereUniqueInput[]
+    delete?: clientsWhereUniqueInput | clientsWhereUniqueInput[]
+    connect?: clientsWhereUniqueInput | clientsWhereUniqueInput[]
+    update?: clientsUpdateWithWhereUniqueWithoutCompaniesInput | clientsUpdateWithWhereUniqueWithoutCompaniesInput[]
+    updateMany?: clientsUpdateManyWithWhereWithoutCompaniesInput | clientsUpdateManyWithWhereWithoutCompaniesInput[]
+    deleteMany?: clientsScalarWhereInput | clientsScalarWhereInput[]
   }
 
   export type devicesUpdateManyWithoutCompaniesNestedInput = {
@@ -29687,6 +34344,20 @@ export namespace Prisma {
     update?: vendorsUpdateWithWhereUniqueWithoutCompaniesInput | vendorsUpdateWithWhereUniqueWithoutCompaniesInput[]
     updateMany?: vendorsUpdateManyWithWhereWithoutCompaniesInput | vendorsUpdateManyWithWhereWithoutCompaniesInput[]
     deleteMany?: vendorsScalarWhereInput | vendorsScalarWhereInput[]
+  }
+
+  export type clientsUncheckedUpdateManyWithoutCompaniesNestedInput = {
+    create?: XOR<clientsCreateWithoutCompaniesInput, clientsUncheckedCreateWithoutCompaniesInput> | clientsCreateWithoutCompaniesInput[] | clientsUncheckedCreateWithoutCompaniesInput[]
+    connectOrCreate?: clientsCreateOrConnectWithoutCompaniesInput | clientsCreateOrConnectWithoutCompaniesInput[]
+    upsert?: clientsUpsertWithWhereUniqueWithoutCompaniesInput | clientsUpsertWithWhereUniqueWithoutCompaniesInput[]
+    createMany?: clientsCreateManyCompaniesInputEnvelope
+    set?: clientsWhereUniqueInput | clientsWhereUniqueInput[]
+    disconnect?: clientsWhereUniqueInput | clientsWhereUniqueInput[]
+    delete?: clientsWhereUniqueInput | clientsWhereUniqueInput[]
+    connect?: clientsWhereUniqueInput | clientsWhereUniqueInput[]
+    update?: clientsUpdateWithWhereUniqueWithoutCompaniesInput | clientsUpdateWithWhereUniqueWithoutCompaniesInput[]
+    updateMany?: clientsUpdateManyWithWhereWithoutCompaniesInput | clientsUpdateManyWithWhereWithoutCompaniesInput[]
+    deleteMany?: clientsScalarWhereInput | clientsScalarWhereInput[]
   }
 
   export type devicesUncheckedUpdateManyWithoutCompaniesNestedInput = {
@@ -29796,11 +34467,11 @@ export namespace Prisma {
     connect?: diagnostic_reportsWhereUniqueInput | diagnostic_reportsWhereUniqueInput[]
   }
 
-  export type invoicesCreateNestedManyWithoutDevicesInput = {
-    create?: XOR<invoicesCreateWithoutDevicesInput, invoicesUncheckedCreateWithoutDevicesInput> | invoicesCreateWithoutDevicesInput[] | invoicesUncheckedCreateWithoutDevicesInput[]
-    connectOrCreate?: invoicesCreateOrConnectWithoutDevicesInput | invoicesCreateOrConnectWithoutDevicesInput[]
-    createMany?: invoicesCreateManyDevicesInputEnvelope
-    connect?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
+  export type invoice_itemsCreateNestedManyWithoutDeviceInput = {
+    create?: XOR<invoice_itemsCreateWithoutDeviceInput, invoice_itemsUncheckedCreateWithoutDeviceInput> | invoice_itemsCreateWithoutDeviceInput[] | invoice_itemsUncheckedCreateWithoutDeviceInput[]
+    connectOrCreate?: invoice_itemsCreateOrConnectWithoutDeviceInput | invoice_itemsCreateOrConnectWithoutDeviceInput[]
+    createMany?: invoice_itemsCreateManyDeviceInputEnvelope
+    connect?: invoice_itemsWhereUniqueInput | invoice_itemsWhereUniqueInput[]
   }
 
   export type physical_inspectionsCreateNestedManyWithoutDevicesInput = {
@@ -29852,11 +34523,11 @@ export namespace Prisma {
     connect?: diagnostic_reportsWhereUniqueInput | diagnostic_reportsWhereUniqueInput[]
   }
 
-  export type invoicesUncheckedCreateNestedManyWithoutDevicesInput = {
-    create?: XOR<invoicesCreateWithoutDevicesInput, invoicesUncheckedCreateWithoutDevicesInput> | invoicesCreateWithoutDevicesInput[] | invoicesUncheckedCreateWithoutDevicesInput[]
-    connectOrCreate?: invoicesCreateOrConnectWithoutDevicesInput | invoicesCreateOrConnectWithoutDevicesInput[]
-    createMany?: invoicesCreateManyDevicesInputEnvelope
-    connect?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
+  export type invoice_itemsUncheckedCreateNestedManyWithoutDeviceInput = {
+    create?: XOR<invoice_itemsCreateWithoutDeviceInput, invoice_itemsUncheckedCreateWithoutDeviceInput> | invoice_itemsCreateWithoutDeviceInput[] | invoice_itemsUncheckedCreateWithoutDeviceInput[]
+    connectOrCreate?: invoice_itemsCreateOrConnectWithoutDeviceInput | invoice_itemsCreateOrConnectWithoutDeviceInput[]
+    createMany?: invoice_itemsCreateManyDeviceInputEnvelope
+    connect?: invoice_itemsWhereUniqueInput | invoice_itemsWhereUniqueInput[]
   }
 
   export type physical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput = {
@@ -29889,14 +34560,6 @@ export namespace Prisma {
 
   export type NullableEnumdevice_statusFieldUpdateOperationsInput = {
     set?: $Enums.device_status | null
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type NullableDecimalFieldUpdateOperationsInput = {
@@ -29997,18 +34660,18 @@ export namespace Prisma {
     deleteMany?: diagnostic_reportsScalarWhereInput | diagnostic_reportsScalarWhereInput[]
   }
 
-  export type invoicesUpdateManyWithoutDevicesNestedInput = {
-    create?: XOR<invoicesCreateWithoutDevicesInput, invoicesUncheckedCreateWithoutDevicesInput> | invoicesCreateWithoutDevicesInput[] | invoicesUncheckedCreateWithoutDevicesInput[]
-    connectOrCreate?: invoicesCreateOrConnectWithoutDevicesInput | invoicesCreateOrConnectWithoutDevicesInput[]
-    upsert?: invoicesUpsertWithWhereUniqueWithoutDevicesInput | invoicesUpsertWithWhereUniqueWithoutDevicesInput[]
-    createMany?: invoicesCreateManyDevicesInputEnvelope
-    set?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
-    disconnect?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
-    delete?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
-    connect?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
-    update?: invoicesUpdateWithWhereUniqueWithoutDevicesInput | invoicesUpdateWithWhereUniqueWithoutDevicesInput[]
-    updateMany?: invoicesUpdateManyWithWhereWithoutDevicesInput | invoicesUpdateManyWithWhereWithoutDevicesInput[]
-    deleteMany?: invoicesScalarWhereInput | invoicesScalarWhereInput[]
+  export type invoice_itemsUpdateManyWithoutDeviceNestedInput = {
+    create?: XOR<invoice_itemsCreateWithoutDeviceInput, invoice_itemsUncheckedCreateWithoutDeviceInput> | invoice_itemsCreateWithoutDeviceInput[] | invoice_itemsUncheckedCreateWithoutDeviceInput[]
+    connectOrCreate?: invoice_itemsCreateOrConnectWithoutDeviceInput | invoice_itemsCreateOrConnectWithoutDeviceInput[]
+    upsert?: invoice_itemsUpsertWithWhereUniqueWithoutDeviceInput | invoice_itemsUpsertWithWhereUniqueWithoutDeviceInput[]
+    createMany?: invoice_itemsCreateManyDeviceInputEnvelope
+    set?: invoice_itemsWhereUniqueInput | invoice_itemsWhereUniqueInput[]
+    disconnect?: invoice_itemsWhereUniqueInput | invoice_itemsWhereUniqueInput[]
+    delete?: invoice_itemsWhereUniqueInput | invoice_itemsWhereUniqueInput[]
+    connect?: invoice_itemsWhereUniqueInput | invoice_itemsWhereUniqueInput[]
+    update?: invoice_itemsUpdateWithWhereUniqueWithoutDeviceInput | invoice_itemsUpdateWithWhereUniqueWithoutDeviceInput[]
+    updateMany?: invoice_itemsUpdateManyWithWhereWithoutDeviceInput | invoice_itemsUpdateManyWithWhereWithoutDeviceInput[]
+    deleteMany?: invoice_itemsScalarWhereInput | invoice_itemsScalarWhereInput[]
   }
 
   export type physical_inspectionsUpdateManyWithoutDevicesNestedInput = {
@@ -30109,18 +34772,18 @@ export namespace Prisma {
     deleteMany?: diagnostic_reportsScalarWhereInput | diagnostic_reportsScalarWhereInput[]
   }
 
-  export type invoicesUncheckedUpdateManyWithoutDevicesNestedInput = {
-    create?: XOR<invoicesCreateWithoutDevicesInput, invoicesUncheckedCreateWithoutDevicesInput> | invoicesCreateWithoutDevicesInput[] | invoicesUncheckedCreateWithoutDevicesInput[]
-    connectOrCreate?: invoicesCreateOrConnectWithoutDevicesInput | invoicesCreateOrConnectWithoutDevicesInput[]
-    upsert?: invoicesUpsertWithWhereUniqueWithoutDevicesInput | invoicesUpsertWithWhereUniqueWithoutDevicesInput[]
-    createMany?: invoicesCreateManyDevicesInputEnvelope
-    set?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
-    disconnect?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
-    delete?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
-    connect?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
-    update?: invoicesUpdateWithWhereUniqueWithoutDevicesInput | invoicesUpdateWithWhereUniqueWithoutDevicesInput[]
-    updateMany?: invoicesUpdateManyWithWhereWithoutDevicesInput | invoicesUpdateManyWithWhereWithoutDevicesInput[]
-    deleteMany?: invoicesScalarWhereInput | invoicesScalarWhereInput[]
+  export type invoice_itemsUncheckedUpdateManyWithoutDeviceNestedInput = {
+    create?: XOR<invoice_itemsCreateWithoutDeviceInput, invoice_itemsUncheckedCreateWithoutDeviceInput> | invoice_itemsCreateWithoutDeviceInput[] | invoice_itemsUncheckedCreateWithoutDeviceInput[]
+    connectOrCreate?: invoice_itemsCreateOrConnectWithoutDeviceInput | invoice_itemsCreateOrConnectWithoutDeviceInput[]
+    upsert?: invoice_itemsUpsertWithWhereUniqueWithoutDeviceInput | invoice_itemsUpsertWithWhereUniqueWithoutDeviceInput[]
+    createMany?: invoice_itemsCreateManyDeviceInputEnvelope
+    set?: invoice_itemsWhereUniqueInput | invoice_itemsWhereUniqueInput[]
+    disconnect?: invoice_itemsWhereUniqueInput | invoice_itemsWhereUniqueInput[]
+    delete?: invoice_itemsWhereUniqueInput | invoice_itemsWhereUniqueInput[]
+    connect?: invoice_itemsWhereUniqueInput | invoice_itemsWhereUniqueInput[]
+    update?: invoice_itemsUpdateWithWhereUniqueWithoutDeviceInput | invoice_itemsUpdateWithWhereUniqueWithoutDeviceInput[]
+    updateMany?: invoice_itemsUpdateManyWithWhereWithoutDeviceInput | invoice_itemsUpdateManyWithWhereWithoutDeviceInput[]
+    deleteMany?: invoice_itemsScalarWhereInput | invoice_itemsScalarWhereInput[]
   }
 
   export type physical_inspectionsUncheckedUpdateManyWithoutDevicesNestedInput = {
@@ -30221,16 +34884,30 @@ export namespace Prisma {
     update?: XOR<XOR<devicesUpdateToOneWithWhereWithoutDevice_assignmentsInput, devicesUpdateWithoutDevice_assignmentsInput>, devicesUncheckedUpdateWithoutDevice_assignmentsInput>
   }
 
+  export type invoice_paymentsCreateNestedManyWithoutInvoicesInput = {
+    create?: XOR<invoice_paymentsCreateWithoutInvoicesInput, invoice_paymentsUncheckedCreateWithoutInvoicesInput> | invoice_paymentsCreateWithoutInvoicesInput[] | invoice_paymentsUncheckedCreateWithoutInvoicesInput[]
+    connectOrCreate?: invoice_paymentsCreateOrConnectWithoutInvoicesInput | invoice_paymentsCreateOrConnectWithoutInvoicesInput[]
+    createMany?: invoice_paymentsCreateManyInvoicesInputEnvelope
+    connect?: invoice_paymentsWhereUniqueInput | invoice_paymentsWhereUniqueInput[]
+  }
+
+  export type invoice_itemsCreateNestedManyWithoutInvoiceInput = {
+    create?: XOR<invoice_itemsCreateWithoutInvoiceInput, invoice_itemsUncheckedCreateWithoutInvoiceInput> | invoice_itemsCreateWithoutInvoiceInput[] | invoice_itemsUncheckedCreateWithoutInvoiceInput[]
+    connectOrCreate?: invoice_itemsCreateOrConnectWithoutInvoiceInput | invoice_itemsCreateOrConnectWithoutInvoiceInput[]
+    createMany?: invoice_itemsCreateManyInvoiceInputEnvelope
+    connect?: invoice_itemsWhereUniqueInput | invoice_itemsWhereUniqueInput[]
+  }
+
   export type branchesCreateNestedOneWithoutInvoicesInput = {
     create?: XOR<branchesCreateWithoutInvoicesInput, branchesUncheckedCreateWithoutInvoicesInput>
     connectOrCreate?: branchesCreateOrConnectWithoutInvoicesInput
     connect?: branchesWhereUniqueInput
   }
 
-  export type devicesCreateNestedOneWithoutInvoicesInput = {
-    create?: XOR<devicesCreateWithoutInvoicesInput, devicesUncheckedCreateWithoutInvoicesInput>
-    connectOrCreate?: devicesCreateOrConnectWithoutInvoicesInput
-    connect?: devicesWhereUniqueInput
+  export type clientsCreateNestedOneWithoutInvoicesInput = {
+    create?: XOR<clientsCreateWithoutInvoicesInput, clientsUncheckedCreateWithoutInvoicesInput>
+    connectOrCreate?: clientsCreateOrConnectWithoutInvoicesInput
+    connect?: clientsWhereUniqueInput
   }
 
   export type usersCreateNestedOneWithoutInvoicesInput = {
@@ -30239,12 +34916,62 @@ export namespace Prisma {
     connect?: usersWhereUniqueInput
   }
 
+  export type invoice_paymentsUncheckedCreateNestedManyWithoutInvoicesInput = {
+    create?: XOR<invoice_paymentsCreateWithoutInvoicesInput, invoice_paymentsUncheckedCreateWithoutInvoicesInput> | invoice_paymentsCreateWithoutInvoicesInput[] | invoice_paymentsUncheckedCreateWithoutInvoicesInput[]
+    connectOrCreate?: invoice_paymentsCreateOrConnectWithoutInvoicesInput | invoice_paymentsCreateOrConnectWithoutInvoicesInput[]
+    createMany?: invoice_paymentsCreateManyInvoicesInputEnvelope
+    connect?: invoice_paymentsWhereUniqueInput | invoice_paymentsWhereUniqueInput[]
+  }
+
+  export type invoice_itemsUncheckedCreateNestedManyWithoutInvoiceInput = {
+    create?: XOR<invoice_itemsCreateWithoutInvoiceInput, invoice_itemsUncheckedCreateWithoutInvoiceInput> | invoice_itemsCreateWithoutInvoiceInput[] | invoice_itemsUncheckedCreateWithoutInvoiceInput[]
+    connectOrCreate?: invoice_itemsCreateOrConnectWithoutInvoiceInput | invoice_itemsCreateOrConnectWithoutInvoiceInput[]
+    createMany?: invoice_itemsCreateManyInvoiceInputEnvelope
+    connect?: invoice_itemsWhereUniqueInput | invoice_itemsWhereUniqueInput[]
+  }
+
   export type DecimalFieldUpdateOperationsInput = {
     set?: Decimal | DecimalJsLike | number | string
     increment?: Decimal | DecimalJsLike | number | string
     decrement?: Decimal | DecimalJsLike | number | string
     multiply?: Decimal | DecimalJsLike | number | string
     divide?: Decimal | DecimalJsLike | number | string
+  }
+
+  export type Enumpayment_methodFieldUpdateOperationsInput = {
+    set?: $Enums.payment_method
+  }
+
+  export type Enumpayment_statusFieldUpdateOperationsInput = {
+    set?: $Enums.payment_status
+  }
+
+  export type invoice_paymentsUpdateManyWithoutInvoicesNestedInput = {
+    create?: XOR<invoice_paymentsCreateWithoutInvoicesInput, invoice_paymentsUncheckedCreateWithoutInvoicesInput> | invoice_paymentsCreateWithoutInvoicesInput[] | invoice_paymentsUncheckedCreateWithoutInvoicesInput[]
+    connectOrCreate?: invoice_paymentsCreateOrConnectWithoutInvoicesInput | invoice_paymentsCreateOrConnectWithoutInvoicesInput[]
+    upsert?: invoice_paymentsUpsertWithWhereUniqueWithoutInvoicesInput | invoice_paymentsUpsertWithWhereUniqueWithoutInvoicesInput[]
+    createMany?: invoice_paymentsCreateManyInvoicesInputEnvelope
+    set?: invoice_paymentsWhereUniqueInput | invoice_paymentsWhereUniqueInput[]
+    disconnect?: invoice_paymentsWhereUniqueInput | invoice_paymentsWhereUniqueInput[]
+    delete?: invoice_paymentsWhereUniqueInput | invoice_paymentsWhereUniqueInput[]
+    connect?: invoice_paymentsWhereUniqueInput | invoice_paymentsWhereUniqueInput[]
+    update?: invoice_paymentsUpdateWithWhereUniqueWithoutInvoicesInput | invoice_paymentsUpdateWithWhereUniqueWithoutInvoicesInput[]
+    updateMany?: invoice_paymentsUpdateManyWithWhereWithoutInvoicesInput | invoice_paymentsUpdateManyWithWhereWithoutInvoicesInput[]
+    deleteMany?: invoice_paymentsScalarWhereInput | invoice_paymentsScalarWhereInput[]
+  }
+
+  export type invoice_itemsUpdateManyWithoutInvoiceNestedInput = {
+    create?: XOR<invoice_itemsCreateWithoutInvoiceInput, invoice_itemsUncheckedCreateWithoutInvoiceInput> | invoice_itemsCreateWithoutInvoiceInput[] | invoice_itemsUncheckedCreateWithoutInvoiceInput[]
+    connectOrCreate?: invoice_itemsCreateOrConnectWithoutInvoiceInput | invoice_itemsCreateOrConnectWithoutInvoiceInput[]
+    upsert?: invoice_itemsUpsertWithWhereUniqueWithoutInvoiceInput | invoice_itemsUpsertWithWhereUniqueWithoutInvoiceInput[]
+    createMany?: invoice_itemsCreateManyInvoiceInputEnvelope
+    set?: invoice_itemsWhereUniqueInput | invoice_itemsWhereUniqueInput[]
+    disconnect?: invoice_itemsWhereUniqueInput | invoice_itemsWhereUniqueInput[]
+    delete?: invoice_itemsWhereUniqueInput | invoice_itemsWhereUniqueInput[]
+    connect?: invoice_itemsWhereUniqueInput | invoice_itemsWhereUniqueInput[]
+    update?: invoice_itemsUpdateWithWhereUniqueWithoutInvoiceInput | invoice_itemsUpdateWithWhereUniqueWithoutInvoiceInput[]
+    updateMany?: invoice_itemsUpdateManyWithWhereWithoutInvoiceInput | invoice_itemsUpdateManyWithWhereWithoutInvoiceInput[]
+    deleteMany?: invoice_itemsScalarWhereInput | invoice_itemsScalarWhereInput[]
   }
 
   export type branchesUpdateOneWithoutInvoicesNestedInput = {
@@ -30257,14 +34984,14 @@ export namespace Prisma {
     update?: XOR<XOR<branchesUpdateToOneWithWhereWithoutInvoicesInput, branchesUpdateWithoutInvoicesInput>, branchesUncheckedUpdateWithoutInvoicesInput>
   }
 
-  export type devicesUpdateOneWithoutInvoicesNestedInput = {
-    create?: XOR<devicesCreateWithoutInvoicesInput, devicesUncheckedCreateWithoutInvoicesInput>
-    connectOrCreate?: devicesCreateOrConnectWithoutInvoicesInput
-    upsert?: devicesUpsertWithoutInvoicesInput
-    disconnect?: devicesWhereInput | boolean
-    delete?: devicesWhereInput | boolean
-    connect?: devicesWhereUniqueInput
-    update?: XOR<XOR<devicesUpdateToOneWithWhereWithoutInvoicesInput, devicesUpdateWithoutInvoicesInput>, devicesUncheckedUpdateWithoutInvoicesInput>
+  export type clientsUpdateOneWithoutInvoicesNestedInput = {
+    create?: XOR<clientsCreateWithoutInvoicesInput, clientsUncheckedCreateWithoutInvoicesInput>
+    connectOrCreate?: clientsCreateOrConnectWithoutInvoicesInput
+    upsert?: clientsUpsertWithoutInvoicesInput
+    disconnect?: clientsWhereInput | boolean
+    delete?: clientsWhereInput | boolean
+    connect?: clientsWhereUniqueInput
+    update?: XOR<XOR<clientsUpdateToOneWithWhereWithoutInvoicesInput, clientsUpdateWithoutInvoicesInput>, clientsUncheckedUpdateWithoutInvoicesInput>
   }
 
   export type usersUpdateOneWithoutInvoicesNestedInput = {
@@ -30275,6 +35002,158 @@ export namespace Prisma {
     delete?: usersWhereInput | boolean
     connect?: usersWhereUniqueInput
     update?: XOR<XOR<usersUpdateToOneWithWhereWithoutInvoicesInput, usersUpdateWithoutInvoicesInput>, usersUncheckedUpdateWithoutInvoicesInput>
+  }
+
+  export type invoice_paymentsUncheckedUpdateManyWithoutInvoicesNestedInput = {
+    create?: XOR<invoice_paymentsCreateWithoutInvoicesInput, invoice_paymentsUncheckedCreateWithoutInvoicesInput> | invoice_paymentsCreateWithoutInvoicesInput[] | invoice_paymentsUncheckedCreateWithoutInvoicesInput[]
+    connectOrCreate?: invoice_paymentsCreateOrConnectWithoutInvoicesInput | invoice_paymentsCreateOrConnectWithoutInvoicesInput[]
+    upsert?: invoice_paymentsUpsertWithWhereUniqueWithoutInvoicesInput | invoice_paymentsUpsertWithWhereUniqueWithoutInvoicesInput[]
+    createMany?: invoice_paymentsCreateManyInvoicesInputEnvelope
+    set?: invoice_paymentsWhereUniqueInput | invoice_paymentsWhereUniqueInput[]
+    disconnect?: invoice_paymentsWhereUniqueInput | invoice_paymentsWhereUniqueInput[]
+    delete?: invoice_paymentsWhereUniqueInput | invoice_paymentsWhereUniqueInput[]
+    connect?: invoice_paymentsWhereUniqueInput | invoice_paymentsWhereUniqueInput[]
+    update?: invoice_paymentsUpdateWithWhereUniqueWithoutInvoicesInput | invoice_paymentsUpdateWithWhereUniqueWithoutInvoicesInput[]
+    updateMany?: invoice_paymentsUpdateManyWithWhereWithoutInvoicesInput | invoice_paymentsUpdateManyWithWhereWithoutInvoicesInput[]
+    deleteMany?: invoice_paymentsScalarWhereInput | invoice_paymentsScalarWhereInput[]
+  }
+
+  export type invoice_itemsUncheckedUpdateManyWithoutInvoiceNestedInput = {
+    create?: XOR<invoice_itemsCreateWithoutInvoiceInput, invoice_itemsUncheckedCreateWithoutInvoiceInput> | invoice_itemsCreateWithoutInvoiceInput[] | invoice_itemsUncheckedCreateWithoutInvoiceInput[]
+    connectOrCreate?: invoice_itemsCreateOrConnectWithoutInvoiceInput | invoice_itemsCreateOrConnectWithoutInvoiceInput[]
+    upsert?: invoice_itemsUpsertWithWhereUniqueWithoutInvoiceInput | invoice_itemsUpsertWithWhereUniqueWithoutInvoiceInput[]
+    createMany?: invoice_itemsCreateManyInvoiceInputEnvelope
+    set?: invoice_itemsWhereUniqueInput | invoice_itemsWhereUniqueInput[]
+    disconnect?: invoice_itemsWhereUniqueInput | invoice_itemsWhereUniqueInput[]
+    delete?: invoice_itemsWhereUniqueInput | invoice_itemsWhereUniqueInput[]
+    connect?: invoice_itemsWhereUniqueInput | invoice_itemsWhereUniqueInput[]
+    update?: invoice_itemsUpdateWithWhereUniqueWithoutInvoiceInput | invoice_itemsUpdateWithWhereUniqueWithoutInvoiceInput[]
+    updateMany?: invoice_itemsUpdateManyWithWhereWithoutInvoiceInput | invoice_itemsUpdateManyWithWhereWithoutInvoiceInput[]
+    deleteMany?: invoice_itemsScalarWhereInput | invoice_itemsScalarWhereInput[]
+  }
+
+  export type invoicesCreateNestedOneWithoutInvoice_itemsInput = {
+    create?: XOR<invoicesCreateWithoutInvoice_itemsInput, invoicesUncheckedCreateWithoutInvoice_itemsInput>
+    connectOrCreate?: invoicesCreateOrConnectWithoutInvoice_itemsInput
+    connect?: invoicesWhereUniqueInput
+  }
+
+  export type devicesCreateNestedOneWithoutInvoice_itemsInput = {
+    create?: XOR<devicesCreateWithoutInvoice_itemsInput, devicesUncheckedCreateWithoutInvoice_itemsInput>
+    connectOrCreate?: devicesCreateOrConnectWithoutInvoice_itemsInput
+    connect?: devicesWhereUniqueInput
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type invoicesUpdateOneRequiredWithoutInvoice_itemsNestedInput = {
+    create?: XOR<invoicesCreateWithoutInvoice_itemsInput, invoicesUncheckedCreateWithoutInvoice_itemsInput>
+    connectOrCreate?: invoicesCreateOrConnectWithoutInvoice_itemsInput
+    upsert?: invoicesUpsertWithoutInvoice_itemsInput
+    connect?: invoicesWhereUniqueInput
+    update?: XOR<XOR<invoicesUpdateToOneWithWhereWithoutInvoice_itemsInput, invoicesUpdateWithoutInvoice_itemsInput>, invoicesUncheckedUpdateWithoutInvoice_itemsInput>
+  }
+
+  export type devicesUpdateOneWithoutInvoice_itemsNestedInput = {
+    create?: XOR<devicesCreateWithoutInvoice_itemsInput, devicesUncheckedCreateWithoutInvoice_itemsInput>
+    connectOrCreate?: devicesCreateOrConnectWithoutInvoice_itemsInput
+    upsert?: devicesUpsertWithoutInvoice_itemsInput
+    disconnect?: devicesWhereInput | boolean
+    delete?: devicesWhereInput | boolean
+    connect?: devicesWhereUniqueInput
+    update?: XOR<XOR<devicesUpdateToOneWithWhereWithoutInvoice_itemsInput, devicesUpdateWithoutInvoice_itemsInput>, devicesUncheckedUpdateWithoutInvoice_itemsInput>
+  }
+
+  export type companiesCreateNestedOneWithoutClientsInput = {
+    create?: XOR<companiesCreateWithoutClientsInput, companiesUncheckedCreateWithoutClientsInput>
+    connectOrCreate?: companiesCreateOrConnectWithoutClientsInput
+    connect?: companiesWhereUniqueInput
+  }
+
+  export type invoicesCreateNestedManyWithoutClientsInput = {
+    create?: XOR<invoicesCreateWithoutClientsInput, invoicesUncheckedCreateWithoutClientsInput> | invoicesCreateWithoutClientsInput[] | invoicesUncheckedCreateWithoutClientsInput[]
+    connectOrCreate?: invoicesCreateOrConnectWithoutClientsInput | invoicesCreateOrConnectWithoutClientsInput[]
+    createMany?: invoicesCreateManyClientsInputEnvelope
+    connect?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
+  }
+
+  export type invoicesUncheckedCreateNestedManyWithoutClientsInput = {
+    create?: XOR<invoicesCreateWithoutClientsInput, invoicesUncheckedCreateWithoutClientsInput> | invoicesCreateWithoutClientsInput[] | invoicesUncheckedCreateWithoutClientsInput[]
+    connectOrCreate?: invoicesCreateOrConnectWithoutClientsInput | invoicesCreateOrConnectWithoutClientsInput[]
+    createMany?: invoicesCreateManyClientsInputEnvelope
+    connect?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
+  }
+
+  export type companiesUpdateOneRequiredWithoutClientsNestedInput = {
+    create?: XOR<companiesCreateWithoutClientsInput, companiesUncheckedCreateWithoutClientsInput>
+    connectOrCreate?: companiesCreateOrConnectWithoutClientsInput
+    upsert?: companiesUpsertWithoutClientsInput
+    connect?: companiesWhereUniqueInput
+    update?: XOR<XOR<companiesUpdateToOneWithWhereWithoutClientsInput, companiesUpdateWithoutClientsInput>, companiesUncheckedUpdateWithoutClientsInput>
+  }
+
+  export type invoicesUpdateManyWithoutClientsNestedInput = {
+    create?: XOR<invoicesCreateWithoutClientsInput, invoicesUncheckedCreateWithoutClientsInput> | invoicesCreateWithoutClientsInput[] | invoicesUncheckedCreateWithoutClientsInput[]
+    connectOrCreate?: invoicesCreateOrConnectWithoutClientsInput | invoicesCreateOrConnectWithoutClientsInput[]
+    upsert?: invoicesUpsertWithWhereUniqueWithoutClientsInput | invoicesUpsertWithWhereUniqueWithoutClientsInput[]
+    createMany?: invoicesCreateManyClientsInputEnvelope
+    set?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
+    disconnect?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
+    delete?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
+    connect?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
+    update?: invoicesUpdateWithWhereUniqueWithoutClientsInput | invoicesUpdateWithWhereUniqueWithoutClientsInput[]
+    updateMany?: invoicesUpdateManyWithWhereWithoutClientsInput | invoicesUpdateManyWithWhereWithoutClientsInput[]
+    deleteMany?: invoicesScalarWhereInput | invoicesScalarWhereInput[]
+  }
+
+  export type invoicesUncheckedUpdateManyWithoutClientsNestedInput = {
+    create?: XOR<invoicesCreateWithoutClientsInput, invoicesUncheckedCreateWithoutClientsInput> | invoicesCreateWithoutClientsInput[] | invoicesUncheckedCreateWithoutClientsInput[]
+    connectOrCreate?: invoicesCreateOrConnectWithoutClientsInput | invoicesCreateOrConnectWithoutClientsInput[]
+    upsert?: invoicesUpsertWithWhereUniqueWithoutClientsInput | invoicesUpsertWithWhereUniqueWithoutClientsInput[]
+    createMany?: invoicesCreateManyClientsInputEnvelope
+    set?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
+    disconnect?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
+    delete?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
+    connect?: invoicesWhereUniqueInput | invoicesWhereUniqueInput[]
+    update?: invoicesUpdateWithWhereUniqueWithoutClientsInput | invoicesUpdateWithWhereUniqueWithoutClientsInput[]
+    updateMany?: invoicesUpdateManyWithWhereWithoutClientsInput | invoicesUpdateManyWithWhereWithoutClientsInput[]
+    deleteMany?: invoicesScalarWhereInput | invoicesScalarWhereInput[]
+  }
+
+  export type invoicesCreateNestedOneWithoutInvoice_paymentsInput = {
+    create?: XOR<invoicesCreateWithoutInvoice_paymentsInput, invoicesUncheckedCreateWithoutInvoice_paymentsInput>
+    connectOrCreate?: invoicesCreateOrConnectWithoutInvoice_paymentsInput
+    connect?: invoicesWhereUniqueInput
+  }
+
+  export type usersCreateNestedOneWithoutInvoice_paymentsInput = {
+    create?: XOR<usersCreateWithoutInvoice_paymentsInput, usersUncheckedCreateWithoutInvoice_paymentsInput>
+    connectOrCreate?: usersCreateOrConnectWithoutInvoice_paymentsInput
+    connect?: usersWhereUniqueInput
+  }
+
+  export type invoicesUpdateOneRequiredWithoutInvoice_paymentsNestedInput = {
+    create?: XOR<invoicesCreateWithoutInvoice_paymentsInput, invoicesUncheckedCreateWithoutInvoice_paymentsInput>
+    connectOrCreate?: invoicesCreateOrConnectWithoutInvoice_paymentsInput
+    upsert?: invoicesUpsertWithoutInvoice_paymentsInput
+    connect?: invoicesWhereUniqueInput
+    update?: XOR<XOR<invoicesUpdateToOneWithWhereWithoutInvoice_paymentsInput, invoicesUpdateWithoutInvoice_paymentsInput>, invoicesUncheckedUpdateWithoutInvoice_paymentsInput>
+  }
+
+  export type usersUpdateOneWithoutInvoice_paymentsNestedInput = {
+    create?: XOR<usersCreateWithoutInvoice_paymentsInput, usersUncheckedCreateWithoutInvoice_paymentsInput>
+    connectOrCreate?: usersCreateOrConnectWithoutInvoice_paymentsInput
+    upsert?: usersUpsertWithoutInvoice_paymentsInput
+    disconnect?: usersWhereInput | boolean
+    delete?: usersWhereInput | boolean
+    connect?: usersWhereUniqueInput
+    update?: XOR<XOR<usersUpdateToOneWithWhereWithoutInvoice_paymentsInput, usersUpdateWithoutInvoice_paymentsInput>, usersUncheckedUpdateWithoutInvoice_paymentsInput>
   }
 
   export type devicesCreateNestedOneWithoutPhysical_inspectionsInput = {
@@ -30429,14 +35308,6 @@ export namespace Prisma {
     connectOrCreate?: devicesCreateOrConnectWithoutShipmentsInput | devicesCreateOrConnectWithoutShipmentsInput[]
     createMany?: devicesCreateManyShipmentsInputEnvelope
     connect?: devicesWhereUniqueInput | devicesWhereUniqueInput[]
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type devicesUpdateManyWithoutShipmentsNestedInput = {
@@ -30681,6 +35552,13 @@ export namespace Prisma {
     connect?: diagnostic_reportsWhereUniqueInput | diagnostic_reportsWhereUniqueInput[]
   }
 
+  export type invoice_paymentsCreateNestedManyWithoutUsersInput = {
+    create?: XOR<invoice_paymentsCreateWithoutUsersInput, invoice_paymentsUncheckedCreateWithoutUsersInput> | invoice_paymentsCreateWithoutUsersInput[] | invoice_paymentsUncheckedCreateWithoutUsersInput[]
+    connectOrCreate?: invoice_paymentsCreateOrConnectWithoutUsersInput | invoice_paymentsCreateOrConnectWithoutUsersInput[]
+    createMany?: invoice_paymentsCreateManyUsersInputEnvelope
+    connect?: invoice_paymentsWhereUniqueInput | invoice_paymentsWhereUniqueInput[]
+  }
+
   export type invoicesCreateNestedManyWithoutUsersInput = {
     create?: XOR<invoicesCreateWithoutUsersInput, invoicesUncheckedCreateWithoutUsersInput> | invoicesCreateWithoutUsersInput[] | invoicesUncheckedCreateWithoutUsersInput[]
     connectOrCreate?: invoicesCreateOrConnectWithoutUsersInput | invoicesCreateOrConnectWithoutUsersInput[]
@@ -30796,6 +35674,13 @@ export namespace Prisma {
     connectOrCreate?: diagnostic_reportsCreateOrConnectWithoutUsersInput | diagnostic_reportsCreateOrConnectWithoutUsersInput[]
     createMany?: diagnostic_reportsCreateManyUsersInputEnvelope
     connect?: diagnostic_reportsWhereUniqueInput | diagnostic_reportsWhereUniqueInput[]
+  }
+
+  export type invoice_paymentsUncheckedCreateNestedManyWithoutUsersInput = {
+    create?: XOR<invoice_paymentsCreateWithoutUsersInput, invoice_paymentsUncheckedCreateWithoutUsersInput> | invoice_paymentsCreateWithoutUsersInput[] | invoice_paymentsUncheckedCreateWithoutUsersInput[]
+    connectOrCreate?: invoice_paymentsCreateOrConnectWithoutUsersInput | invoice_paymentsCreateOrConnectWithoutUsersInput[]
+    createMany?: invoice_paymentsCreateManyUsersInputEnvelope
+    connect?: invoice_paymentsWhereUniqueInput | invoice_paymentsWhereUniqueInput[]
   }
 
   export type invoicesUncheckedCreateNestedManyWithoutUsersInput = {
@@ -30947,6 +35832,20 @@ export namespace Prisma {
     update?: diagnostic_reportsUpdateWithWhereUniqueWithoutUsersInput | diagnostic_reportsUpdateWithWhereUniqueWithoutUsersInput[]
     updateMany?: diagnostic_reportsUpdateManyWithWhereWithoutUsersInput | diagnostic_reportsUpdateManyWithWhereWithoutUsersInput[]
     deleteMany?: diagnostic_reportsScalarWhereInput | diagnostic_reportsScalarWhereInput[]
+  }
+
+  export type invoice_paymentsUpdateManyWithoutUsersNestedInput = {
+    create?: XOR<invoice_paymentsCreateWithoutUsersInput, invoice_paymentsUncheckedCreateWithoutUsersInput> | invoice_paymentsCreateWithoutUsersInput[] | invoice_paymentsUncheckedCreateWithoutUsersInput[]
+    connectOrCreate?: invoice_paymentsCreateOrConnectWithoutUsersInput | invoice_paymentsCreateOrConnectWithoutUsersInput[]
+    upsert?: invoice_paymentsUpsertWithWhereUniqueWithoutUsersInput | invoice_paymentsUpsertWithWhereUniqueWithoutUsersInput[]
+    createMany?: invoice_paymentsCreateManyUsersInputEnvelope
+    set?: invoice_paymentsWhereUniqueInput | invoice_paymentsWhereUniqueInput[]
+    disconnect?: invoice_paymentsWhereUniqueInput | invoice_paymentsWhereUniqueInput[]
+    delete?: invoice_paymentsWhereUniqueInput | invoice_paymentsWhereUniqueInput[]
+    connect?: invoice_paymentsWhereUniqueInput | invoice_paymentsWhereUniqueInput[]
+    update?: invoice_paymentsUpdateWithWhereUniqueWithoutUsersInput | invoice_paymentsUpdateWithWhereUniqueWithoutUsersInput[]
+    updateMany?: invoice_paymentsUpdateManyWithWhereWithoutUsersInput | invoice_paymentsUpdateManyWithWhereWithoutUsersInput[]
+    deleteMany?: invoice_paymentsScalarWhereInput | invoice_paymentsScalarWhereInput[]
   }
 
   export type invoicesUpdateManyWithoutUsersNestedInput = {
@@ -31177,6 +36076,20 @@ export namespace Prisma {
     update?: diagnostic_reportsUpdateWithWhereUniqueWithoutUsersInput | diagnostic_reportsUpdateWithWhereUniqueWithoutUsersInput[]
     updateMany?: diagnostic_reportsUpdateManyWithWhereWithoutUsersInput | diagnostic_reportsUpdateManyWithWhereWithoutUsersInput[]
     deleteMany?: diagnostic_reportsScalarWhereInput | diagnostic_reportsScalarWhereInput[]
+  }
+
+  export type invoice_paymentsUncheckedUpdateManyWithoutUsersNestedInput = {
+    create?: XOR<invoice_paymentsCreateWithoutUsersInput, invoice_paymentsUncheckedCreateWithoutUsersInput> | invoice_paymentsCreateWithoutUsersInput[] | invoice_paymentsUncheckedCreateWithoutUsersInput[]
+    connectOrCreate?: invoice_paymentsCreateOrConnectWithoutUsersInput | invoice_paymentsCreateOrConnectWithoutUsersInput[]
+    upsert?: invoice_paymentsUpsertWithWhereUniqueWithoutUsersInput | invoice_paymentsUpsertWithWhereUniqueWithoutUsersInput[]
+    createMany?: invoice_paymentsCreateManyUsersInputEnvelope
+    set?: invoice_paymentsWhereUniqueInput | invoice_paymentsWhereUniqueInput[]
+    disconnect?: invoice_paymentsWhereUniqueInput | invoice_paymentsWhereUniqueInput[]
+    delete?: invoice_paymentsWhereUniqueInput | invoice_paymentsWhereUniqueInput[]
+    connect?: invoice_paymentsWhereUniqueInput | invoice_paymentsWhereUniqueInput[]
+    update?: invoice_paymentsUpdateWithWhereUniqueWithoutUsersInput | invoice_paymentsUpdateWithWhereUniqueWithoutUsersInput[]
+    updateMany?: invoice_paymentsUpdateManyWithWhereWithoutUsersInput | invoice_paymentsUpdateManyWithWhereWithoutUsersInput[]
+    deleteMany?: invoice_paymentsScalarWhereInput | invoice_paymentsScalarWhereInput[]
   }
 
   export type invoicesUncheckedUpdateManyWithoutUsersNestedInput = {
@@ -31647,6 +36560,33 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[]
@@ -31687,33 +36627,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumdevice_statusNullableFilter<$PrismaModel>
     _max?: NestedEnumdevice_statusNullableFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
   export type NestedJsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -31766,6 +36679,20 @@ export namespace Prisma {
     not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
   }
 
+  export type NestedEnumpayment_methodFilter<$PrismaModel = never> = {
+    equals?: $Enums.payment_method | Enumpayment_methodFieldRefInput<$PrismaModel>
+    in?: $Enums.payment_method[]
+    notIn?: $Enums.payment_method[]
+    not?: NestedEnumpayment_methodFilter<$PrismaModel> | $Enums.payment_method
+  }
+
+  export type NestedEnumpayment_statusFilter<$PrismaModel = never> = {
+    equals?: $Enums.payment_status | Enumpayment_statusFieldRefInput<$PrismaModel>
+    in?: $Enums.payment_status[]
+    notIn?: $Enums.payment_status[]
+    not?: NestedEnumpayment_statusFilter<$PrismaModel> | $Enums.payment_status
+  }
+
   export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     in?: Decimal[] | DecimalJsLike[] | number[] | string[]
@@ -31780,6 +36707,26 @@ export namespace Prisma {
     _sum?: NestedDecimalFilter<$PrismaModel>
     _min?: NestedDecimalFilter<$PrismaModel>
     _max?: NestedDecimalFilter<$PrismaModel>
+  }
+
+  export type NestedEnumpayment_methodWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.payment_method | Enumpayment_methodFieldRefInput<$PrismaModel>
+    in?: $Enums.payment_method[]
+    notIn?: $Enums.payment_method[]
+    not?: NestedEnumpayment_methodWithAggregatesFilter<$PrismaModel> | $Enums.payment_method
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumpayment_methodFilter<$PrismaModel>
+    _max?: NestedEnumpayment_methodFilter<$PrismaModel>
+  }
+
+  export type NestedEnumpayment_statusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.payment_status | Enumpayment_statusFieldRefInput<$PrismaModel>
+    in?: $Enums.payment_status[]
+    notIn?: $Enums.payment_status[]
+    not?: NestedEnumpayment_statusWithAggregatesFilter<$PrismaModel> | $Enums.payment_status
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumpayment_statusFilter<$PrismaModel>
+    _max?: NestedEnumpayment_statusFilter<$PrismaModel>
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -31862,6 +36809,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsCreateNestedManyWithoutUsersInput
     invoices?: invoicesCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -31890,6 +36838,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesUncheckedCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsUncheckedCreateNestedManyWithoutUsersInput
     invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -31963,6 +36912,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -31991,6 +36941,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUncheckedUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUncheckedUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -32090,6 +37041,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsCreateNestedManyWithoutUsersInput
     invoices?: invoicesCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -32118,6 +37070,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesUncheckedCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsUncheckedCreateNestedManyWithoutUsersInput
     invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -32159,6 +37112,7 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsCreateNestedManyWithoutDevicesInput
     hardware_specs?: device_hardware_specsCreateNestedManyWithoutDeviceInput
     users?: usersCreateNestedOneWithoutDevicesInput
@@ -32166,7 +37120,7 @@ export namespace Prisma {
     latest_report?: diagnostic_reportsCreateNestedOneWithoutDevices_latestInput
     shipments?: shipmentsCreateNestedOneWithoutDevicesInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutDevicesInput
-    invoices?: invoicesCreateNestedManyWithoutDevicesInput
+    invoice_items?: invoice_itemsCreateNestedManyWithoutDeviceInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutDevicesInput
     repairs?: repairsCreateNestedManyWithoutDevicesInput
     technical_inspections?: technical_inspectionsCreateNestedManyWithoutDevicesInput
@@ -32202,10 +37156,11 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUncheckedCreateNestedManyWithoutDevicesInput
     hardware_specs?: device_hardware_specsUncheckedCreateNestedManyWithoutDeviceInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutDevicesInput
-    invoices?: invoicesUncheckedCreateNestedManyWithoutDevicesInput
+    invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutDeviceInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
     repairs?: repairsUncheckedCreateNestedManyWithoutDevicesInput
     technical_inspections?: technical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
@@ -32225,9 +37180,8 @@ export namespace Prisma {
   export type invoicesCreateWithoutBranchesInput = {
     id?: string
     invoice_number: string
-    customer_name: string
+    customer_name?: string | null
     customer_contact?: string | null
-    customer_email?: string | null
     sale_price: Decimal | DecimalJsLike | number | string
     tax_amount?: Decimal | DecimalJsLike | number | string | null
     total_amount: Decimal | DecimalJsLike | number | string
@@ -32235,17 +37189,20 @@ export namespace Prisma {
     notes?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
-    devices?: devicesCreateNestedOneWithoutInvoicesInput
+    amount_paid?: Decimal | DecimalJsLike | number | string
+    payment_method?: $Enums.payment_method
+    payment_status?: $Enums.payment_status
+    invoice_payments?: invoice_paymentsCreateNestedManyWithoutInvoicesInput
+    invoice_items?: invoice_itemsCreateNestedManyWithoutInvoiceInput
+    clients?: clientsCreateNestedOneWithoutInvoicesInput
     users?: usersCreateNestedOneWithoutInvoicesInput
   }
 
   export type invoicesUncheckedCreateWithoutBranchesInput = {
     id?: string
     invoice_number: string
-    device_id?: string | null
-    customer_name: string
+    customer_name?: string | null
     customer_contact?: string | null
-    customer_email?: string | null
     sale_price: Decimal | DecimalJsLike | number | string
     tax_amount?: Decimal | DecimalJsLike | number | string | null
     total_amount: Decimal | DecimalJsLike | number | string
@@ -32254,6 +37211,12 @@ export namespace Prisma {
     notes?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
+    amount_paid?: Decimal | DecimalJsLike | number | string
+    client_id?: string | null
+    payment_method?: $Enums.payment_method
+    payment_status?: $Enums.payment_status
+    invoice_payments?: invoice_paymentsUncheckedCreateNestedManyWithoutInvoicesInput
+    invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutInvoiceInput
   }
 
   export type invoicesCreateOrConnectWithoutBranchesInput = {
@@ -32360,6 +37323,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsCreateNestedManyWithoutUsersInput
     invoices?: invoicesCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -32387,6 +37351,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesUncheckedCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsUncheckedCreateNestedManyWithoutUsersInput
     invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -32465,6 +37430,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -32493,6 +37459,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUncheckedUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUncheckedUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -32553,6 +37520,7 @@ export namespace Prisma {
     os?: StringNullableFilter<"devices"> | string | null
     battery_health_percent?: DecimalNullableFilter<"devices"> | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: DecimalNullableFilter<"devices"> | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: DecimalNullableFilter<"devices"> | Decimal | DecimalJsLike | number | string | null
   }
 
   export type invoicesUpsertWithWhereUniqueWithoutBranchesInput = {
@@ -32577,11 +37545,9 @@ export namespace Prisma {
     NOT?: invoicesScalarWhereInput | invoicesScalarWhereInput[]
     id?: StringFilter<"invoices"> | string
     invoice_number?: StringFilter<"invoices"> | string
-    device_id?: StringNullableFilter<"invoices"> | string | null
     branch_id?: StringNullableFilter<"invoices"> | string | null
-    customer_name?: StringFilter<"invoices"> | string
+    customer_name?: StringNullableFilter<"invoices"> | string | null
     customer_contact?: StringNullableFilter<"invoices"> | string | null
-    customer_email?: StringNullableFilter<"invoices"> | string | null
     sale_price?: DecimalFilter<"invoices"> | Decimal | DecimalJsLike | number | string
     tax_amount?: DecimalNullableFilter<"invoices"> | Decimal | DecimalJsLike | number | string | null
     total_amount?: DecimalFilter<"invoices"> | Decimal | DecimalJsLike | number | string
@@ -32590,6 +37556,10 @@ export namespace Prisma {
     notes?: StringNullableFilter<"invoices"> | string | null
     created_at?: DateTimeNullableFilter<"invoices"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"invoices"> | Date | string | null
+    amount_paid?: DecimalFilter<"invoices"> | Decimal | DecimalJsLike | number | string
+    client_id?: StringNullableFilter<"invoices"> | string | null
+    payment_method?: Enumpayment_methodFilter<"invoices"> | $Enums.payment_method
+    payment_status?: Enumpayment_statusFilter<"invoices"> | $Enums.payment_status
   }
 
   export type transfersUpsertWithWhereUniqueWithoutBranches_transfers_from_branch_idTobranchesInput = {
@@ -32721,8 +37691,12 @@ export namespace Prisma {
     name: string
     status?: string
     subscription_plan?: string | null
+    subscription_expiry?: Date | string | null
+    max_offline_devices?: number | null
+    offline_scan_usage?: number | null
     created_at?: Date | string
     updated_at?: Date | string
+    clients?: clientsCreateNestedManyWithoutCompaniesInput
     devices?: devicesCreateNestedManyWithoutCompaniesInput
     shipments?: shipmentsCreateNestedManyWithoutCompaniesInput
     users?: usersCreateNestedManyWithoutCompaniesInput
@@ -32733,8 +37707,12 @@ export namespace Prisma {
     name: string
     status?: string
     subscription_plan?: string | null
+    subscription_expiry?: Date | string | null
+    max_offline_devices?: number | null
+    offline_scan_usage?: number | null
     created_at?: Date | string
     updated_at?: Date | string
+    clients?: clientsUncheckedCreateNestedManyWithoutCompaniesInput
     devices?: devicesUncheckedCreateNestedManyWithoutCompaniesInput
     shipments?: shipmentsUncheckedCreateNestedManyWithoutCompaniesInput
     users?: usersUncheckedCreateNestedManyWithoutCompaniesInput
@@ -32796,8 +37774,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     subscription_plan?: NullableStringFieldUpdateOperationsInput | string | null
+    subscription_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    max_offline_devices?: NullableIntFieldUpdateOperationsInput | number | null
+    offline_scan_usage?: NullableIntFieldUpdateOperationsInput | number | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    clients?: clientsUpdateManyWithoutCompaniesNestedInput
     devices?: devicesUpdateManyWithoutCompaniesNestedInput
     shipments?: shipmentsUpdateManyWithoutCompaniesNestedInput
     users?: usersUpdateManyWithoutCompaniesNestedInput
@@ -32808,11 +37790,49 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     subscription_plan?: NullableStringFieldUpdateOperationsInput | string | null
+    subscription_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    max_offline_devices?: NullableIntFieldUpdateOperationsInput | number | null
+    offline_scan_usage?: NullableIntFieldUpdateOperationsInput | number | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    clients?: clientsUncheckedUpdateManyWithoutCompaniesNestedInput
     devices?: devicesUncheckedUpdateManyWithoutCompaniesNestedInput
     shipments?: shipmentsUncheckedUpdateManyWithoutCompaniesNestedInput
     users?: usersUncheckedUpdateManyWithoutCompaniesNestedInput
+  }
+
+  export type clientsCreateWithoutCompaniesInput = {
+    id?: string
+    name: string
+    phone?: string | null
+    email?: string | null
+    address?: string | null
+    balance?: Decimal | DecimalJsLike | number | string
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    invoices?: invoicesCreateNestedManyWithoutClientsInput
+  }
+
+  export type clientsUncheckedCreateWithoutCompaniesInput = {
+    id?: string
+    name: string
+    phone?: string | null
+    email?: string | null
+    address?: string | null
+    balance?: Decimal | DecimalJsLike | number | string
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    invoices?: invoicesUncheckedCreateNestedManyWithoutClientsInput
+  }
+
+  export type clientsCreateOrConnectWithoutCompaniesInput = {
+    where: clientsWhereUniqueInput
+    create: XOR<clientsCreateWithoutCompaniesInput, clientsUncheckedCreateWithoutCompaniesInput>
+  }
+
+  export type clientsCreateManyCompaniesInputEnvelope = {
+    data: clientsCreateManyCompaniesInput | clientsCreateManyCompaniesInput[]
+    skipDuplicates?: boolean
   }
 
   export type devicesCreateWithoutCompaniesInput = {
@@ -32840,6 +37860,7 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsCreateNestedManyWithoutDevicesInput
     hardware_specs?: device_hardware_specsCreateNestedManyWithoutDeviceInput
     users?: usersCreateNestedOneWithoutDevicesInput
@@ -32847,7 +37868,7 @@ export namespace Prisma {
     latest_report?: diagnostic_reportsCreateNestedOneWithoutDevices_latestInput
     shipments?: shipmentsCreateNestedOneWithoutDevicesInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutDevicesInput
-    invoices?: invoicesCreateNestedManyWithoutDevicesInput
+    invoice_items?: invoice_itemsCreateNestedManyWithoutDeviceInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutDevicesInput
     repairs?: repairsCreateNestedManyWithoutDevicesInput
     technical_inspections?: technical_inspectionsCreateNestedManyWithoutDevicesInput
@@ -32883,10 +37904,11 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUncheckedCreateNestedManyWithoutDevicesInput
     hardware_specs?: device_hardware_specsUncheckedCreateNestedManyWithoutDeviceInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutDevicesInput
-    invoices?: invoicesUncheckedCreateNestedManyWithoutDevicesInput
+    invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutDeviceInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
     repairs?: repairsUncheckedCreateNestedManyWithoutDevicesInput
     technical_inspections?: technical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
@@ -32959,6 +37981,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsCreateNestedManyWithoutUsersInput
     invoices?: invoicesCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -32986,6 +38009,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesUncheckedCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsUncheckedCreateNestedManyWithoutUsersInput
     invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -33039,6 +38063,37 @@ export namespace Prisma {
   export type vendorsCreateManyCompaniesInputEnvelope = {
     data: vendorsCreateManyCompaniesInput | vendorsCreateManyCompaniesInput[]
     skipDuplicates?: boolean
+  }
+
+  export type clientsUpsertWithWhereUniqueWithoutCompaniesInput = {
+    where: clientsWhereUniqueInput
+    update: XOR<clientsUpdateWithoutCompaniesInput, clientsUncheckedUpdateWithoutCompaniesInput>
+    create: XOR<clientsCreateWithoutCompaniesInput, clientsUncheckedCreateWithoutCompaniesInput>
+  }
+
+  export type clientsUpdateWithWhereUniqueWithoutCompaniesInput = {
+    where: clientsWhereUniqueInput
+    data: XOR<clientsUpdateWithoutCompaniesInput, clientsUncheckedUpdateWithoutCompaniesInput>
+  }
+
+  export type clientsUpdateManyWithWhereWithoutCompaniesInput = {
+    where: clientsScalarWhereInput
+    data: XOR<clientsUpdateManyMutationInput, clientsUncheckedUpdateManyWithoutCompaniesInput>
+  }
+
+  export type clientsScalarWhereInput = {
+    AND?: clientsScalarWhereInput | clientsScalarWhereInput[]
+    OR?: clientsScalarWhereInput[]
+    NOT?: clientsScalarWhereInput | clientsScalarWhereInput[]
+    id?: StringFilter<"clients"> | string
+    name?: StringFilter<"clients"> | string
+    phone?: StringNullableFilter<"clients"> | string | null
+    email?: StringNullableFilter<"clients"> | string | null
+    address?: StringNullableFilter<"clients"> | string | null
+    company_id?: StringFilter<"clients"> | string
+    balance?: DecimalFilter<"clients"> | Decimal | DecimalJsLike | number | string
+    created_at?: DateTimeNullableFilter<"clients"> | Date | string | null
+    updated_at?: DateTimeNullableFilter<"clients"> | Date | string | null
   }
 
   export type devicesUpsertWithWhereUniqueWithoutCompaniesInput = {
@@ -33281,6 +38336,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_byTousers?: device_assignmentsCreateNestedManyWithoutUsers_device_assignments_assigned_byTousersInput
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsCreateNestedManyWithoutUsersInput
     invoices?: invoicesCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -33309,6 +38365,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_byTousers?: device_assignmentsUncheckedCreateNestedManyWithoutUsers_device_assignments_assigned_byTousersInput
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsUncheckedCreateNestedManyWithoutUsersInput
     invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -33363,8 +38420,12 @@ export namespace Prisma {
     name: string
     status?: string
     subscription_plan?: string | null
+    subscription_expiry?: Date | string | null
+    max_offline_devices?: number | null
+    offline_scan_usage?: number | null
     created_at?: Date | string
     updated_at?: Date | string
+    clients?: clientsCreateNestedManyWithoutCompaniesInput
     shipments?: shipmentsCreateNestedManyWithoutCompaniesInput
     users?: usersCreateNestedManyWithoutCompaniesInput
     vendors?: vendorsCreateNestedManyWithoutCompaniesInput
@@ -33375,8 +38436,12 @@ export namespace Prisma {
     name: string
     status?: string
     subscription_plan?: string | null
+    subscription_expiry?: Date | string | null
+    max_offline_devices?: number | null
+    offline_scan_usage?: number | null
     created_at?: Date | string
     updated_at?: Date | string
+    clients?: clientsUncheckedCreateNestedManyWithoutCompaniesInput
     shipments?: shipmentsUncheckedCreateNestedManyWithoutCompaniesInput
     users?: usersUncheckedCreateNestedManyWithoutCompaniesInput
     vendors?: vendorsUncheckedCreateNestedManyWithoutCompaniesInput
@@ -33583,47 +38648,35 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type invoicesCreateWithoutDevicesInput = {
+  export type invoice_itemsCreateWithoutDeviceInput = {
     id?: string
-    invoice_number: string
-    customer_name: string
-    customer_contact?: string | null
-    customer_email?: string | null
-    sale_price: Decimal | DecimalJsLike | number | string
-    tax_amount?: Decimal | DecimalJsLike | number | string | null
-    total_amount: Decimal | DecimalJsLike | number | string
-    sale_date?: Date | string | null
-    notes?: string | null
-    created_at?: Date | string | null
-    updated_at?: Date | string | null
-    branches?: branchesCreateNestedOneWithoutInvoicesInput
-    users?: usersCreateNestedOneWithoutInvoicesInput
+    item_name?: string | null
+    serial_number?: string | null
+    asset_id?: string | null
+    quantity?: number
+    unit_price: Decimal | DecimalJsLike | number | string
+    total_price: Decimal | DecimalJsLike | number | string
+    invoice: invoicesCreateNestedOneWithoutInvoice_itemsInput
   }
 
-  export type invoicesUncheckedCreateWithoutDevicesInput = {
+  export type invoice_itemsUncheckedCreateWithoutDeviceInput = {
     id?: string
-    invoice_number: string
-    branch_id?: string | null
-    customer_name: string
-    customer_contact?: string | null
-    customer_email?: string | null
-    sale_price: Decimal | DecimalJsLike | number | string
-    tax_amount?: Decimal | DecimalJsLike | number | string | null
-    total_amount: Decimal | DecimalJsLike | number | string
-    sold_by?: string | null
-    sale_date?: Date | string | null
-    notes?: string | null
-    created_at?: Date | string | null
-    updated_at?: Date | string | null
+    invoice_id: string
+    item_name?: string | null
+    serial_number?: string | null
+    asset_id?: string | null
+    quantity?: number
+    unit_price: Decimal | DecimalJsLike | number | string
+    total_price: Decimal | DecimalJsLike | number | string
   }
 
-  export type invoicesCreateOrConnectWithoutDevicesInput = {
-    where: invoicesWhereUniqueInput
-    create: XOR<invoicesCreateWithoutDevicesInput, invoicesUncheckedCreateWithoutDevicesInput>
+  export type invoice_itemsCreateOrConnectWithoutDeviceInput = {
+    where: invoice_itemsWhereUniqueInput
+    create: XOR<invoice_itemsCreateWithoutDeviceInput, invoice_itemsUncheckedCreateWithoutDeviceInput>
   }
 
-  export type invoicesCreateManyDevicesInputEnvelope = {
-    data: invoicesCreateManyDevicesInput | invoicesCreateManyDevicesInput[]
+  export type invoice_itemsCreateManyDeviceInputEnvelope = {
+    data: invoice_itemsCreateManyDeviceInput | invoice_itemsCreateManyDeviceInput[]
     skipDuplicates?: boolean
   }
 
@@ -33907,6 +38960,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_byTousers?: device_assignmentsUpdateManyWithoutUsers_device_assignments_assigned_byTousersNestedInput
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -33935,6 +38989,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_byTousers?: device_assignmentsUncheckedUpdateManyWithoutUsers_device_assignments_assigned_byTousersNestedInput
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUncheckedUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -34001,8 +39056,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     subscription_plan?: NullableStringFieldUpdateOperationsInput | string | null
+    subscription_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    max_offline_devices?: NullableIntFieldUpdateOperationsInput | number | null
+    offline_scan_usage?: NullableIntFieldUpdateOperationsInput | number | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    clients?: clientsUpdateManyWithoutCompaniesNestedInput
     shipments?: shipmentsUpdateManyWithoutCompaniesNestedInput
     users?: usersUpdateManyWithoutCompaniesNestedInput
     vendors?: vendorsUpdateManyWithoutCompaniesNestedInput
@@ -34013,8 +39072,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     subscription_plan?: NullableStringFieldUpdateOperationsInput | string | null
+    subscription_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    max_offline_devices?: NullableIntFieldUpdateOperationsInput | number | null
+    offline_scan_usage?: NullableIntFieldUpdateOperationsInput | number | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    clients?: clientsUncheckedUpdateManyWithoutCompaniesNestedInput
     shipments?: shipmentsUncheckedUpdateManyWithoutCompaniesNestedInput
     users?: usersUncheckedUpdateManyWithoutCompaniesNestedInput
     vendors?: vendorsUncheckedUpdateManyWithoutCompaniesNestedInput
@@ -34199,20 +39262,35 @@ export namespace Prisma {
     updated_at?: DateTimeNullableFilter<"diagnostic_reports"> | Date | string | null
   }
 
-  export type invoicesUpsertWithWhereUniqueWithoutDevicesInput = {
-    where: invoicesWhereUniqueInput
-    update: XOR<invoicesUpdateWithoutDevicesInput, invoicesUncheckedUpdateWithoutDevicesInput>
-    create: XOR<invoicesCreateWithoutDevicesInput, invoicesUncheckedCreateWithoutDevicesInput>
+  export type invoice_itemsUpsertWithWhereUniqueWithoutDeviceInput = {
+    where: invoice_itemsWhereUniqueInput
+    update: XOR<invoice_itemsUpdateWithoutDeviceInput, invoice_itemsUncheckedUpdateWithoutDeviceInput>
+    create: XOR<invoice_itemsCreateWithoutDeviceInput, invoice_itemsUncheckedCreateWithoutDeviceInput>
   }
 
-  export type invoicesUpdateWithWhereUniqueWithoutDevicesInput = {
-    where: invoicesWhereUniqueInput
-    data: XOR<invoicesUpdateWithoutDevicesInput, invoicesUncheckedUpdateWithoutDevicesInput>
+  export type invoice_itemsUpdateWithWhereUniqueWithoutDeviceInput = {
+    where: invoice_itemsWhereUniqueInput
+    data: XOR<invoice_itemsUpdateWithoutDeviceInput, invoice_itemsUncheckedUpdateWithoutDeviceInput>
   }
 
-  export type invoicesUpdateManyWithWhereWithoutDevicesInput = {
-    where: invoicesScalarWhereInput
-    data: XOR<invoicesUpdateManyMutationInput, invoicesUncheckedUpdateManyWithoutDevicesInput>
+  export type invoice_itemsUpdateManyWithWhereWithoutDeviceInput = {
+    where: invoice_itemsScalarWhereInput
+    data: XOR<invoice_itemsUpdateManyMutationInput, invoice_itemsUncheckedUpdateManyWithoutDeviceInput>
+  }
+
+  export type invoice_itemsScalarWhereInput = {
+    AND?: invoice_itemsScalarWhereInput | invoice_itemsScalarWhereInput[]
+    OR?: invoice_itemsScalarWhereInput[]
+    NOT?: invoice_itemsScalarWhereInput | invoice_itemsScalarWhereInput[]
+    id?: StringFilter<"invoice_items"> | string
+    invoice_id?: StringFilter<"invoice_items"> | string
+    device_id?: StringNullableFilter<"invoice_items"> | string | null
+    item_name?: StringNullableFilter<"invoice_items"> | string | null
+    serial_number?: StringNullableFilter<"invoice_items"> | string | null
+    asset_id?: StringNullableFilter<"invoice_items"> | string | null
+    quantity?: IntFilter<"invoice_items"> | number
+    unit_price?: DecimalFilter<"invoice_items"> | Decimal | DecimalJsLike | number | string
+    total_price?: DecimalFilter<"invoice_items"> | Decimal | DecimalJsLike | number | string
   }
 
   export type physical_inspectionsUpsertWithWhereUniqueWithoutDevicesInput = {
@@ -34344,6 +39422,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsCreateNestedManyWithoutUsersInput
     invoices?: invoicesCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -34372,6 +39451,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesUncheckedCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsUncheckedCreateNestedManyWithoutUsersInput
     invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -34401,6 +39481,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_byTousers?: device_assignmentsCreateNestedManyWithoutUsers_device_assignments_assigned_byTousersInput
     devices?: devicesCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsCreateNestedManyWithoutUsersInput
     invoices?: invoicesCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -34429,6 +39510,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_byTousers?: device_assignmentsUncheckedCreateNestedManyWithoutUsers_device_assignments_assigned_byTousersInput
     devices?: devicesUncheckedCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsUncheckedCreateNestedManyWithoutUsersInput
     invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -34470,6 +39552,7 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
     hardware_specs?: device_hardware_specsCreateNestedManyWithoutDeviceInput
     users?: usersCreateNestedOneWithoutDevicesInput
     branches?: branchesCreateNestedOneWithoutDevicesInput
@@ -34477,7 +39560,7 @@ export namespace Prisma {
     latest_report?: diagnostic_reportsCreateNestedOneWithoutDevices_latestInput
     shipments?: shipmentsCreateNestedOneWithoutDevicesInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutDevicesInput
-    invoices?: invoicesCreateNestedManyWithoutDevicesInput
+    invoice_items?: invoice_itemsCreateNestedManyWithoutDeviceInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutDevicesInput
     repairs?: repairsCreateNestedManyWithoutDevicesInput
     technical_inspections?: technical_inspectionsCreateNestedManyWithoutDevicesInput
@@ -34514,9 +39597,10 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
     hardware_specs?: device_hardware_specsUncheckedCreateNestedManyWithoutDeviceInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutDevicesInput
-    invoices?: invoicesUncheckedCreateNestedManyWithoutDevicesInput
+    invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutDeviceInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
     repairs?: repairsUncheckedCreateNestedManyWithoutDevicesInput
     technical_inspections?: technical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
@@ -34552,6 +39636,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -34580,6 +39665,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUncheckedUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUncheckedUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -34615,6 +39701,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_byTousers?: device_assignmentsUpdateManyWithoutUsers_device_assignments_assigned_byTousersNestedInput
     devices?: devicesUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -34643,6 +39730,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_byTousers?: device_assignmentsUncheckedUpdateManyWithoutUsers_device_assignments_assigned_byTousersNestedInput
     devices?: devicesUncheckedUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUncheckedUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -34690,6 +39778,7 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     hardware_specs?: device_hardware_specsUpdateManyWithoutDeviceNestedInput
     users?: usersUpdateOneWithoutDevicesNestedInput
     branches?: branchesUpdateOneWithoutDevicesNestedInput
@@ -34697,7 +39786,7 @@ export namespace Prisma {
     latest_report?: diagnostic_reportsUpdateOneWithoutDevices_latestNestedInput
     shipments?: shipmentsUpdateOneWithoutDevicesNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutDevicesNestedInput
-    invoices?: invoicesUpdateManyWithoutDevicesNestedInput
+    invoice_items?: invoice_itemsUpdateManyWithoutDeviceNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutDevicesNestedInput
     repairs?: repairsUpdateManyWithoutDevicesNestedInput
     technical_inspections?: technical_inspectionsUpdateManyWithoutDevicesNestedInput
@@ -34734,13 +39823,76 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     hardware_specs?: device_hardware_specsUncheckedUpdateManyWithoutDeviceNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutDevicesNestedInput
-    invoices?: invoicesUncheckedUpdateManyWithoutDevicesNestedInput
+    invoice_items?: invoice_itemsUncheckedUpdateManyWithoutDeviceNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutDevicesNestedInput
     repairs?: repairsUncheckedUpdateManyWithoutDevicesNestedInput
     technical_inspections?: technical_inspectionsUncheckedUpdateManyWithoutDevicesNestedInput
     transfers?: transfersUncheckedUpdateManyWithoutDevicesNestedInput
+  }
+
+  export type invoice_paymentsCreateWithoutInvoicesInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    payment_date?: Date | string
+    payment_method?: $Enums.payment_method
+    notes?: string | null
+    created_at?: Date | string | null
+    users?: usersCreateNestedOneWithoutInvoice_paymentsInput
+  }
+
+  export type invoice_paymentsUncheckedCreateWithoutInvoicesInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    payment_date?: Date | string
+    payment_method?: $Enums.payment_method
+    received_by?: string | null
+    notes?: string | null
+    created_at?: Date | string | null
+  }
+
+  export type invoice_paymentsCreateOrConnectWithoutInvoicesInput = {
+    where: invoice_paymentsWhereUniqueInput
+    create: XOR<invoice_paymentsCreateWithoutInvoicesInput, invoice_paymentsUncheckedCreateWithoutInvoicesInput>
+  }
+
+  export type invoice_paymentsCreateManyInvoicesInputEnvelope = {
+    data: invoice_paymentsCreateManyInvoicesInput | invoice_paymentsCreateManyInvoicesInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type invoice_itemsCreateWithoutInvoiceInput = {
+    id?: string
+    item_name?: string | null
+    serial_number?: string | null
+    asset_id?: string | null
+    quantity?: number
+    unit_price: Decimal | DecimalJsLike | number | string
+    total_price: Decimal | DecimalJsLike | number | string
+    device?: devicesCreateNestedOneWithoutInvoice_itemsInput
+  }
+
+  export type invoice_itemsUncheckedCreateWithoutInvoiceInput = {
+    id?: string
+    device_id?: string | null
+    item_name?: string | null
+    serial_number?: string | null
+    asset_id?: string | null
+    quantity?: number
+    unit_price: Decimal | DecimalJsLike | number | string
+    total_price: Decimal | DecimalJsLike | number | string
+  }
+
+  export type invoice_itemsCreateOrConnectWithoutInvoiceInput = {
+    where: invoice_itemsWhereUniqueInput
+    create: XOR<invoice_itemsCreateWithoutInvoiceInput, invoice_itemsUncheckedCreateWithoutInvoiceInput>
+  }
+
+  export type invoice_itemsCreateManyInvoiceInputEnvelope = {
+    data: invoice_itemsCreateManyInvoiceInput | invoice_itemsCreateManyInvoiceInput[]
+    skipDuplicates?: boolean
   }
 
   export type branchesCreateWithoutInvoicesInput = {
@@ -34776,87 +39928,33 @@ export namespace Prisma {
     create: XOR<branchesCreateWithoutInvoicesInput, branchesUncheckedCreateWithoutInvoicesInput>
   }
 
-  export type devicesCreateWithoutInvoicesInput = {
+  export type clientsCreateWithoutInvoicesInput = {
     id?: string
-    asset_id: string
-    status?: $Enums.device_status | null
-    model?: string | null
-    serial_number?: string | null
-    manufacturer?: string | null
-    ram_size?: number | null
-    ram_count?: number | null
-    ram_models?: NullableJsonNullValueInput | InputJsonValue
-    storage_size?: number | null
-    storage_count?: number | null
-    storage_types?: NullableJsonNullValueInput | InputJsonValue
-    storage_models?: NullableJsonNullValueInput | InputJsonValue
-    gpu_model?: string | null
-    cpu_model?: string | null
-    current_location?: string | null
+    name: string
+    phone?: string | null
+    email?: string | null
+    address?: string | null
+    balance?: Decimal | DecimalJsLike | number | string
     created_at?: Date | string | null
     updated_at?: Date | string | null
-    last_diagnostic_at?: Date | string | null
-    diagnostic_score?: number | null
-    bios_serial?: string | null
-    os?: string | null
-    battery_health_percent?: Decimal | DecimalJsLike | number | string | null
-    storage_health_percent?: Decimal | DecimalJsLike | number | string | null
-    device_assignments?: device_assignmentsCreateNestedManyWithoutDevicesInput
-    hardware_specs?: device_hardware_specsCreateNestedManyWithoutDeviceInput
-    users?: usersCreateNestedOneWithoutDevicesInput
-    branches?: branchesCreateNestedOneWithoutDevicesInput
-    companies: companiesCreateNestedOneWithoutDevicesInput
-    latest_report?: diagnostic_reportsCreateNestedOneWithoutDevices_latestInput
-    shipments?: shipmentsCreateNestedOneWithoutDevicesInput
-    diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutDevicesInput
-    physical_inspections?: physical_inspectionsCreateNestedManyWithoutDevicesInput
-    repairs?: repairsCreateNestedManyWithoutDevicesInput
-    technical_inspections?: technical_inspectionsCreateNestedManyWithoutDevicesInput
-    transfers?: transfersCreateNestedManyWithoutDevicesInput
+    companies: companiesCreateNestedOneWithoutClientsInput
   }
 
-  export type devicesUncheckedCreateWithoutInvoicesInput = {
+  export type clientsUncheckedCreateWithoutInvoicesInput = {
     id?: string
-    asset_id: string
-    shipment_id?: string | null
-    status?: $Enums.device_status | null
-    model?: string | null
-    serial_number?: string | null
-    manufacturer?: string | null
-    ram_size?: number | null
-    ram_count?: number | null
-    ram_models?: NullableJsonNullValueInput | InputJsonValue
-    storage_size?: number | null
-    storage_count?: number | null
-    storage_types?: NullableJsonNullValueInput | InputJsonValue
-    storage_models?: NullableJsonNullValueInput | InputJsonValue
-    gpu_model?: string | null
-    cpu_model?: string | null
-    current_location?: string | null
-    branch_id?: string | null
-    assigned_to?: string | null
-    created_at?: Date | string | null
-    updated_at?: Date | string | null
+    name: string
+    phone?: string | null
+    email?: string | null
+    address?: string | null
     company_id: string
-    latest_report_id?: string | null
-    last_diagnostic_at?: Date | string | null
-    diagnostic_score?: number | null
-    bios_serial?: string | null
-    os?: string | null
-    battery_health_percent?: Decimal | DecimalJsLike | number | string | null
-    storage_health_percent?: Decimal | DecimalJsLike | number | string | null
-    device_assignments?: device_assignmentsUncheckedCreateNestedManyWithoutDevicesInput
-    hardware_specs?: device_hardware_specsUncheckedCreateNestedManyWithoutDeviceInput
-    diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutDevicesInput
-    physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
-    repairs?: repairsUncheckedCreateNestedManyWithoutDevicesInput
-    technical_inspections?: technical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
-    transfers?: transfersUncheckedCreateNestedManyWithoutDevicesInput
+    balance?: Decimal | DecimalJsLike | number | string
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
   }
 
-  export type devicesCreateOrConnectWithoutInvoicesInput = {
-    where: devicesWhereUniqueInput
-    create: XOR<devicesCreateWithoutInvoicesInput, devicesUncheckedCreateWithoutInvoicesInput>
+  export type clientsCreateOrConnectWithoutInvoicesInput = {
+    where: clientsWhereUniqueInput
+    create: XOR<clientsCreateWithoutInvoicesInput, clientsUncheckedCreateWithoutInvoicesInput>
   }
 
   export type usersCreateWithoutInvoicesInput = {
@@ -34873,6 +39971,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
     repairs_repairs_assigned_toTousers?: repairsCreateNestedManyWithoutUsers_repairs_assigned_toTousersInput
@@ -34901,6 +40000,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesUncheckedCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsUncheckedCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
     repairs_repairs_assigned_toTousers?: repairsUncheckedCreateNestedManyWithoutUsers_repairs_assigned_toTousersInput
@@ -34914,6 +40014,52 @@ export namespace Prisma {
   export type usersCreateOrConnectWithoutInvoicesInput = {
     where: usersWhereUniqueInput
     create: XOR<usersCreateWithoutInvoicesInput, usersUncheckedCreateWithoutInvoicesInput>
+  }
+
+  export type invoice_paymentsUpsertWithWhereUniqueWithoutInvoicesInput = {
+    where: invoice_paymentsWhereUniqueInput
+    update: XOR<invoice_paymentsUpdateWithoutInvoicesInput, invoice_paymentsUncheckedUpdateWithoutInvoicesInput>
+    create: XOR<invoice_paymentsCreateWithoutInvoicesInput, invoice_paymentsUncheckedCreateWithoutInvoicesInput>
+  }
+
+  export type invoice_paymentsUpdateWithWhereUniqueWithoutInvoicesInput = {
+    where: invoice_paymentsWhereUniqueInput
+    data: XOR<invoice_paymentsUpdateWithoutInvoicesInput, invoice_paymentsUncheckedUpdateWithoutInvoicesInput>
+  }
+
+  export type invoice_paymentsUpdateManyWithWhereWithoutInvoicesInput = {
+    where: invoice_paymentsScalarWhereInput
+    data: XOR<invoice_paymentsUpdateManyMutationInput, invoice_paymentsUncheckedUpdateManyWithoutInvoicesInput>
+  }
+
+  export type invoice_paymentsScalarWhereInput = {
+    AND?: invoice_paymentsScalarWhereInput | invoice_paymentsScalarWhereInput[]
+    OR?: invoice_paymentsScalarWhereInput[]
+    NOT?: invoice_paymentsScalarWhereInput | invoice_paymentsScalarWhereInput[]
+    id?: StringFilter<"invoice_payments"> | string
+    invoice_id?: StringFilter<"invoice_payments"> | string
+    amount?: DecimalFilter<"invoice_payments"> | Decimal | DecimalJsLike | number | string
+    payment_date?: DateTimeFilter<"invoice_payments"> | Date | string
+    payment_method?: Enumpayment_methodFilter<"invoice_payments"> | $Enums.payment_method
+    received_by?: StringNullableFilter<"invoice_payments"> | string | null
+    notes?: StringNullableFilter<"invoice_payments"> | string | null
+    created_at?: DateTimeNullableFilter<"invoice_payments"> | Date | string | null
+  }
+
+  export type invoice_itemsUpsertWithWhereUniqueWithoutInvoiceInput = {
+    where: invoice_itemsWhereUniqueInput
+    update: XOR<invoice_itemsUpdateWithoutInvoiceInput, invoice_itemsUncheckedUpdateWithoutInvoiceInput>
+    create: XOR<invoice_itemsCreateWithoutInvoiceInput, invoice_itemsUncheckedCreateWithoutInvoiceInput>
+  }
+
+  export type invoice_itemsUpdateWithWhereUniqueWithoutInvoiceInput = {
+    where: invoice_itemsWhereUniqueInput
+    data: XOR<invoice_itemsUpdateWithoutInvoiceInput, invoice_itemsUncheckedUpdateWithoutInvoiceInput>
+  }
+
+  export type invoice_itemsUpdateManyWithWhereWithoutInvoiceInput = {
+    where: invoice_itemsScalarWhereInput
+    data: XOR<invoice_itemsUpdateManyMutationInput, invoice_itemsUncheckedUpdateManyWithoutInvoiceInput>
   }
 
   export type branchesUpsertWithoutInvoicesInput = {
@@ -34955,18 +40101,303 @@ export namespace Prisma {
     users_users_branch_idTobranches?: usersUncheckedUpdateManyWithoutBranches_users_branch_idTobranchesNestedInput
   }
 
-  export type devicesUpsertWithoutInvoicesInput = {
-    update: XOR<devicesUpdateWithoutInvoicesInput, devicesUncheckedUpdateWithoutInvoicesInput>
-    create: XOR<devicesCreateWithoutInvoicesInput, devicesUncheckedCreateWithoutInvoicesInput>
+  export type clientsUpsertWithoutInvoicesInput = {
+    update: XOR<clientsUpdateWithoutInvoicesInput, clientsUncheckedUpdateWithoutInvoicesInput>
+    create: XOR<clientsCreateWithoutInvoicesInput, clientsUncheckedCreateWithoutInvoicesInput>
+    where?: clientsWhereInput
+  }
+
+  export type clientsUpdateToOneWithWhereWithoutInvoicesInput = {
+    where?: clientsWhereInput
+    data: XOR<clientsUpdateWithoutInvoicesInput, clientsUncheckedUpdateWithoutInvoicesInput>
+  }
+
+  export type clientsUpdateWithoutInvoicesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    balance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    companies?: companiesUpdateOneRequiredWithoutClientsNestedInput
+  }
+
+  export type clientsUncheckedUpdateWithoutInvoicesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    company_id?: StringFieldUpdateOperationsInput | string
+    balance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type usersUpsertWithoutInvoicesInput = {
+    update: XOR<usersUpdateWithoutInvoicesInput, usersUncheckedUpdateWithoutInvoicesInput>
+    create: XOR<usersCreateWithoutInvoicesInput, usersUncheckedCreateWithoutInvoicesInput>
+    where?: usersWhereInput
+  }
+
+  export type usersUpdateToOneWithWhereWithoutInvoicesInput = {
+    where?: usersWhereInput
+    data: XOR<usersUpdateWithoutInvoicesInput, usersUncheckedUpdateWithoutInvoicesInput>
+  }
+
+  export type usersUpdateWithoutInvoicesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    role?: Enumuser_roleFieldUpdateOperationsInput | $Enums.user_role
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    announcements?: announcementsUpdateManyWithoutUsersNestedInput
+    branches_branches_manager_idTousers?: branchesUpdateManyWithoutUsers_branches_manager_idTousersNestedInput
+    device_assignments_device_assignments_assigned_byTousers?: device_assignmentsUpdateManyWithoutUsers_device_assignments_assigned_byTousersNestedInput
+    device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
+    devices?: devicesUpdateManyWithoutUsersNestedInput
+    diagnostic_reports?: diagnostic_reportsUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUpdateManyWithoutUsersNestedInput
+    physical_inspections?: physical_inspectionsUpdateManyWithoutUsersNestedInput
+    repairs_repairs_assigned_byTousers?: repairsUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
+    repairs_repairs_assigned_toTousers?: repairsUpdateManyWithoutUsers_repairs_assigned_toTousersNestedInput
+    shipments?: shipmentsUpdateManyWithoutUsersNestedInput
+    spare_parts_requests_spare_parts_requests_approved_byTousers?: spare_parts_requestsUpdateManyWithoutUsers_spare_parts_requests_approved_byTousersNestedInput
+    spare_parts_requests_spare_parts_requests_requested_byTousers?: spare_parts_requestsUpdateManyWithoutUsers_spare_parts_requests_requested_byTousersNestedInput
+    technical_inspections?: technical_inspectionsUpdateManyWithoutUsersNestedInput
+    transfers?: transfersUpdateManyWithoutUsersNestedInput
+    branches_users_branch_idTobranches?: branchesUpdateOneWithoutUsers_users_branch_idTobranchesNestedInput
+    companies?: companiesUpdateOneWithoutUsersNestedInput
+  }
+
+  export type usersUncheckedUpdateWithoutInvoicesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    role?: Enumuser_roleFieldUpdateOperationsInput | $Enums.user_role
+    branch_id?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    company_id?: NullableStringFieldUpdateOperationsInput | string | null
+    password_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    announcements?: announcementsUncheckedUpdateManyWithoutUsersNestedInput
+    branches_branches_manager_idTousers?: branchesUncheckedUpdateManyWithoutUsers_branches_manager_idTousersNestedInput
+    device_assignments_device_assignments_assigned_byTousers?: device_assignmentsUncheckedUpdateManyWithoutUsers_device_assignments_assigned_byTousersNestedInput
+    device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
+    devices?: devicesUncheckedUpdateManyWithoutUsersNestedInput
+    diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUncheckedUpdateManyWithoutUsersNestedInput
+    physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutUsersNestedInput
+    repairs_repairs_assigned_byTousers?: repairsUncheckedUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
+    repairs_repairs_assigned_toTousers?: repairsUncheckedUpdateManyWithoutUsers_repairs_assigned_toTousersNestedInput
+    shipments?: shipmentsUncheckedUpdateManyWithoutUsersNestedInput
+    spare_parts_requests_spare_parts_requests_approved_byTousers?: spare_parts_requestsUncheckedUpdateManyWithoutUsers_spare_parts_requests_approved_byTousersNestedInput
+    spare_parts_requests_spare_parts_requests_requested_byTousers?: spare_parts_requestsUncheckedUpdateManyWithoutUsers_spare_parts_requests_requested_byTousersNestedInput
+    technical_inspections?: technical_inspectionsUncheckedUpdateManyWithoutUsersNestedInput
+    transfers?: transfersUncheckedUpdateManyWithoutUsersNestedInput
+  }
+
+  export type invoicesCreateWithoutInvoice_itemsInput = {
+    id?: string
+    invoice_number: string
+    customer_name?: string | null
+    customer_contact?: string | null
+    sale_price: Decimal | DecimalJsLike | number | string
+    tax_amount?: Decimal | DecimalJsLike | number | string | null
+    total_amount: Decimal | DecimalJsLike | number | string
+    sale_date?: Date | string | null
+    notes?: string | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    amount_paid?: Decimal | DecimalJsLike | number | string
+    payment_method?: $Enums.payment_method
+    payment_status?: $Enums.payment_status
+    invoice_payments?: invoice_paymentsCreateNestedManyWithoutInvoicesInput
+    branches?: branchesCreateNestedOneWithoutInvoicesInput
+    clients?: clientsCreateNestedOneWithoutInvoicesInput
+    users?: usersCreateNestedOneWithoutInvoicesInput
+  }
+
+  export type invoicesUncheckedCreateWithoutInvoice_itemsInput = {
+    id?: string
+    invoice_number: string
+    branch_id?: string | null
+    customer_name?: string | null
+    customer_contact?: string | null
+    sale_price: Decimal | DecimalJsLike | number | string
+    tax_amount?: Decimal | DecimalJsLike | number | string | null
+    total_amount: Decimal | DecimalJsLike | number | string
+    sold_by?: string | null
+    sale_date?: Date | string | null
+    notes?: string | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    amount_paid?: Decimal | DecimalJsLike | number | string
+    client_id?: string | null
+    payment_method?: $Enums.payment_method
+    payment_status?: $Enums.payment_status
+    invoice_payments?: invoice_paymentsUncheckedCreateNestedManyWithoutInvoicesInput
+  }
+
+  export type invoicesCreateOrConnectWithoutInvoice_itemsInput = {
+    where: invoicesWhereUniqueInput
+    create: XOR<invoicesCreateWithoutInvoice_itemsInput, invoicesUncheckedCreateWithoutInvoice_itemsInput>
+  }
+
+  export type devicesCreateWithoutInvoice_itemsInput = {
+    id?: string
+    asset_id: string
+    status?: $Enums.device_status | null
+    model?: string | null
+    serial_number?: string | null
+    manufacturer?: string | null
+    ram_size?: number | null
+    ram_count?: number | null
+    ram_models?: NullableJsonNullValueInput | InputJsonValue
+    storage_size?: number | null
+    storage_count?: number | null
+    storage_types?: NullableJsonNullValueInput | InputJsonValue
+    storage_models?: NullableJsonNullValueInput | InputJsonValue
+    gpu_model?: string | null
+    cpu_model?: string | null
+    current_location?: string | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    last_diagnostic_at?: Date | string | null
+    diagnostic_score?: number | null
+    bios_serial?: string | null
+    os?: string | null
+    battery_health_percent?: Decimal | DecimalJsLike | number | string | null
+    storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
+    device_assignments?: device_assignmentsCreateNestedManyWithoutDevicesInput
+    hardware_specs?: device_hardware_specsCreateNestedManyWithoutDeviceInput
+    users?: usersCreateNestedOneWithoutDevicesInput
+    branches?: branchesCreateNestedOneWithoutDevicesInput
+    companies: companiesCreateNestedOneWithoutDevicesInput
+    latest_report?: diagnostic_reportsCreateNestedOneWithoutDevices_latestInput
+    shipments?: shipmentsCreateNestedOneWithoutDevicesInput
+    diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutDevicesInput
+    physical_inspections?: physical_inspectionsCreateNestedManyWithoutDevicesInput
+    repairs?: repairsCreateNestedManyWithoutDevicesInput
+    technical_inspections?: technical_inspectionsCreateNestedManyWithoutDevicesInput
+    transfers?: transfersCreateNestedManyWithoutDevicesInput
+  }
+
+  export type devicesUncheckedCreateWithoutInvoice_itemsInput = {
+    id?: string
+    asset_id: string
+    shipment_id?: string | null
+    status?: $Enums.device_status | null
+    model?: string | null
+    serial_number?: string | null
+    manufacturer?: string | null
+    ram_size?: number | null
+    ram_count?: number | null
+    ram_models?: NullableJsonNullValueInput | InputJsonValue
+    storage_size?: number | null
+    storage_count?: number | null
+    storage_types?: NullableJsonNullValueInput | InputJsonValue
+    storage_models?: NullableJsonNullValueInput | InputJsonValue
+    gpu_model?: string | null
+    cpu_model?: string | null
+    current_location?: string | null
+    branch_id?: string | null
+    assigned_to?: string | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    company_id: string
+    latest_report_id?: string | null
+    last_diagnostic_at?: Date | string | null
+    diagnostic_score?: number | null
+    bios_serial?: string | null
+    os?: string | null
+    battery_health_percent?: Decimal | DecimalJsLike | number | string | null
+    storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
+    device_assignments?: device_assignmentsUncheckedCreateNestedManyWithoutDevicesInput
+    hardware_specs?: device_hardware_specsUncheckedCreateNestedManyWithoutDeviceInput
+    diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutDevicesInput
+    physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
+    repairs?: repairsUncheckedCreateNestedManyWithoutDevicesInput
+    technical_inspections?: technical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
+    transfers?: transfersUncheckedCreateNestedManyWithoutDevicesInput
+  }
+
+  export type devicesCreateOrConnectWithoutInvoice_itemsInput = {
+    where: devicesWhereUniqueInput
+    create: XOR<devicesCreateWithoutInvoice_itemsInput, devicesUncheckedCreateWithoutInvoice_itemsInput>
+  }
+
+  export type invoicesUpsertWithoutInvoice_itemsInput = {
+    update: XOR<invoicesUpdateWithoutInvoice_itemsInput, invoicesUncheckedUpdateWithoutInvoice_itemsInput>
+    create: XOR<invoicesCreateWithoutInvoice_itemsInput, invoicesUncheckedCreateWithoutInvoice_itemsInput>
+    where?: invoicesWhereInput
+  }
+
+  export type invoicesUpdateToOneWithWhereWithoutInvoice_itemsInput = {
+    where?: invoicesWhereInput
+    data: XOR<invoicesUpdateWithoutInvoice_itemsInput, invoicesUncheckedUpdateWithoutInvoice_itemsInput>
+  }
+
+  export type invoicesUpdateWithoutInvoice_itemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoice_number?: StringFieldUpdateOperationsInput | string
+    customer_name?: NullableStringFieldUpdateOperationsInput | string | null
+    customer_contact?: NullableStringFieldUpdateOperationsInput | string | null
+    sale_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tax_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sale_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amount_paid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    payment_status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    invoice_payments?: invoice_paymentsUpdateManyWithoutInvoicesNestedInput
+    branches?: branchesUpdateOneWithoutInvoicesNestedInput
+    clients?: clientsUpdateOneWithoutInvoicesNestedInput
+    users?: usersUpdateOneWithoutInvoicesNestedInput
+  }
+
+  export type invoicesUncheckedUpdateWithoutInvoice_itemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoice_number?: StringFieldUpdateOperationsInput | string
+    branch_id?: NullableStringFieldUpdateOperationsInput | string | null
+    customer_name?: NullableStringFieldUpdateOperationsInput | string | null
+    customer_contact?: NullableStringFieldUpdateOperationsInput | string | null
+    sale_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tax_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sold_by?: NullableStringFieldUpdateOperationsInput | string | null
+    sale_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amount_paid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    client_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    payment_status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    invoice_payments?: invoice_paymentsUncheckedUpdateManyWithoutInvoicesNestedInput
+  }
+
+  export type devicesUpsertWithoutInvoice_itemsInput = {
+    update: XOR<devicesUpdateWithoutInvoice_itemsInput, devicesUncheckedUpdateWithoutInvoice_itemsInput>
+    create: XOR<devicesCreateWithoutInvoice_itemsInput, devicesUncheckedCreateWithoutInvoice_itemsInput>
     where?: devicesWhereInput
   }
 
-  export type devicesUpdateToOneWithWhereWithoutInvoicesInput = {
+  export type devicesUpdateToOneWithWhereWithoutInvoice_itemsInput = {
     where?: devicesWhereInput
-    data: XOR<devicesUpdateWithoutInvoicesInput, devicesUncheckedUpdateWithoutInvoicesInput>
+    data: XOR<devicesUpdateWithoutInvoice_itemsInput, devicesUncheckedUpdateWithoutInvoice_itemsInput>
   }
 
-  export type devicesUpdateWithoutInvoicesInput = {
+  export type devicesUpdateWithoutInvoice_itemsInput = {
     id?: StringFieldUpdateOperationsInput | string
     asset_id?: StringFieldUpdateOperationsInput | string
     status?: NullableEnumdevice_statusFieldUpdateOperationsInput | $Enums.device_status | null
@@ -34991,6 +40422,7 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUpdateManyWithoutDevicesNestedInput
     hardware_specs?: device_hardware_specsUpdateManyWithoutDeviceNestedInput
     users?: usersUpdateOneWithoutDevicesNestedInput
@@ -35005,7 +40437,7 @@ export namespace Prisma {
     transfers?: transfersUpdateManyWithoutDevicesNestedInput
   }
 
-  export type devicesUncheckedUpdateWithoutInvoicesInput = {
+  export type devicesUncheckedUpdateWithoutInvoice_itemsInput = {
     id?: StringFieldUpdateOperationsInput | string
     asset_id?: StringFieldUpdateOperationsInput | string
     shipment_id?: NullableStringFieldUpdateOperationsInput | string | null
@@ -35035,6 +40467,7 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUncheckedUpdateManyWithoutDevicesNestedInput
     hardware_specs?: device_hardware_specsUncheckedUpdateManyWithoutDeviceNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutDevicesNestedInput
@@ -35044,18 +40477,325 @@ export namespace Prisma {
     transfers?: transfersUncheckedUpdateManyWithoutDevicesNestedInput
   }
 
-  export type usersUpsertWithoutInvoicesInput = {
-    update: XOR<usersUpdateWithoutInvoicesInput, usersUncheckedUpdateWithoutInvoicesInput>
-    create: XOR<usersCreateWithoutInvoicesInput, usersUncheckedCreateWithoutInvoicesInput>
+  export type companiesCreateWithoutClientsInput = {
+    id?: string
+    name: string
+    status?: string
+    subscription_plan?: string | null
+    subscription_expiry?: Date | string | null
+    max_offline_devices?: number | null
+    offline_scan_usage?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    devices?: devicesCreateNestedManyWithoutCompaniesInput
+    shipments?: shipmentsCreateNestedManyWithoutCompaniesInput
+    users?: usersCreateNestedManyWithoutCompaniesInput
+    vendors?: vendorsCreateNestedManyWithoutCompaniesInput
+  }
+
+  export type companiesUncheckedCreateWithoutClientsInput = {
+    id?: string
+    name: string
+    status?: string
+    subscription_plan?: string | null
+    subscription_expiry?: Date | string | null
+    max_offline_devices?: number | null
+    offline_scan_usage?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    devices?: devicesUncheckedCreateNestedManyWithoutCompaniesInput
+    shipments?: shipmentsUncheckedCreateNestedManyWithoutCompaniesInput
+    users?: usersUncheckedCreateNestedManyWithoutCompaniesInput
+    vendors?: vendorsUncheckedCreateNestedManyWithoutCompaniesInput
+  }
+
+  export type companiesCreateOrConnectWithoutClientsInput = {
+    where: companiesWhereUniqueInput
+    create: XOR<companiesCreateWithoutClientsInput, companiesUncheckedCreateWithoutClientsInput>
+  }
+
+  export type invoicesCreateWithoutClientsInput = {
+    id?: string
+    invoice_number: string
+    customer_name?: string | null
+    customer_contact?: string | null
+    sale_price: Decimal | DecimalJsLike | number | string
+    tax_amount?: Decimal | DecimalJsLike | number | string | null
+    total_amount: Decimal | DecimalJsLike | number | string
+    sale_date?: Date | string | null
+    notes?: string | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    amount_paid?: Decimal | DecimalJsLike | number | string
+    payment_method?: $Enums.payment_method
+    payment_status?: $Enums.payment_status
+    invoice_payments?: invoice_paymentsCreateNestedManyWithoutInvoicesInput
+    invoice_items?: invoice_itemsCreateNestedManyWithoutInvoiceInput
+    branches?: branchesCreateNestedOneWithoutInvoicesInput
+    users?: usersCreateNestedOneWithoutInvoicesInput
+  }
+
+  export type invoicesUncheckedCreateWithoutClientsInput = {
+    id?: string
+    invoice_number: string
+    branch_id?: string | null
+    customer_name?: string | null
+    customer_contact?: string | null
+    sale_price: Decimal | DecimalJsLike | number | string
+    tax_amount?: Decimal | DecimalJsLike | number | string | null
+    total_amount: Decimal | DecimalJsLike | number | string
+    sold_by?: string | null
+    sale_date?: Date | string | null
+    notes?: string | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    amount_paid?: Decimal | DecimalJsLike | number | string
+    payment_method?: $Enums.payment_method
+    payment_status?: $Enums.payment_status
+    invoice_payments?: invoice_paymentsUncheckedCreateNestedManyWithoutInvoicesInput
+    invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutInvoiceInput
+  }
+
+  export type invoicesCreateOrConnectWithoutClientsInput = {
+    where: invoicesWhereUniqueInput
+    create: XOR<invoicesCreateWithoutClientsInput, invoicesUncheckedCreateWithoutClientsInput>
+  }
+
+  export type invoicesCreateManyClientsInputEnvelope = {
+    data: invoicesCreateManyClientsInput | invoicesCreateManyClientsInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type companiesUpsertWithoutClientsInput = {
+    update: XOR<companiesUpdateWithoutClientsInput, companiesUncheckedUpdateWithoutClientsInput>
+    create: XOR<companiesCreateWithoutClientsInput, companiesUncheckedCreateWithoutClientsInput>
+    where?: companiesWhereInput
+  }
+
+  export type companiesUpdateToOneWithWhereWithoutClientsInput = {
+    where?: companiesWhereInput
+    data: XOR<companiesUpdateWithoutClientsInput, companiesUncheckedUpdateWithoutClientsInput>
+  }
+
+  export type companiesUpdateWithoutClientsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    subscription_plan?: NullableStringFieldUpdateOperationsInput | string | null
+    subscription_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    max_offline_devices?: NullableIntFieldUpdateOperationsInput | number | null
+    offline_scan_usage?: NullableIntFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    devices?: devicesUpdateManyWithoutCompaniesNestedInput
+    shipments?: shipmentsUpdateManyWithoutCompaniesNestedInput
+    users?: usersUpdateManyWithoutCompaniesNestedInput
+    vendors?: vendorsUpdateManyWithoutCompaniesNestedInput
+  }
+
+  export type companiesUncheckedUpdateWithoutClientsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    subscription_plan?: NullableStringFieldUpdateOperationsInput | string | null
+    subscription_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    max_offline_devices?: NullableIntFieldUpdateOperationsInput | number | null
+    offline_scan_usage?: NullableIntFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    devices?: devicesUncheckedUpdateManyWithoutCompaniesNestedInput
+    shipments?: shipmentsUncheckedUpdateManyWithoutCompaniesNestedInput
+    users?: usersUncheckedUpdateManyWithoutCompaniesNestedInput
+    vendors?: vendorsUncheckedUpdateManyWithoutCompaniesNestedInput
+  }
+
+  export type invoicesUpsertWithWhereUniqueWithoutClientsInput = {
+    where: invoicesWhereUniqueInput
+    update: XOR<invoicesUpdateWithoutClientsInput, invoicesUncheckedUpdateWithoutClientsInput>
+    create: XOR<invoicesCreateWithoutClientsInput, invoicesUncheckedCreateWithoutClientsInput>
+  }
+
+  export type invoicesUpdateWithWhereUniqueWithoutClientsInput = {
+    where: invoicesWhereUniqueInput
+    data: XOR<invoicesUpdateWithoutClientsInput, invoicesUncheckedUpdateWithoutClientsInput>
+  }
+
+  export type invoicesUpdateManyWithWhereWithoutClientsInput = {
+    where: invoicesScalarWhereInput
+    data: XOR<invoicesUpdateManyMutationInput, invoicesUncheckedUpdateManyWithoutClientsInput>
+  }
+
+  export type invoicesCreateWithoutInvoice_paymentsInput = {
+    id?: string
+    invoice_number: string
+    customer_name?: string | null
+    customer_contact?: string | null
+    sale_price: Decimal | DecimalJsLike | number | string
+    tax_amount?: Decimal | DecimalJsLike | number | string | null
+    total_amount: Decimal | DecimalJsLike | number | string
+    sale_date?: Date | string | null
+    notes?: string | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    amount_paid?: Decimal | DecimalJsLike | number | string
+    payment_method?: $Enums.payment_method
+    payment_status?: $Enums.payment_status
+    invoice_items?: invoice_itemsCreateNestedManyWithoutInvoiceInput
+    branches?: branchesCreateNestedOneWithoutInvoicesInput
+    clients?: clientsCreateNestedOneWithoutInvoicesInput
+    users?: usersCreateNestedOneWithoutInvoicesInput
+  }
+
+  export type invoicesUncheckedCreateWithoutInvoice_paymentsInput = {
+    id?: string
+    invoice_number: string
+    branch_id?: string | null
+    customer_name?: string | null
+    customer_contact?: string | null
+    sale_price: Decimal | DecimalJsLike | number | string
+    tax_amount?: Decimal | DecimalJsLike | number | string | null
+    total_amount: Decimal | DecimalJsLike | number | string
+    sold_by?: string | null
+    sale_date?: Date | string | null
+    notes?: string | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    amount_paid?: Decimal | DecimalJsLike | number | string
+    client_id?: string | null
+    payment_method?: $Enums.payment_method
+    payment_status?: $Enums.payment_status
+    invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutInvoiceInput
+  }
+
+  export type invoicesCreateOrConnectWithoutInvoice_paymentsInput = {
+    where: invoicesWhereUniqueInput
+    create: XOR<invoicesCreateWithoutInvoice_paymentsInput, invoicesUncheckedCreateWithoutInvoice_paymentsInput>
+  }
+
+  export type usersCreateWithoutInvoice_paymentsInput = {
+    id?: string
+    email: string
+    full_name: string
+    role: $Enums.user_role
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    password_hash?: string | null
+    announcements?: announcementsCreateNestedManyWithoutUsersInput
+    branches_branches_manager_idTousers?: branchesCreateNestedManyWithoutUsers_branches_manager_idTousersInput
+    device_assignments_device_assignments_assigned_byTousers?: device_assignmentsCreateNestedManyWithoutUsers_device_assignments_assigned_byTousersInput
+    device_assignments_device_assignments_assigned_toTousers?: device_assignmentsCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
+    devices?: devicesCreateNestedManyWithoutUsersInput
+    diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutUsersInput
+    invoices?: invoicesCreateNestedManyWithoutUsersInput
+    physical_inspections?: physical_inspectionsCreateNestedManyWithoutUsersInput
+    repairs_repairs_assigned_byTousers?: repairsCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
+    repairs_repairs_assigned_toTousers?: repairsCreateNestedManyWithoutUsers_repairs_assigned_toTousersInput
+    shipments?: shipmentsCreateNestedManyWithoutUsersInput
+    spare_parts_requests_spare_parts_requests_approved_byTousers?: spare_parts_requestsCreateNestedManyWithoutUsers_spare_parts_requests_approved_byTousersInput
+    spare_parts_requests_spare_parts_requests_requested_byTousers?: spare_parts_requestsCreateNestedManyWithoutUsers_spare_parts_requests_requested_byTousersInput
+    technical_inspections?: technical_inspectionsCreateNestedManyWithoutUsersInput
+    transfers?: transfersCreateNestedManyWithoutUsersInput
+    branches_users_branch_idTobranches?: branchesCreateNestedOneWithoutUsers_users_branch_idTobranchesInput
+    companies?: companiesCreateNestedOneWithoutUsersInput
+  }
+
+  export type usersUncheckedCreateWithoutInvoice_paymentsInput = {
+    id?: string
+    email: string
+    full_name: string
+    role: $Enums.user_role
+    branch_id?: string | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    company_id?: string | null
+    password_hash?: string | null
+    announcements?: announcementsUncheckedCreateNestedManyWithoutUsersInput
+    branches_branches_manager_idTousers?: branchesUncheckedCreateNestedManyWithoutUsers_branches_manager_idTousersInput
+    device_assignments_device_assignments_assigned_byTousers?: device_assignmentsUncheckedCreateNestedManyWithoutUsers_device_assignments_assigned_byTousersInput
+    device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
+    devices?: devicesUncheckedCreateNestedManyWithoutUsersInput
+    diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutUsersInput
+    invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
+    physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutUsersInput
+    repairs_repairs_assigned_byTousers?: repairsUncheckedCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
+    repairs_repairs_assigned_toTousers?: repairsUncheckedCreateNestedManyWithoutUsers_repairs_assigned_toTousersInput
+    shipments?: shipmentsUncheckedCreateNestedManyWithoutUsersInput
+    spare_parts_requests_spare_parts_requests_approved_byTousers?: spare_parts_requestsUncheckedCreateNestedManyWithoutUsers_spare_parts_requests_approved_byTousersInput
+    spare_parts_requests_spare_parts_requests_requested_byTousers?: spare_parts_requestsUncheckedCreateNestedManyWithoutUsers_spare_parts_requests_requested_byTousersInput
+    technical_inspections?: technical_inspectionsUncheckedCreateNestedManyWithoutUsersInput
+    transfers?: transfersUncheckedCreateNestedManyWithoutUsersInput
+  }
+
+  export type usersCreateOrConnectWithoutInvoice_paymentsInput = {
+    where: usersWhereUniqueInput
+    create: XOR<usersCreateWithoutInvoice_paymentsInput, usersUncheckedCreateWithoutInvoice_paymentsInput>
+  }
+
+  export type invoicesUpsertWithoutInvoice_paymentsInput = {
+    update: XOR<invoicesUpdateWithoutInvoice_paymentsInput, invoicesUncheckedUpdateWithoutInvoice_paymentsInput>
+    create: XOR<invoicesCreateWithoutInvoice_paymentsInput, invoicesUncheckedCreateWithoutInvoice_paymentsInput>
+    where?: invoicesWhereInput
+  }
+
+  export type invoicesUpdateToOneWithWhereWithoutInvoice_paymentsInput = {
+    where?: invoicesWhereInput
+    data: XOR<invoicesUpdateWithoutInvoice_paymentsInput, invoicesUncheckedUpdateWithoutInvoice_paymentsInput>
+  }
+
+  export type invoicesUpdateWithoutInvoice_paymentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoice_number?: StringFieldUpdateOperationsInput | string
+    customer_name?: NullableStringFieldUpdateOperationsInput | string | null
+    customer_contact?: NullableStringFieldUpdateOperationsInput | string | null
+    sale_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tax_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sale_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amount_paid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    payment_status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    invoice_items?: invoice_itemsUpdateManyWithoutInvoiceNestedInput
+    branches?: branchesUpdateOneWithoutInvoicesNestedInput
+    clients?: clientsUpdateOneWithoutInvoicesNestedInput
+    users?: usersUpdateOneWithoutInvoicesNestedInput
+  }
+
+  export type invoicesUncheckedUpdateWithoutInvoice_paymentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoice_number?: StringFieldUpdateOperationsInput | string
+    branch_id?: NullableStringFieldUpdateOperationsInput | string | null
+    customer_name?: NullableStringFieldUpdateOperationsInput | string | null
+    customer_contact?: NullableStringFieldUpdateOperationsInput | string | null
+    sale_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tax_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sold_by?: NullableStringFieldUpdateOperationsInput | string | null
+    sale_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amount_paid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    client_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    payment_status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    invoice_items?: invoice_itemsUncheckedUpdateManyWithoutInvoiceNestedInput
+  }
+
+  export type usersUpsertWithoutInvoice_paymentsInput = {
+    update: XOR<usersUpdateWithoutInvoice_paymentsInput, usersUncheckedUpdateWithoutInvoice_paymentsInput>
+    create: XOR<usersCreateWithoutInvoice_paymentsInput, usersUncheckedCreateWithoutInvoice_paymentsInput>
     where?: usersWhereInput
   }
 
-  export type usersUpdateToOneWithWhereWithoutInvoicesInput = {
+  export type usersUpdateToOneWithWhereWithoutInvoice_paymentsInput = {
     where?: usersWhereInput
-    data: XOR<usersUpdateWithoutInvoicesInput, usersUncheckedUpdateWithoutInvoicesInput>
+    data: XOR<usersUpdateWithoutInvoice_paymentsInput, usersUncheckedUpdateWithoutInvoice_paymentsInput>
   }
 
-  export type usersUpdateWithoutInvoicesInput = {
+  export type usersUpdateWithoutInvoice_paymentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     full_name?: StringFieldUpdateOperationsInput | string
@@ -35069,6 +40809,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutUsersNestedInput
+    invoices?: invoicesUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
     repairs_repairs_assigned_toTousers?: repairsUpdateManyWithoutUsers_repairs_assigned_toTousersNestedInput
@@ -35081,7 +40822,7 @@ export namespace Prisma {
     companies?: companiesUpdateOneWithoutUsersNestedInput
   }
 
-  export type usersUncheckedUpdateWithoutInvoicesInput = {
+  export type usersUncheckedUpdateWithoutInvoice_paymentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     full_name?: StringFieldUpdateOperationsInput | string
@@ -35097,6 +40838,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUncheckedUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutUsersNestedInput
+    invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
     repairs_repairs_assigned_toTousers?: repairsUncheckedUpdateManyWithoutUsers_repairs_assigned_toTousersNestedInput
@@ -35132,6 +40874,7 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsCreateNestedManyWithoutDevicesInput
     hardware_specs?: device_hardware_specsCreateNestedManyWithoutDeviceInput
     users?: usersCreateNestedOneWithoutDevicesInput
@@ -35140,7 +40883,7 @@ export namespace Prisma {
     latest_report?: diagnostic_reportsCreateNestedOneWithoutDevices_latestInput
     shipments?: shipmentsCreateNestedOneWithoutDevicesInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutDevicesInput
-    invoices?: invoicesCreateNestedManyWithoutDevicesInput
+    invoice_items?: invoice_itemsCreateNestedManyWithoutDeviceInput
     repairs?: repairsCreateNestedManyWithoutDevicesInput
     technical_inspections?: technical_inspectionsCreateNestedManyWithoutDevicesInput
     transfers?: transfersCreateNestedManyWithoutDevicesInput
@@ -35176,10 +40919,11 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUncheckedCreateNestedManyWithoutDevicesInput
     hardware_specs?: device_hardware_specsUncheckedCreateNestedManyWithoutDeviceInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutDevicesInput
-    invoices?: invoicesUncheckedCreateNestedManyWithoutDevicesInput
+    invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutDeviceInput
     repairs?: repairsUncheckedCreateNestedManyWithoutDevicesInput
     technical_inspections?: technical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
     transfers?: transfersUncheckedCreateNestedManyWithoutDevicesInput
@@ -35204,6 +40948,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsCreateNestedManyWithoutUsersInput
     invoices?: invoicesCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
     repairs_repairs_assigned_toTousers?: repairsCreateNestedManyWithoutUsers_repairs_assigned_toTousersInput
@@ -35232,6 +40977,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesUncheckedCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsUncheckedCreateNestedManyWithoutUsersInput
     invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
     repairs_repairs_assigned_toTousers?: repairsUncheckedCreateNestedManyWithoutUsers_repairs_assigned_toTousersInput
@@ -35283,6 +41029,7 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUpdateManyWithoutDevicesNestedInput
     hardware_specs?: device_hardware_specsUpdateManyWithoutDeviceNestedInput
     users?: usersUpdateOneWithoutDevicesNestedInput
@@ -35291,7 +41038,7 @@ export namespace Prisma {
     latest_report?: diagnostic_reportsUpdateOneWithoutDevices_latestNestedInput
     shipments?: shipmentsUpdateOneWithoutDevicesNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutDevicesNestedInput
-    invoices?: invoicesUpdateManyWithoutDevicesNestedInput
+    invoice_items?: invoice_itemsUpdateManyWithoutDeviceNestedInput
     repairs?: repairsUpdateManyWithoutDevicesNestedInput
     technical_inspections?: technical_inspectionsUpdateManyWithoutDevicesNestedInput
     transfers?: transfersUpdateManyWithoutDevicesNestedInput
@@ -35327,10 +41074,11 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUncheckedUpdateManyWithoutDevicesNestedInput
     hardware_specs?: device_hardware_specsUncheckedUpdateManyWithoutDeviceNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutDevicesNestedInput
-    invoices?: invoicesUncheckedUpdateManyWithoutDevicesNestedInput
+    invoice_items?: invoice_itemsUncheckedUpdateManyWithoutDeviceNestedInput
     repairs?: repairsUncheckedUpdateManyWithoutDevicesNestedInput
     technical_inspections?: technical_inspectionsUncheckedUpdateManyWithoutDevicesNestedInput
     transfers?: transfersUncheckedUpdateManyWithoutDevicesNestedInput
@@ -35361,6 +41109,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
     repairs_repairs_assigned_toTousers?: repairsUpdateManyWithoutUsers_repairs_assigned_toTousersNestedInput
@@ -35389,6 +41138,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUncheckedUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUncheckedUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
     repairs_repairs_assigned_toTousers?: repairsUncheckedUpdateManyWithoutUsers_repairs_assigned_toTousersNestedInput
@@ -35413,6 +41163,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsCreateNestedManyWithoutUsersInput
     invoices?: invoicesCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_toTousers?: repairsCreateNestedManyWithoutUsers_repairs_assigned_toTousersInput
@@ -35441,6 +41192,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesUncheckedCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsUncheckedCreateNestedManyWithoutUsersInput
     invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_toTousers?: repairsUncheckedCreateNestedManyWithoutUsers_repairs_assigned_toTousersInput
@@ -35470,6 +41222,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsCreateNestedManyWithoutUsersInput
     invoices?: invoicesCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -35498,6 +41251,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesUncheckedCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsUncheckedCreateNestedManyWithoutUsersInput
     invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -35538,6 +41292,7 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsCreateNestedManyWithoutDevicesInput
     hardware_specs?: device_hardware_specsCreateNestedManyWithoutDeviceInput
     users?: usersCreateNestedOneWithoutDevicesInput
@@ -35546,7 +41301,7 @@ export namespace Prisma {
     latest_report?: diagnostic_reportsCreateNestedOneWithoutDevices_latestInput
     shipments?: shipmentsCreateNestedOneWithoutDevicesInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutDevicesInput
-    invoices?: invoicesCreateNestedManyWithoutDevicesInput
+    invoice_items?: invoice_itemsCreateNestedManyWithoutDeviceInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutDevicesInput
     technical_inspections?: technical_inspectionsCreateNestedManyWithoutDevicesInput
     transfers?: transfersCreateNestedManyWithoutDevicesInput
@@ -35582,10 +41337,11 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUncheckedCreateNestedManyWithoutDevicesInput
     hardware_specs?: device_hardware_specsUncheckedCreateNestedManyWithoutDeviceInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutDevicesInput
-    invoices?: invoicesUncheckedCreateNestedManyWithoutDevicesInput
+    invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutDeviceInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
     technical_inspections?: technical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
     transfers?: transfersUncheckedCreateNestedManyWithoutDevicesInput
@@ -35659,6 +41415,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_toTousers?: repairsUpdateManyWithoutUsers_repairs_assigned_toTousersNestedInput
@@ -35687,6 +41444,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUncheckedUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUncheckedUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_toTousers?: repairsUncheckedUpdateManyWithoutUsers_repairs_assigned_toTousersNestedInput
@@ -35722,6 +41480,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -35750,6 +41509,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUncheckedUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUncheckedUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -35796,6 +41556,7 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUpdateManyWithoutDevicesNestedInput
     hardware_specs?: device_hardware_specsUpdateManyWithoutDeviceNestedInput
     users?: usersUpdateOneWithoutDevicesNestedInput
@@ -35804,7 +41565,7 @@ export namespace Prisma {
     latest_report?: diagnostic_reportsUpdateOneWithoutDevices_latestNestedInput
     shipments?: shipmentsUpdateOneWithoutDevicesNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutDevicesNestedInput
-    invoices?: invoicesUpdateManyWithoutDevicesNestedInput
+    invoice_items?: invoice_itemsUpdateManyWithoutDeviceNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutDevicesNestedInput
     technical_inspections?: technical_inspectionsUpdateManyWithoutDevicesNestedInput
     transfers?: transfersUpdateManyWithoutDevicesNestedInput
@@ -35840,10 +41601,11 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUncheckedUpdateManyWithoutDevicesNestedInput
     hardware_specs?: device_hardware_specsUncheckedUpdateManyWithoutDeviceNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutDevicesNestedInput
-    invoices?: invoicesUncheckedUpdateManyWithoutDevicesNestedInput
+    invoice_items?: invoice_itemsUncheckedUpdateManyWithoutDeviceNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutDevicesNestedInput
     technical_inspections?: technical_inspectionsUncheckedUpdateManyWithoutDevicesNestedInput
     transfers?: transfersUncheckedUpdateManyWithoutDevicesNestedInput
@@ -35908,6 +41670,7 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsCreateNestedManyWithoutDevicesInput
     hardware_specs?: device_hardware_specsCreateNestedManyWithoutDeviceInput
     users?: usersCreateNestedOneWithoutDevicesInput
@@ -35915,7 +41678,7 @@ export namespace Prisma {
     companies: companiesCreateNestedOneWithoutDevicesInput
     latest_report?: diagnostic_reportsCreateNestedOneWithoutDevices_latestInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutDevicesInput
-    invoices?: invoicesCreateNestedManyWithoutDevicesInput
+    invoice_items?: invoice_itemsCreateNestedManyWithoutDeviceInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutDevicesInput
     repairs?: repairsCreateNestedManyWithoutDevicesInput
     technical_inspections?: technical_inspectionsCreateNestedManyWithoutDevicesInput
@@ -35951,10 +41714,11 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUncheckedCreateNestedManyWithoutDevicesInput
     hardware_specs?: device_hardware_specsUncheckedCreateNestedManyWithoutDeviceInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutDevicesInput
-    invoices?: invoicesUncheckedCreateNestedManyWithoutDevicesInput
+    invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutDeviceInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
     repairs?: repairsUncheckedCreateNestedManyWithoutDevicesInput
     technical_inspections?: technical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
@@ -35976,8 +41740,12 @@ export namespace Prisma {
     name: string
     status?: string
     subscription_plan?: string | null
+    subscription_expiry?: Date | string | null
+    max_offline_devices?: number | null
+    offline_scan_usage?: number | null
     created_at?: Date | string
     updated_at?: Date | string
+    clients?: clientsCreateNestedManyWithoutCompaniesInput
     devices?: devicesCreateNestedManyWithoutCompaniesInput
     users?: usersCreateNestedManyWithoutCompaniesInput
     vendors?: vendorsCreateNestedManyWithoutCompaniesInput
@@ -35988,8 +41756,12 @@ export namespace Prisma {
     name: string
     status?: string
     subscription_plan?: string | null
+    subscription_expiry?: Date | string | null
+    max_offline_devices?: number | null
+    offline_scan_usage?: number | null
     created_at?: Date | string
     updated_at?: Date | string
+    clients?: clientsUncheckedCreateNestedManyWithoutCompaniesInput
     devices?: devicesUncheckedCreateNestedManyWithoutCompaniesInput
     users?: usersUncheckedCreateNestedManyWithoutCompaniesInput
     vendors?: vendorsUncheckedCreateNestedManyWithoutCompaniesInput
@@ -36014,6 +41786,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsCreateNestedManyWithoutUsersInput
     invoices?: invoicesCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -36042,6 +41815,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesUncheckedCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsUncheckedCreateNestedManyWithoutUsersInput
     invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -36118,8 +41892,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     subscription_plan?: NullableStringFieldUpdateOperationsInput | string | null
+    subscription_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    max_offline_devices?: NullableIntFieldUpdateOperationsInput | number | null
+    offline_scan_usage?: NullableIntFieldUpdateOperationsInput | number | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    clients?: clientsUpdateManyWithoutCompaniesNestedInput
     devices?: devicesUpdateManyWithoutCompaniesNestedInput
     users?: usersUpdateManyWithoutCompaniesNestedInput
     vendors?: vendorsUpdateManyWithoutCompaniesNestedInput
@@ -36130,8 +41908,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     subscription_plan?: NullableStringFieldUpdateOperationsInput | string | null
+    subscription_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    max_offline_devices?: NullableIntFieldUpdateOperationsInput | number | null
+    offline_scan_usage?: NullableIntFieldUpdateOperationsInput | number | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    clients?: clientsUncheckedUpdateManyWithoutCompaniesNestedInput
     devices?: devicesUncheckedUpdateManyWithoutCompaniesNestedInput
     users?: usersUncheckedUpdateManyWithoutCompaniesNestedInput
     vendors?: vendorsUncheckedUpdateManyWithoutCompaniesNestedInput
@@ -36162,6 +41944,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -36190,6 +41973,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUncheckedUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUncheckedUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -36249,6 +42033,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsCreateNestedManyWithoutUsersInput
     invoices?: invoicesCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -36277,6 +42062,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesUncheckedCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsUncheckedCreateNestedManyWithoutUsersInput
     invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -36339,6 +42125,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsCreateNestedManyWithoutUsersInput
     invoices?: invoicesCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -36367,6 +42154,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesUncheckedCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsUncheckedCreateNestedManyWithoutUsersInput
     invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -36407,6 +42195,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -36435,6 +42224,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUncheckedUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUncheckedUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -36509,6 +42299,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -36537,6 +42328,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUncheckedUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUncheckedUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -36572,6 +42364,7 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsCreateNestedManyWithoutDevicesInput
     hardware_specs?: device_hardware_specsCreateNestedManyWithoutDeviceInput
     users?: usersCreateNestedOneWithoutDevicesInput
@@ -36580,7 +42373,7 @@ export namespace Prisma {
     latest_report?: diagnostic_reportsCreateNestedOneWithoutDevices_latestInput
     shipments?: shipmentsCreateNestedOneWithoutDevicesInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutDevicesInput
-    invoices?: invoicesCreateNestedManyWithoutDevicesInput
+    invoice_items?: invoice_itemsCreateNestedManyWithoutDeviceInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutDevicesInput
     repairs?: repairsCreateNestedManyWithoutDevicesInput
     transfers?: transfersCreateNestedManyWithoutDevicesInput
@@ -36616,10 +42409,11 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUncheckedCreateNestedManyWithoutDevicesInput
     hardware_specs?: device_hardware_specsUncheckedCreateNestedManyWithoutDeviceInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutDevicesInput
-    invoices?: invoicesUncheckedCreateNestedManyWithoutDevicesInput
+    invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutDeviceInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
     repairs?: repairsUncheckedCreateNestedManyWithoutDevicesInput
     transfers?: transfersUncheckedCreateNestedManyWithoutDevicesInput
@@ -36644,6 +42438,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsCreateNestedManyWithoutUsersInput
     invoices?: invoicesCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -36672,6 +42467,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesUncheckedCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsUncheckedCreateNestedManyWithoutUsersInput
     invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -36723,6 +42519,7 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUpdateManyWithoutDevicesNestedInput
     hardware_specs?: device_hardware_specsUpdateManyWithoutDeviceNestedInput
     users?: usersUpdateOneWithoutDevicesNestedInput
@@ -36731,7 +42528,7 @@ export namespace Prisma {
     latest_report?: diagnostic_reportsUpdateOneWithoutDevices_latestNestedInput
     shipments?: shipmentsUpdateOneWithoutDevicesNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutDevicesNestedInput
-    invoices?: invoicesUpdateManyWithoutDevicesNestedInput
+    invoice_items?: invoice_itemsUpdateManyWithoutDeviceNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutDevicesNestedInput
     repairs?: repairsUpdateManyWithoutDevicesNestedInput
     transfers?: transfersUpdateManyWithoutDevicesNestedInput
@@ -36767,10 +42564,11 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUncheckedUpdateManyWithoutDevicesNestedInput
     hardware_specs?: device_hardware_specsUncheckedUpdateManyWithoutDeviceNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutDevicesNestedInput
-    invoices?: invoicesUncheckedUpdateManyWithoutDevicesNestedInput
+    invoice_items?: invoice_itemsUncheckedUpdateManyWithoutDeviceNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutDevicesNestedInput
     repairs?: repairsUncheckedUpdateManyWithoutDevicesNestedInput
     transfers?: transfersUncheckedUpdateManyWithoutDevicesNestedInput
@@ -36801,6 +42599,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -36829,6 +42628,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUncheckedUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUncheckedUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -36864,6 +42664,7 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsCreateNestedManyWithoutDevicesInput
     hardware_specs?: device_hardware_specsCreateNestedManyWithoutDeviceInput
     users?: usersCreateNestedOneWithoutDevicesInput
@@ -36872,7 +42673,7 @@ export namespace Prisma {
     latest_report?: diagnostic_reportsCreateNestedOneWithoutDevices_latestInput
     shipments?: shipmentsCreateNestedOneWithoutDevicesInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutDevicesInput
-    invoices?: invoicesCreateNestedManyWithoutDevicesInput
+    invoice_items?: invoice_itemsCreateNestedManyWithoutDeviceInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutDevicesInput
     repairs?: repairsCreateNestedManyWithoutDevicesInput
     technical_inspections?: technical_inspectionsCreateNestedManyWithoutDevicesInput
@@ -36908,10 +42709,11 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUncheckedCreateNestedManyWithoutDevicesInput
     hardware_specs?: device_hardware_specsUncheckedCreateNestedManyWithoutDeviceInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutDevicesInput
-    invoices?: invoicesUncheckedCreateNestedManyWithoutDevicesInput
+    invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutDeviceInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
     repairs?: repairsUncheckedCreateNestedManyWithoutDevicesInput
     technical_inspections?: technical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
@@ -36969,6 +42771,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsCreateNestedManyWithoutUsersInput
     invoices?: invoicesCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -36997,6 +42800,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesUncheckedCreateNestedManyWithoutUsersInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsUncheckedCreateNestedManyWithoutUsersInput
     invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -37081,6 +42885,7 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUpdateManyWithoutDevicesNestedInput
     hardware_specs?: device_hardware_specsUpdateManyWithoutDeviceNestedInput
     users?: usersUpdateOneWithoutDevicesNestedInput
@@ -37089,7 +42894,7 @@ export namespace Prisma {
     latest_report?: diagnostic_reportsUpdateOneWithoutDevices_latestNestedInput
     shipments?: shipmentsUpdateOneWithoutDevicesNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutDevicesNestedInput
-    invoices?: invoicesUpdateManyWithoutDevicesNestedInput
+    invoice_items?: invoice_itemsUpdateManyWithoutDeviceNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutDevicesNestedInput
     repairs?: repairsUpdateManyWithoutDevicesNestedInput
     technical_inspections?: technical_inspectionsUpdateManyWithoutDevicesNestedInput
@@ -37125,10 +42930,11 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUncheckedUpdateManyWithoutDevicesNestedInput
     hardware_specs?: device_hardware_specsUncheckedUpdateManyWithoutDeviceNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutDevicesNestedInput
-    invoices?: invoicesUncheckedUpdateManyWithoutDevicesNestedInput
+    invoice_items?: invoice_itemsUncheckedUpdateManyWithoutDeviceNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutDevicesNestedInput
     repairs?: repairsUncheckedUpdateManyWithoutDevicesNestedInput
     technical_inspections?: technical_inspectionsUncheckedUpdateManyWithoutDevicesNestedInput
@@ -37198,6 +43004,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -37226,6 +43033,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUncheckedUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUncheckedUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -37442,6 +43250,7 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsCreateNestedManyWithoutDevicesInput
     hardware_specs?: device_hardware_specsCreateNestedManyWithoutDeviceInput
     branches?: branchesCreateNestedOneWithoutDevicesInput
@@ -37449,7 +43258,7 @@ export namespace Prisma {
     latest_report?: diagnostic_reportsCreateNestedOneWithoutDevices_latestInput
     shipments?: shipmentsCreateNestedOneWithoutDevicesInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutDevicesInput
-    invoices?: invoicesCreateNestedManyWithoutDevicesInput
+    invoice_items?: invoice_itemsCreateNestedManyWithoutDeviceInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutDevicesInput
     repairs?: repairsCreateNestedManyWithoutDevicesInput
     technical_inspections?: technical_inspectionsCreateNestedManyWithoutDevicesInput
@@ -37485,10 +43294,11 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUncheckedCreateNestedManyWithoutDevicesInput
     hardware_specs?: device_hardware_specsUncheckedCreateNestedManyWithoutDeviceInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutDevicesInput
-    invoices?: invoicesUncheckedCreateNestedManyWithoutDevicesInput
+    invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutDeviceInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
     repairs?: repairsUncheckedCreateNestedManyWithoutDevicesInput
     technical_inspections?: technical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
@@ -37587,12 +43397,41 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type invoice_paymentsCreateWithoutUsersInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    payment_date?: Date | string
+    payment_method?: $Enums.payment_method
+    notes?: string | null
+    created_at?: Date | string | null
+    invoices: invoicesCreateNestedOneWithoutInvoice_paymentsInput
+  }
+
+  export type invoice_paymentsUncheckedCreateWithoutUsersInput = {
+    id?: string
+    invoice_id: string
+    amount: Decimal | DecimalJsLike | number | string
+    payment_date?: Date | string
+    payment_method?: $Enums.payment_method
+    notes?: string | null
+    created_at?: Date | string | null
+  }
+
+  export type invoice_paymentsCreateOrConnectWithoutUsersInput = {
+    where: invoice_paymentsWhereUniqueInput
+    create: XOR<invoice_paymentsCreateWithoutUsersInput, invoice_paymentsUncheckedCreateWithoutUsersInput>
+  }
+
+  export type invoice_paymentsCreateManyUsersInputEnvelope = {
+    data: invoice_paymentsCreateManyUsersInput | invoice_paymentsCreateManyUsersInput[]
+    skipDuplicates?: boolean
+  }
+
   export type invoicesCreateWithoutUsersInput = {
     id?: string
     invoice_number: string
-    customer_name: string
+    customer_name?: string | null
     customer_contact?: string | null
-    customer_email?: string | null
     sale_price: Decimal | DecimalJsLike | number | string
     tax_amount?: Decimal | DecimalJsLike | number | string | null
     total_amount: Decimal | DecimalJsLike | number | string
@@ -37600,18 +43439,21 @@ export namespace Prisma {
     notes?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
+    amount_paid?: Decimal | DecimalJsLike | number | string
+    payment_method?: $Enums.payment_method
+    payment_status?: $Enums.payment_status
+    invoice_payments?: invoice_paymentsCreateNestedManyWithoutInvoicesInput
+    invoice_items?: invoice_itemsCreateNestedManyWithoutInvoiceInput
     branches?: branchesCreateNestedOneWithoutInvoicesInput
-    devices?: devicesCreateNestedOneWithoutInvoicesInput
+    clients?: clientsCreateNestedOneWithoutInvoicesInput
   }
 
   export type invoicesUncheckedCreateWithoutUsersInput = {
     id?: string
     invoice_number: string
-    device_id?: string | null
     branch_id?: string | null
-    customer_name: string
+    customer_name?: string | null
     customer_contact?: string | null
-    customer_email?: string | null
     sale_price: Decimal | DecimalJsLike | number | string
     tax_amount?: Decimal | DecimalJsLike | number | string | null
     total_amount: Decimal | DecimalJsLike | number | string
@@ -37619,6 +43461,12 @@ export namespace Prisma {
     notes?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
+    amount_paid?: Decimal | DecimalJsLike | number | string
+    client_id?: string | null
+    payment_method?: $Enums.payment_method
+    payment_status?: $Enums.payment_status
+    invoice_payments?: invoice_paymentsUncheckedCreateNestedManyWithoutInvoicesInput
+    invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutInvoiceInput
   }
 
   export type invoicesCreateOrConnectWithoutUsersInput = {
@@ -37977,8 +43825,12 @@ export namespace Prisma {
     name: string
     status?: string
     subscription_plan?: string | null
+    subscription_expiry?: Date | string | null
+    max_offline_devices?: number | null
+    offline_scan_usage?: number | null
     created_at?: Date | string
     updated_at?: Date | string
+    clients?: clientsCreateNestedManyWithoutCompaniesInput
     devices?: devicesCreateNestedManyWithoutCompaniesInput
     shipments?: shipmentsCreateNestedManyWithoutCompaniesInput
     vendors?: vendorsCreateNestedManyWithoutCompaniesInput
@@ -37989,8 +43841,12 @@ export namespace Prisma {
     name: string
     status?: string
     subscription_plan?: string | null
+    subscription_expiry?: Date | string | null
+    max_offline_devices?: number | null
+    offline_scan_usage?: number | null
     created_at?: Date | string
     updated_at?: Date | string
+    clients?: clientsUncheckedCreateNestedManyWithoutCompaniesInput
     devices?: devicesUncheckedCreateNestedManyWithoutCompaniesInput
     shipments?: shipmentsUncheckedCreateNestedManyWithoutCompaniesInput
     vendors?: vendorsUncheckedCreateNestedManyWithoutCompaniesInput
@@ -38107,6 +43963,22 @@ export namespace Prisma {
   export type diagnostic_reportsUpdateManyWithWhereWithoutUsersInput = {
     where: diagnostic_reportsScalarWhereInput
     data: XOR<diagnostic_reportsUpdateManyMutationInput, diagnostic_reportsUncheckedUpdateManyWithoutUsersInput>
+  }
+
+  export type invoice_paymentsUpsertWithWhereUniqueWithoutUsersInput = {
+    where: invoice_paymentsWhereUniqueInput
+    update: XOR<invoice_paymentsUpdateWithoutUsersInput, invoice_paymentsUncheckedUpdateWithoutUsersInput>
+    create: XOR<invoice_paymentsCreateWithoutUsersInput, invoice_paymentsUncheckedCreateWithoutUsersInput>
+  }
+
+  export type invoice_paymentsUpdateWithWhereUniqueWithoutUsersInput = {
+    where: invoice_paymentsWhereUniqueInput
+    data: XOR<invoice_paymentsUpdateWithoutUsersInput, invoice_paymentsUncheckedUpdateWithoutUsersInput>
+  }
+
+  export type invoice_paymentsUpdateManyWithWhereWithoutUsersInput = {
+    where: invoice_paymentsScalarWhereInput
+    data: XOR<invoice_paymentsUpdateManyMutationInput, invoice_paymentsUncheckedUpdateManyWithoutUsersInput>
   }
 
   export type invoicesUpsertWithWhereUniqueWithoutUsersInput = {
@@ -38308,8 +44180,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     subscription_plan?: NullableStringFieldUpdateOperationsInput | string | null
+    subscription_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    max_offline_devices?: NullableIntFieldUpdateOperationsInput | number | null
+    offline_scan_usage?: NullableIntFieldUpdateOperationsInput | number | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    clients?: clientsUpdateManyWithoutCompaniesNestedInput
     devices?: devicesUpdateManyWithoutCompaniesNestedInput
     shipments?: shipmentsUpdateManyWithoutCompaniesNestedInput
     vendors?: vendorsUpdateManyWithoutCompaniesNestedInput
@@ -38320,8 +44196,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     status?: StringFieldUpdateOperationsInput | string
     subscription_plan?: NullableStringFieldUpdateOperationsInput | string | null
+    subscription_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    max_offline_devices?: NullableIntFieldUpdateOperationsInput | number | null
+    offline_scan_usage?: NullableIntFieldUpdateOperationsInput | number | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    clients?: clientsUncheckedUpdateManyWithoutCompaniesNestedInput
     devices?: devicesUncheckedUpdateManyWithoutCompaniesNestedInput
     shipments?: shipmentsUncheckedUpdateManyWithoutCompaniesNestedInput
     vendors?: vendorsUncheckedUpdateManyWithoutCompaniesNestedInput
@@ -38461,6 +44341,7 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsCreateNestedManyWithoutDevicesInput
     hardware_specs?: device_hardware_specsCreateNestedManyWithoutDeviceInput
     users?: usersCreateNestedOneWithoutDevicesInput
@@ -38468,7 +44349,7 @@ export namespace Prisma {
     companies: companiesCreateNestedOneWithoutDevicesInput
     shipments?: shipmentsCreateNestedOneWithoutDevicesInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutDevicesInput
-    invoices?: invoicesCreateNestedManyWithoutDevicesInput
+    invoice_items?: invoice_itemsCreateNestedManyWithoutDeviceInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutDevicesInput
     repairs?: repairsCreateNestedManyWithoutDevicesInput
     technical_inspections?: technical_inspectionsCreateNestedManyWithoutDevicesInput
@@ -38504,10 +44385,11 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUncheckedCreateNestedManyWithoutDevicesInput
     hardware_specs?: device_hardware_specsUncheckedCreateNestedManyWithoutDeviceInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutDevicesInput
-    invoices?: invoicesUncheckedCreateNestedManyWithoutDevicesInput
+    invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutDeviceInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
     repairs?: repairsUncheckedCreateNestedManyWithoutDevicesInput
     technical_inspections?: technical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
@@ -38549,6 +44431,7 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsCreateNestedManyWithoutDevicesInput
     hardware_specs?: device_hardware_specsCreateNestedManyWithoutDeviceInput
     users?: usersCreateNestedOneWithoutDevicesInput
@@ -38556,7 +44439,7 @@ export namespace Prisma {
     companies: companiesCreateNestedOneWithoutDevicesInput
     latest_report?: diagnostic_reportsCreateNestedOneWithoutDevices_latestInput
     shipments?: shipmentsCreateNestedOneWithoutDevicesInput
-    invoices?: invoicesCreateNestedManyWithoutDevicesInput
+    invoice_items?: invoice_itemsCreateNestedManyWithoutDeviceInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutDevicesInput
     repairs?: repairsCreateNestedManyWithoutDevicesInput
     technical_inspections?: technical_inspectionsCreateNestedManyWithoutDevicesInput
@@ -38593,9 +44476,10 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUncheckedCreateNestedManyWithoutDevicesInput
     hardware_specs?: device_hardware_specsUncheckedCreateNestedManyWithoutDeviceInput
-    invoices?: invoicesUncheckedCreateNestedManyWithoutDevicesInput
+    invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutDeviceInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
     repairs?: repairsUncheckedCreateNestedManyWithoutDevicesInput
     technical_inspections?: technical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
@@ -38620,6 +44504,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_byTousers?: device_assignmentsCreateNestedManyWithoutUsers_device_assignments_assigned_byTousersInput
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsCreateNestedManyWithoutUsersInput
     invoices?: invoicesCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -38648,6 +44533,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_byTousers?: device_assignmentsUncheckedCreateNestedManyWithoutUsers_device_assignments_assigned_byTousersInput
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedCreateNestedManyWithoutUsers_device_assignments_assigned_toTousersInput
     devices?: devicesUncheckedCreateNestedManyWithoutUsersInput
+    invoice_payments?: invoice_paymentsUncheckedCreateNestedManyWithoutUsersInput
     invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutUsersInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedCreateNestedManyWithoutUsers_repairs_assigned_byTousersInput
@@ -38861,6 +44747,7 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUpdateManyWithoutDevicesNestedInput
     hardware_specs?: device_hardware_specsUpdateManyWithoutDeviceNestedInput
     users?: usersUpdateOneWithoutDevicesNestedInput
@@ -38868,7 +44755,7 @@ export namespace Prisma {
     companies?: companiesUpdateOneRequiredWithoutDevicesNestedInput
     latest_report?: diagnostic_reportsUpdateOneWithoutDevices_latestNestedInput
     shipments?: shipmentsUpdateOneWithoutDevicesNestedInput
-    invoices?: invoicesUpdateManyWithoutDevicesNestedInput
+    invoice_items?: invoice_itemsUpdateManyWithoutDeviceNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutDevicesNestedInput
     repairs?: repairsUpdateManyWithoutDevicesNestedInput
     technical_inspections?: technical_inspectionsUpdateManyWithoutDevicesNestedInput
@@ -38905,9 +44792,10 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUncheckedUpdateManyWithoutDevicesNestedInput
     hardware_specs?: device_hardware_specsUncheckedUpdateManyWithoutDeviceNestedInput
-    invoices?: invoicesUncheckedUpdateManyWithoutDevicesNestedInput
+    invoice_items?: invoice_itemsUncheckedUpdateManyWithoutDeviceNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutDevicesNestedInput
     repairs?: repairsUncheckedUpdateManyWithoutDevicesNestedInput
     technical_inspections?: technical_inspectionsUncheckedUpdateManyWithoutDevicesNestedInput
@@ -38938,6 +44826,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_byTousers?: device_assignmentsUpdateManyWithoutUsers_device_assignments_assigned_byTousersNestedInput
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -38966,6 +44855,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_byTousers?: device_assignmentsUncheckedUpdateManyWithoutUsers_device_assignments_assigned_byTousersNestedInput
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUncheckedUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUncheckedUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -39192,6 +45082,7 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsCreateNestedManyWithoutDevicesInput
     users?: usersCreateNestedOneWithoutDevicesInput
     branches?: branchesCreateNestedOneWithoutDevicesInput
@@ -39199,7 +45090,7 @@ export namespace Prisma {
     latest_report?: diagnostic_reportsCreateNestedOneWithoutDevices_latestInput
     shipments?: shipmentsCreateNestedOneWithoutDevicesInput
     diagnostic_reports?: diagnostic_reportsCreateNestedManyWithoutDevicesInput
-    invoices?: invoicesCreateNestedManyWithoutDevicesInput
+    invoice_items?: invoice_itemsCreateNestedManyWithoutDeviceInput
     physical_inspections?: physical_inspectionsCreateNestedManyWithoutDevicesInput
     repairs?: repairsCreateNestedManyWithoutDevicesInput
     technical_inspections?: technical_inspectionsCreateNestedManyWithoutDevicesInput
@@ -39236,9 +45127,10 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUncheckedCreateNestedManyWithoutDevicesInput
     diagnostic_reports?: diagnostic_reportsUncheckedCreateNestedManyWithoutDevicesInput
-    invoices?: invoicesUncheckedCreateNestedManyWithoutDevicesInput
+    invoice_items?: invoice_itemsUncheckedCreateNestedManyWithoutDeviceInput
     physical_inspections?: physical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
     repairs?: repairsUncheckedCreateNestedManyWithoutDevicesInput
     technical_inspections?: technical_inspectionsUncheckedCreateNestedManyWithoutDevicesInput
@@ -39363,6 +45255,7 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUpdateManyWithoutDevicesNestedInput
     users?: usersUpdateOneWithoutDevicesNestedInput
     branches?: branchesUpdateOneWithoutDevicesNestedInput
@@ -39370,7 +45263,7 @@ export namespace Prisma {
     latest_report?: diagnostic_reportsUpdateOneWithoutDevices_latestNestedInput
     shipments?: shipmentsUpdateOneWithoutDevicesNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutDevicesNestedInput
-    invoices?: invoicesUpdateManyWithoutDevicesNestedInput
+    invoice_items?: invoice_itemsUpdateManyWithoutDeviceNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutDevicesNestedInput
     repairs?: repairsUpdateManyWithoutDevicesNestedInput
     technical_inspections?: technical_inspectionsUpdateManyWithoutDevicesNestedInput
@@ -39407,9 +45300,10 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUncheckedUpdateManyWithoutDevicesNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutDevicesNestedInput
-    invoices?: invoicesUncheckedUpdateManyWithoutDevicesNestedInput
+    invoice_items?: invoice_itemsUncheckedUpdateManyWithoutDeviceNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutDevicesNestedInput
     repairs?: repairsUncheckedUpdateManyWithoutDevicesNestedInput
     technical_inspections?: technical_inspectionsUncheckedUpdateManyWithoutDevicesNestedInput
@@ -39541,15 +45435,14 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
   }
 
   export type invoicesCreateManyBranchesInput = {
     id?: string
     invoice_number: string
-    device_id?: string | null
-    customer_name: string
+    customer_name?: string | null
     customer_contact?: string | null
-    customer_email?: string | null
     sale_price: Decimal | DecimalJsLike | number | string
     tax_amount?: Decimal | DecimalJsLike | number | string | null
     total_amount: Decimal | DecimalJsLike | number | string
@@ -39558,6 +45451,10 @@ export namespace Prisma {
     notes?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
+    amount_paid?: Decimal | DecimalJsLike | number | string
+    client_id?: string | null
+    payment_method?: $Enums.payment_method
+    payment_status?: $Enums.payment_status
   }
 
   export type transfersCreateManyBranches_transfers_from_branch_idTobranchesInput = {
@@ -39665,6 +45562,7 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUpdateManyWithoutDevicesNestedInput
     hardware_specs?: device_hardware_specsUpdateManyWithoutDeviceNestedInput
     users?: usersUpdateOneWithoutDevicesNestedInput
@@ -39672,7 +45570,7 @@ export namespace Prisma {
     latest_report?: diagnostic_reportsUpdateOneWithoutDevices_latestNestedInput
     shipments?: shipmentsUpdateOneWithoutDevicesNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutDevicesNestedInput
-    invoices?: invoicesUpdateManyWithoutDevicesNestedInput
+    invoice_items?: invoice_itemsUpdateManyWithoutDeviceNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutDevicesNestedInput
     repairs?: repairsUpdateManyWithoutDevicesNestedInput
     technical_inspections?: technical_inspectionsUpdateManyWithoutDevicesNestedInput
@@ -39708,10 +45606,11 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUncheckedUpdateManyWithoutDevicesNestedInput
     hardware_specs?: device_hardware_specsUncheckedUpdateManyWithoutDeviceNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutDevicesNestedInput
-    invoices?: invoicesUncheckedUpdateManyWithoutDevicesNestedInput
+    invoice_items?: invoice_itemsUncheckedUpdateManyWithoutDeviceNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutDevicesNestedInput
     repairs?: repairsUncheckedUpdateManyWithoutDevicesNestedInput
     technical_inspections?: technical_inspectionsUncheckedUpdateManyWithoutDevicesNestedInput
@@ -39747,14 +45646,14 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
   }
 
   export type invoicesUpdateWithoutBranchesInput = {
     id?: StringFieldUpdateOperationsInput | string
     invoice_number?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_name?: NullableStringFieldUpdateOperationsInput | string | null
     customer_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    customer_email?: NullableStringFieldUpdateOperationsInput | string | null
     sale_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tax_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -39762,17 +45661,20 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    devices?: devicesUpdateOneWithoutInvoicesNestedInput
+    amount_paid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    payment_status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    invoice_payments?: invoice_paymentsUpdateManyWithoutInvoicesNestedInput
+    invoice_items?: invoice_itemsUpdateManyWithoutInvoiceNestedInput
+    clients?: clientsUpdateOneWithoutInvoicesNestedInput
     users?: usersUpdateOneWithoutInvoicesNestedInput
   }
 
   export type invoicesUncheckedUpdateWithoutBranchesInput = {
     id?: StringFieldUpdateOperationsInput | string
     invoice_number?: StringFieldUpdateOperationsInput | string
-    device_id?: NullableStringFieldUpdateOperationsInput | string | null
-    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_name?: NullableStringFieldUpdateOperationsInput | string | null
     customer_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    customer_email?: NullableStringFieldUpdateOperationsInput | string | null
     sale_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tax_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -39781,15 +45683,19 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amount_paid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    client_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    payment_status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    invoice_payments?: invoice_paymentsUncheckedUpdateManyWithoutInvoicesNestedInput
+    invoice_items?: invoice_itemsUncheckedUpdateManyWithoutInvoiceNestedInput
   }
 
   export type invoicesUncheckedUpdateManyWithoutBranchesInput = {
     id?: StringFieldUpdateOperationsInput | string
     invoice_number?: StringFieldUpdateOperationsInput | string
-    device_id?: NullableStringFieldUpdateOperationsInput | string | null
-    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_name?: NullableStringFieldUpdateOperationsInput | string | null
     customer_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    customer_email?: NullableStringFieldUpdateOperationsInput | string | null
     sale_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tax_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -39798,6 +45704,10 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amount_paid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    client_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    payment_status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
   }
 
   export type transfersUpdateWithoutBranches_transfers_from_branch_idTobranchesInput = {
@@ -39904,6 +45814,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -39931,6 +45842,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUncheckedUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUncheckedUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -40015,6 +45927,17 @@ export namespace Prisma {
     shipment_name?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type clientsCreateManyCompaniesInput = {
+    id?: string
+    name: string
+    phone?: string | null
+    email?: string | null
+    address?: string | null
+    balance?: Decimal | DecimalJsLike | number | string
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
   export type devicesCreateManyCompaniesInput = {
     id?: string
     asset_id: string
@@ -40044,6 +45967,7 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
   }
 
   export type shipmentsCreateManyCompaniesInput = {
@@ -40083,6 +46007,41 @@ export namespace Prisma {
     updated_at?: Date | string | null
   }
 
+  export type clientsUpdateWithoutCompaniesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    balance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    invoices?: invoicesUpdateManyWithoutClientsNestedInput
+  }
+
+  export type clientsUncheckedUpdateWithoutCompaniesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    balance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    invoices?: invoicesUncheckedUpdateManyWithoutClientsNestedInput
+  }
+
+  export type clientsUncheckedUpdateManyWithoutCompaniesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    balance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type devicesUpdateWithoutCompaniesInput = {
     id?: StringFieldUpdateOperationsInput | string
     asset_id?: StringFieldUpdateOperationsInput | string
@@ -40108,6 +46067,7 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUpdateManyWithoutDevicesNestedInput
     hardware_specs?: device_hardware_specsUpdateManyWithoutDeviceNestedInput
     users?: usersUpdateOneWithoutDevicesNestedInput
@@ -40115,7 +46075,7 @@ export namespace Prisma {
     latest_report?: diagnostic_reportsUpdateOneWithoutDevices_latestNestedInput
     shipments?: shipmentsUpdateOneWithoutDevicesNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutDevicesNestedInput
-    invoices?: invoicesUpdateManyWithoutDevicesNestedInput
+    invoice_items?: invoice_itemsUpdateManyWithoutDeviceNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutDevicesNestedInput
     repairs?: repairsUpdateManyWithoutDevicesNestedInput
     technical_inspections?: technical_inspectionsUpdateManyWithoutDevicesNestedInput
@@ -40151,10 +46111,11 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUncheckedUpdateManyWithoutDevicesNestedInput
     hardware_specs?: device_hardware_specsUncheckedUpdateManyWithoutDeviceNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutDevicesNestedInput
-    invoices?: invoicesUncheckedUpdateManyWithoutDevicesNestedInput
+    invoice_items?: invoice_itemsUncheckedUpdateManyWithoutDeviceNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutDevicesNestedInput
     repairs?: repairsUncheckedUpdateManyWithoutDevicesNestedInput
     technical_inspections?: technical_inspectionsUncheckedUpdateManyWithoutDevicesNestedInput
@@ -40190,6 +46151,7 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
   }
 
   export type shipmentsUpdateWithoutCompaniesInput = {
@@ -40253,6 +46215,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -40280,6 +46243,7 @@ export namespace Prisma {
     device_assignments_device_assignments_assigned_toTousers?: device_assignmentsUncheckedUpdateManyWithoutUsers_device_assignments_assigned_toTousersNestedInput
     devices?: devicesUncheckedUpdateManyWithoutUsersNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutUsersNestedInput
+    invoice_payments?: invoice_paymentsUncheckedUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutUsersNestedInput
     repairs_repairs_assigned_byTousers?: repairsUncheckedUpdateManyWithoutUsers_repairs_assigned_byTousersNestedInput
@@ -40434,21 +46398,15 @@ export namespace Prisma {
     updated_at?: Date | string | null
   }
 
-  export type invoicesCreateManyDevicesInput = {
+  export type invoice_itemsCreateManyDeviceInput = {
     id?: string
-    invoice_number: string
-    branch_id?: string | null
-    customer_name: string
-    customer_contact?: string | null
-    customer_email?: string | null
-    sale_price: Decimal | DecimalJsLike | number | string
-    tax_amount?: Decimal | DecimalJsLike | number | string | null
-    total_amount: Decimal | DecimalJsLike | number | string
-    sold_by?: string | null
-    sale_date?: Date | string | null
-    notes?: string | null
-    created_at?: Date | string | null
-    updated_at?: Date | string | null
+    invoice_id: string
+    item_name?: string | null
+    serial_number?: string | null
+    asset_id?: string | null
+    quantity?: number
+    unit_price: Decimal | DecimalJsLike | number | string
+    total_price: Decimal | DecimalJsLike | number | string
   }
 
   export type physical_inspectionsCreateManyDevicesInput = {
@@ -40803,55 +46761,37 @@ export namespace Prisma {
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type invoicesUpdateWithoutDevicesInput = {
+  export type invoice_itemsUpdateWithoutDeviceInput = {
     id?: StringFieldUpdateOperationsInput | string
-    invoice_number?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
-    customer_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    customer_email?: NullableStringFieldUpdateOperationsInput | string | null
-    sale_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    tax_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    sale_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    branches?: branchesUpdateOneWithoutInvoicesNestedInput
-    users?: usersUpdateOneWithoutInvoicesNestedInput
+    item_name?: NullableStringFieldUpdateOperationsInput | string | null
+    serial_number?: NullableStringFieldUpdateOperationsInput | string | null
+    asset_id?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    unit_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    invoice?: invoicesUpdateOneRequiredWithoutInvoice_itemsNestedInput
   }
 
-  export type invoicesUncheckedUpdateWithoutDevicesInput = {
+  export type invoice_itemsUncheckedUpdateWithoutDeviceInput = {
     id?: StringFieldUpdateOperationsInput | string
-    invoice_number?: StringFieldUpdateOperationsInput | string
-    branch_id?: NullableStringFieldUpdateOperationsInput | string | null
-    customer_name?: StringFieldUpdateOperationsInput | string
-    customer_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    customer_email?: NullableStringFieldUpdateOperationsInput | string | null
-    sale_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    tax_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    sold_by?: NullableStringFieldUpdateOperationsInput | string | null
-    sale_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    invoice_id?: StringFieldUpdateOperationsInput | string
+    item_name?: NullableStringFieldUpdateOperationsInput | string | null
+    serial_number?: NullableStringFieldUpdateOperationsInput | string | null
+    asset_id?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    unit_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
-  export type invoicesUncheckedUpdateManyWithoutDevicesInput = {
+  export type invoice_itemsUncheckedUpdateManyWithoutDeviceInput = {
     id?: StringFieldUpdateOperationsInput | string
-    invoice_number?: StringFieldUpdateOperationsInput | string
-    branch_id?: NullableStringFieldUpdateOperationsInput | string | null
-    customer_name?: StringFieldUpdateOperationsInput | string
-    customer_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    customer_email?: NullableStringFieldUpdateOperationsInput | string | null
-    sale_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    tax_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    sold_by?: NullableStringFieldUpdateOperationsInput | string | null
-    sale_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    invoice_id?: StringFieldUpdateOperationsInput | string
+    item_name?: NullableStringFieldUpdateOperationsInput | string | null
+    serial_number?: NullableStringFieldUpdateOperationsInput | string | null
+    asset_id?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    unit_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type physical_inspectionsUpdateWithoutDevicesInput = {
@@ -41021,6 +46961,170 @@ export namespace Prisma {
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type invoice_paymentsCreateManyInvoicesInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    payment_date?: Date | string
+    payment_method?: $Enums.payment_method
+    received_by?: string | null
+    notes?: string | null
+    created_at?: Date | string | null
+  }
+
+  export type invoice_itemsCreateManyInvoiceInput = {
+    id?: string
+    device_id?: string | null
+    item_name?: string | null
+    serial_number?: string | null
+    asset_id?: string | null
+    quantity?: number
+    unit_price: Decimal | DecimalJsLike | number | string
+    total_price: Decimal | DecimalJsLike | number | string
+  }
+
+  export type invoice_paymentsUpdateWithoutInvoicesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    payment_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    users?: usersUpdateOneWithoutInvoice_paymentsNestedInput
+  }
+
+  export type invoice_paymentsUncheckedUpdateWithoutInvoicesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    payment_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    received_by?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type invoice_paymentsUncheckedUpdateManyWithoutInvoicesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    payment_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    received_by?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type invoice_itemsUpdateWithoutInvoiceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    item_name?: NullableStringFieldUpdateOperationsInput | string | null
+    serial_number?: NullableStringFieldUpdateOperationsInput | string | null
+    asset_id?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    unit_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    device?: devicesUpdateOneWithoutInvoice_itemsNestedInput
+  }
+
+  export type invoice_itemsUncheckedUpdateWithoutInvoiceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    device_id?: NullableStringFieldUpdateOperationsInput | string | null
+    item_name?: NullableStringFieldUpdateOperationsInput | string | null
+    serial_number?: NullableStringFieldUpdateOperationsInput | string | null
+    asset_id?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    unit_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type invoice_itemsUncheckedUpdateManyWithoutInvoiceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    device_id?: NullableStringFieldUpdateOperationsInput | string | null
+    item_name?: NullableStringFieldUpdateOperationsInput | string | null
+    serial_number?: NullableStringFieldUpdateOperationsInput | string | null
+    asset_id?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    unit_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type invoicesCreateManyClientsInput = {
+    id?: string
+    invoice_number: string
+    branch_id?: string | null
+    customer_name?: string | null
+    customer_contact?: string | null
+    sale_price: Decimal | DecimalJsLike | number | string
+    tax_amount?: Decimal | DecimalJsLike | number | string | null
+    total_amount: Decimal | DecimalJsLike | number | string
+    sold_by?: string | null
+    sale_date?: Date | string | null
+    notes?: string | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    amount_paid?: Decimal | DecimalJsLike | number | string
+    payment_method?: $Enums.payment_method
+    payment_status?: $Enums.payment_status
+  }
+
+  export type invoicesUpdateWithoutClientsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoice_number?: StringFieldUpdateOperationsInput | string
+    customer_name?: NullableStringFieldUpdateOperationsInput | string | null
+    customer_contact?: NullableStringFieldUpdateOperationsInput | string | null
+    sale_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tax_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sale_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amount_paid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    payment_status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    invoice_payments?: invoice_paymentsUpdateManyWithoutInvoicesNestedInput
+    invoice_items?: invoice_itemsUpdateManyWithoutInvoiceNestedInput
+    branches?: branchesUpdateOneWithoutInvoicesNestedInput
+    users?: usersUpdateOneWithoutInvoicesNestedInput
+  }
+
+  export type invoicesUncheckedUpdateWithoutClientsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoice_number?: StringFieldUpdateOperationsInput | string
+    branch_id?: NullableStringFieldUpdateOperationsInput | string | null
+    customer_name?: NullableStringFieldUpdateOperationsInput | string | null
+    customer_contact?: NullableStringFieldUpdateOperationsInput | string | null
+    sale_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tax_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sold_by?: NullableStringFieldUpdateOperationsInput | string | null
+    sale_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amount_paid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    payment_status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    invoice_payments?: invoice_paymentsUncheckedUpdateManyWithoutInvoicesNestedInput
+    invoice_items?: invoice_itemsUncheckedUpdateManyWithoutInvoiceNestedInput
+  }
+
+  export type invoicesUncheckedUpdateManyWithoutClientsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoice_number?: StringFieldUpdateOperationsInput | string
+    branch_id?: NullableStringFieldUpdateOperationsInput | string | null
+    customer_name?: NullableStringFieldUpdateOperationsInput | string | null
+    customer_contact?: NullableStringFieldUpdateOperationsInput | string | null
+    sale_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tax_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    sold_by?: NullableStringFieldUpdateOperationsInput | string | null
+    sale_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amount_paid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    payment_status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+  }
+
   export type spare_parts_requestsCreateManyRepairsInput = {
     id?: string
     requested_by?: string | null
@@ -41106,6 +47210,7 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
   }
 
   export type devicesUpdateWithoutShipmentsInput = {
@@ -41133,6 +47238,7 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUpdateManyWithoutDevicesNestedInput
     hardware_specs?: device_hardware_specsUpdateManyWithoutDeviceNestedInput
     users?: usersUpdateOneWithoutDevicesNestedInput
@@ -41140,7 +47246,7 @@ export namespace Prisma {
     companies?: companiesUpdateOneRequiredWithoutDevicesNestedInput
     latest_report?: diagnostic_reportsUpdateOneWithoutDevices_latestNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutDevicesNestedInput
-    invoices?: invoicesUpdateManyWithoutDevicesNestedInput
+    invoice_items?: invoice_itemsUpdateManyWithoutDeviceNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutDevicesNestedInput
     repairs?: repairsUpdateManyWithoutDevicesNestedInput
     technical_inspections?: technical_inspectionsUpdateManyWithoutDevicesNestedInput
@@ -41176,10 +47282,11 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUncheckedUpdateManyWithoutDevicesNestedInput
     hardware_specs?: device_hardware_specsUncheckedUpdateManyWithoutDeviceNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutDevicesNestedInput
-    invoices?: invoicesUncheckedUpdateManyWithoutDevicesNestedInput
+    invoice_items?: invoice_itemsUncheckedUpdateManyWithoutDeviceNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutDevicesNestedInput
     repairs?: repairsUncheckedUpdateManyWithoutDevicesNestedInput
     technical_inspections?: technical_inspectionsUncheckedUpdateManyWithoutDevicesNestedInput
@@ -41215,6 +47322,7 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
   }
 
   export type announcementsCreateManyUsersInput = {
@@ -41291,6 +47399,7 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
   }
 
   export type diagnostic_reportsCreateManyUsersInput = {
@@ -41326,14 +47435,22 @@ export namespace Prisma {
     updated_at?: Date | string | null
   }
 
+  export type invoice_paymentsCreateManyUsersInput = {
+    id?: string
+    invoice_id: string
+    amount: Decimal | DecimalJsLike | number | string
+    payment_date?: Date | string
+    payment_method?: $Enums.payment_method
+    notes?: string | null
+    created_at?: Date | string | null
+  }
+
   export type invoicesCreateManyUsersInput = {
     id?: string
     invoice_number: string
-    device_id?: string | null
     branch_id?: string | null
-    customer_name: string
+    customer_name?: string | null
     customer_contact?: string | null
-    customer_email?: string | null
     sale_price: Decimal | DecimalJsLike | number | string
     tax_amount?: Decimal | DecimalJsLike | number | string | null
     total_amount: Decimal | DecimalJsLike | number | string
@@ -41341,6 +47458,10 @@ export namespace Prisma {
     notes?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
+    amount_paid?: Decimal | DecimalJsLike | number | string
+    client_id?: string | null
+    payment_method?: $Enums.payment_method
+    payment_status?: $Enums.payment_status
   }
 
   export type physical_inspectionsCreateManyUsersInput = {
@@ -41626,6 +47747,7 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUpdateManyWithoutDevicesNestedInput
     hardware_specs?: device_hardware_specsUpdateManyWithoutDeviceNestedInput
     branches?: branchesUpdateOneWithoutDevicesNestedInput
@@ -41633,7 +47755,7 @@ export namespace Prisma {
     latest_report?: diagnostic_reportsUpdateOneWithoutDevices_latestNestedInput
     shipments?: shipmentsUpdateOneWithoutDevicesNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutDevicesNestedInput
-    invoices?: invoicesUpdateManyWithoutDevicesNestedInput
+    invoice_items?: invoice_itemsUpdateManyWithoutDeviceNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutDevicesNestedInput
     repairs?: repairsUpdateManyWithoutDevicesNestedInput
     technical_inspections?: technical_inspectionsUpdateManyWithoutDevicesNestedInput
@@ -41669,10 +47791,11 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUncheckedUpdateManyWithoutDevicesNestedInput
     hardware_specs?: device_hardware_specsUncheckedUpdateManyWithoutDeviceNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutDevicesNestedInput
-    invoices?: invoicesUncheckedUpdateManyWithoutDevicesNestedInput
+    invoice_items?: invoice_itemsUncheckedUpdateManyWithoutDeviceNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutDevicesNestedInput
     repairs?: repairsUncheckedUpdateManyWithoutDevicesNestedInput
     technical_inspections?: technical_inspectionsUncheckedUpdateManyWithoutDevicesNestedInput
@@ -41708,6 +47831,7 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
   }
 
   export type diagnostic_reportsUpdateWithoutUsersInput = {
@@ -41815,12 +47939,41 @@ export namespace Prisma {
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type invoice_paymentsUpdateWithoutUsersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    payment_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    invoices?: invoicesUpdateOneRequiredWithoutInvoice_paymentsNestedInput
+  }
+
+  export type invoice_paymentsUncheckedUpdateWithoutUsersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoice_id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    payment_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type invoice_paymentsUncheckedUpdateManyWithoutUsersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoice_id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    payment_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type invoicesUpdateWithoutUsersInput = {
     id?: StringFieldUpdateOperationsInput | string
     invoice_number?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_name?: NullableStringFieldUpdateOperationsInput | string | null
     customer_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    customer_email?: NullableStringFieldUpdateOperationsInput | string | null
     sale_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tax_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -41828,18 +47981,21 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amount_paid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    payment_status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    invoice_payments?: invoice_paymentsUpdateManyWithoutInvoicesNestedInput
+    invoice_items?: invoice_itemsUpdateManyWithoutInvoiceNestedInput
     branches?: branchesUpdateOneWithoutInvoicesNestedInput
-    devices?: devicesUpdateOneWithoutInvoicesNestedInput
+    clients?: clientsUpdateOneWithoutInvoicesNestedInput
   }
 
   export type invoicesUncheckedUpdateWithoutUsersInput = {
     id?: StringFieldUpdateOperationsInput | string
     invoice_number?: StringFieldUpdateOperationsInput | string
-    device_id?: NullableStringFieldUpdateOperationsInput | string | null
     branch_id?: NullableStringFieldUpdateOperationsInput | string | null
-    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_name?: NullableStringFieldUpdateOperationsInput | string | null
     customer_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    customer_email?: NullableStringFieldUpdateOperationsInput | string | null
     sale_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tax_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -41847,16 +48003,20 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amount_paid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    client_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    payment_status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
+    invoice_payments?: invoice_paymentsUncheckedUpdateManyWithoutInvoicesNestedInput
+    invoice_items?: invoice_itemsUncheckedUpdateManyWithoutInvoiceNestedInput
   }
 
   export type invoicesUncheckedUpdateManyWithoutUsersInput = {
     id?: StringFieldUpdateOperationsInput | string
     invoice_number?: StringFieldUpdateOperationsInput | string
-    device_id?: NullableStringFieldUpdateOperationsInput | string | null
     branch_id?: NullableStringFieldUpdateOperationsInput | string | null
-    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_name?: NullableStringFieldUpdateOperationsInput | string | null
     customer_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    customer_email?: NullableStringFieldUpdateOperationsInput | string | null
     sale_price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tax_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -41864,6 +48024,10 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    amount_paid?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    client_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_method?: Enumpayment_methodFieldUpdateOperationsInput | $Enums.payment_method
+    payment_status?: Enumpayment_statusFieldUpdateOperationsInput | $Enums.payment_status
   }
 
   export type physical_inspectionsUpdateWithoutUsersInput = {
@@ -42234,6 +48398,7 @@ export namespace Prisma {
     os?: string | null
     battery_health_percent?: Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: Decimal | DecimalJsLike | number | string | null
+    purchase_price?: Decimal | DecimalJsLike | number | string | null
   }
 
   export type diagnostic_test_resultsCreateManyReportInput = {
@@ -42271,6 +48436,7 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUpdateManyWithoutDevicesNestedInput
     hardware_specs?: device_hardware_specsUpdateManyWithoutDeviceNestedInput
     users?: usersUpdateOneWithoutDevicesNestedInput
@@ -42278,7 +48444,7 @@ export namespace Prisma {
     companies?: companiesUpdateOneRequiredWithoutDevicesNestedInput
     shipments?: shipmentsUpdateOneWithoutDevicesNestedInput
     diagnostic_reports?: diagnostic_reportsUpdateManyWithoutDevicesNestedInput
-    invoices?: invoicesUpdateManyWithoutDevicesNestedInput
+    invoice_items?: invoice_itemsUpdateManyWithoutDeviceNestedInput
     physical_inspections?: physical_inspectionsUpdateManyWithoutDevicesNestedInput
     repairs?: repairsUpdateManyWithoutDevicesNestedInput
     technical_inspections?: technical_inspectionsUpdateManyWithoutDevicesNestedInput
@@ -42314,10 +48480,11 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     device_assignments?: device_assignmentsUncheckedUpdateManyWithoutDevicesNestedInput
     hardware_specs?: device_hardware_specsUncheckedUpdateManyWithoutDeviceNestedInput
     diagnostic_reports?: diagnostic_reportsUncheckedUpdateManyWithoutDevicesNestedInput
-    invoices?: invoicesUncheckedUpdateManyWithoutDevicesNestedInput
+    invoice_items?: invoice_itemsUncheckedUpdateManyWithoutDeviceNestedInput
     physical_inspections?: physical_inspectionsUncheckedUpdateManyWithoutDevicesNestedInput
     repairs?: repairsUncheckedUpdateManyWithoutDevicesNestedInput
     technical_inspections?: technical_inspectionsUncheckedUpdateManyWithoutDevicesNestedInput
@@ -42353,6 +48520,7 @@ export namespace Prisma {
     os?: NullableStringFieldUpdateOperationsInput | string | null
     battery_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     storage_health_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    purchase_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
   }
 
   export type diagnostic_test_resultsUpdateWithoutReportInput = {

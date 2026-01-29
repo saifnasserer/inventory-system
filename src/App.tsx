@@ -13,7 +13,8 @@ import {
   ShopOutlined,
   BuildOutlined,
   BarsOutlined,
-  FileTextOutlined
+  FileTextOutlined,
+  WalletOutlined
 } from "@ant-design/icons";
 // Devtools removed to clear console error
 // import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
@@ -50,7 +51,9 @@ import { EmployeeDashboard } from "./pages/employee-dashboard";
 import { MyTasksPage } from "./pages/my-tasks";
 import { SalesPage } from "./pages/sales";
 import { SalesPortalList } from "./pages/sales-portal";
-import { InvoiceCreate } from "./pages/invoices";
+import { InvoiceCreate, InvoiceList, InvoiceShow } from "./pages/invoices";
+import { ClientList, ClientShow, ClientCreate, ClientEdit } from "./pages/clients";
+import { FinanceDashboard } from "./pages/finance";
 import { MaintenanceDashboard } from "./pages/maintenance-dashboard";
 import { CustomLayout } from "./components/layout";
 import { AdminRoute } from "./components/AdminRoute";
@@ -241,6 +244,38 @@ function App() {
                         roles: ["super_admin"],
                       },
                     },
+                    {
+                      name: "clients",
+                      list: "/clients",
+                      create: "/clients/create",
+                      edit: "/clients/edit/:id",
+                      show: "/clients/show/:id",
+                      meta: {
+                        label: "العملاء",
+                        icon: <TeamOutlined />,
+                        roles: ["admin", "sales_staff", "branch_manager"],
+                      },
+                    },
+                    {
+                      name: "invoices",
+                      list: "/invoices",
+                      create: "/invoices/create",
+                      show: "/invoices/show/:id",
+                      meta: {
+                        label: "الفواتير",
+                        icon: <FileTextOutlined />,
+                        roles: ["admin", "branch_manager", "sales_staff"],
+                      },
+                    },
+                    {
+                      name: "finance",
+                      list: "/finance",
+                      meta: {
+                        label: "المالية",
+                        icon: <WalletOutlined />,
+                        roles: ["admin"],
+                      },
+                    },
                   ]}
                   options={{
                     syncWithLocation: true,
@@ -318,7 +353,20 @@ function App() {
                       </Route>
 
                       <Route path="/invoices">
+                        <Route index element={<InvoiceList />} />
                         <Route path="create" element={<InvoiceCreate />} />
+                        <Route path="show/:id" element={<InvoiceShow />} />
+                      </Route>
+
+                      <Route path="/clients">
+                        <Route index element={<ClientList />} />
+                        <Route path="create" element={<ClientCreate />} />
+                        <Route path="edit/:id" element={<ClientEdit />} />
+                        <Route path="show/:id" element={<ClientShow />} />
+                      </Route>
+
+                      <Route path="/finance">
+                        <Route index element={<FinanceDashboard />} />
                       </Route>
 
                     </Route>

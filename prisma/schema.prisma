@@ -61,6 +61,8 @@ model vendors {
   company_id     String      @default("default-company-id")
   shipments      shipments[]
   companies      companies   @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([company_id], map: "vendors_company_id_fkey")
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
@@ -71,6 +73,7 @@ model companies {
   subscription_plan String?     @default("free")
   created_at        DateTime    @default(now()) @db.DateTime(0)
   updated_at        DateTime    @default(now()) @db.DateTime(0)
+  clients           clients[]
   devices           devices[]
   shipments         shipments[]
   users             users[]
@@ -108,6 +111,7 @@ model devices {
   os                     String?                 @db.VarChar(100)
   battery_health_percent Decimal?                @db.Decimal(5, 2)
   storage_health_percent Decimal?                @db.Decimal(5, 2)
+  purchase_price         Decimal?                @db.Decimal(10, 2)
   device_assignments     device_assignments[]
   hardware_specs         device_hardware_specs[]
   users                  users?                  @relation(fields: [assigned_to], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -116,7 +120,7 @@ model devices {
   latest_report          diagnostic_reports?     @relation("devices_latest_report", fields: [latest_report_id], references: [id])
   shipments              shipments?              @relation(fields: [shipment_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   diagnostic_reports     diagnostic_reports[]
-  invoices               invoices[]
+  invoice_items          invoice_items[]
   physical_inspections   physical_inspections[]
   repairs                repairs[]
   technical_inspections  technical_inspections[]
@@ -155,28 +159,81 @@ model device_assignments {
 }
 
 model invoices {
-  id               String    @id @default(cuid())
-  invoice_number   String    @unique @db.VarChar(100)
-  device_id        String?
+  id               String             @id @default(cuid())
+  invoice_number   String             @unique @db.VarChar(100)
   branch_id        String?
-  customer_name    String    @db.VarChar(255)
-  customer_contact String?   @db.VarChar(255)
-  customer_email   String?   @db.VarChar(255)
-  sale_price       Decimal   @db.Decimal(10, 2)
-  tax_amount       Decimal?  @db.Decimal(10, 2)
-  total_amount     Decimal   @db.Decimal(10, 2)
+  customer_name    String?            @db.VarChar(255)
+  customer_contact String?            @db.VarChar(255)
+  sale_price       Decimal            @db.Decimal(10, 2)
+  tax_amount       Decimal?           @db.Decimal(10, 2)
+  total_amount     Decimal            @db.Decimal(10, 2)
   sold_by          String?
-  sale_date        DateTime? @default(now()) @db.DateTime(0)
+  sale_date        DateTime?          @default(now()) @db.DateTime(0)
   notes            String?
-  created_at       DateTime? @default(now()) @db.DateTime(0)
-  updated_at       DateTime? @default(now()) @db.DateTime(0)
-  branches         branches? @relation(fields: [branch_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  devices          devices?  @relation(fields: [device_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  users            users?    @relation(fields: [sold_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  created_at       DateTime?          @default(now()) @db.DateTime(0)
+  updated_at       DateTime?          @default(now()) @db.DateTime(0)
+  amount_paid      Decimal            @default(0.00) @db.Decimal(10, 2)
+  client_id        String?
+  payment_method   payment_method     @default(cash)
+  payment_status   payment_status     @default(pending)
+  invoice_payments invoice_payments[]
+  invoice_items    invoice_items[]
+  branches         branches?          @relation(fields: [branch_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  clients          clients?           @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users            users?             @relation(fields: [sold_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([branch_id], map: "invoices_branch_id_fkey")
-  @@index([device_id], map: "invoices_device_id_fkey")
   @@index([sold_by], map: "invoices_sold_by_fkey")
+  @@index([client_id], map: "invoices_client_id_fkey")
+}
+
+model invoice_items {
+  id            String   @id @default(cuid())
+  invoice_id    String
+  device_id     String?
+  item_name     String?  @db.VarChar(255)
+  serial_number String?  @db.VarChar(255)
+  asset_id      String?  @db.VarChar(100)
+  quantity      Int      @default(1)
+  unit_price    Decimal  @db.Decimal(10, 2)
+  total_price   Decimal  @db.Decimal(10, 2)
+  invoice       invoices @relation(fields: [invoice_id], references: [id], onDelete: Cascade)
+  device        devices? @relation(fields: [device_id], references: [id])
+
+  @@index([invoice_id], map: "invoice_items_invoice_id_fkey")
+  @@index([device_id], map: "invoice_items_device_id_fkey")
+}
+
+model clients {
+  id         String     @id @default(cuid())
+  name       String     @db.VarChar(255)
+  phone      String?    @db.VarChar(50)
+  email      String?    @db.VarChar(255)
+  address    String?    @db.VarChar(500)
+  company_id String
+  balance    Decimal    @default(0.00) @db.Decimal(10, 2)
+  created_at DateTime?  @default(now()) @db.DateTime(0)
+  updated_at DateTime?  @default(now()) @db.DateTime(0)
+  companies  companies  @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  invoices   invoices[]
+
+  @@index([company_id], map: "clients_company_id_fkey")
+}
+
+model invoice_payments {
+  id             String         @id @default(cuid())
+  invoice_id     String
+  amount         Decimal        @db.Decimal(10, 2)
+  payment_date   DateTime       @default(now()) @db.DateTime(0)
+  payment_method payment_method @default(cash)
+  received_by    String?
+  notes          String?
+  created_at     DateTime?      @default(now()) @db.DateTime(0)
+  invoices       invoices       @relation(fields: [invoice_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users          users?         @relation(fields: [received_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([invoice_id], map: "invoice_payments_invoice_id_fkey")
+  @@index([received_by], map: "invoice_payments_received_by_fkey")
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
@@ -337,6 +394,7 @@ model users {
   device_assignments_device_assignments_assigned_toTousers      device_assignments[]    @relation("device_assignments_assigned_toTousers")
   devices                                                       devices[]
   diagnostic_reports                                            diagnostic_reports[]
+  invoice_payments                                              invoice_payments[]
   invoices                                                      invoices[]
   physical_inspections                                          physical_inspections[]
   repairs_repairs_assigned_byTousers                            repairs[]               @relation("repairs_assigned_byTousers")
@@ -486,6 +544,17 @@ enum device_status {
   in_repair
   in_branch
   sold
+}
+
+enum payment_status {
+  paid
+  partial
+  pending
+}
+
+enum payment_method {
+  cash
+  credit
 }
 
 enum user_role {

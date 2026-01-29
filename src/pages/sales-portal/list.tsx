@@ -218,10 +218,10 @@ export const SalesPortalList: React.FC = () => {
                             <span>تم تحديد {selectedRowKeys.length} عنصر</span>
                             <Button
                                 type="primary"
-                                icon={<UserAddOutlined />}
-                                onClick={handleBulkAssign}
+                                icon={<FileAddOutlined />}
+                                onClick={() => push(`/invoices/create?device_ids=${selectedRowKeys.join(",")}`)}
                             >
-                                تعيين المحدد
+                                إنشاء فاتورة للمحدد
                             </Button>
                             <Button
                                 type="default"

@@ -139,19 +139,63 @@ export interface SparePartsRequest {
 export interface Invoice {
     id: string;
     invoice_number: string;
-    device_id: string;
     branch_id: string;
-    customer_name: string;
+    client_id?: string;
+    customer_name?: string;
     customer_contact?: string;
-    customer_email?: string;
     sale_price: number;
     tax_amount?: number;
     total_amount: number;
+    amount_paid: number;
+    payment_status: "paid" | "partial" | "pending";
+    payment_method: "cash" | "credit";
     sold_by?: string;
     sale_date: string;
     notes?: string;
     created_at: string;
     updated_at: string;
+    clients?: Client;
+    invoice_payments?: InvoicePayment[];
+    invoice_items?: InvoiceItem[];
+}
+
+export interface InvoiceItem {
+    id: string;
+    invoice_id: string;
+    device_id?: string;
+    item_name?: string;
+    serial_number?: string;
+    asset_id?: string;
+    quantity: number;
+    unit_price: number;
+    total_price: number;
+    device?: Device;
+}
+
+export interface Client {
+    id: string;
+    name: string;
+    phone?: string;
+    address?: string;
+    company_id: string;
+    balance: number;
+    created_at: string;
+    updated_at: string;
+    _count?: {
+        invoices: number;
+    };
+    invoices?: Invoice[];
+}
+
+export interface InvoicePayment {
+    id: string;
+    invoice_id: string;
+    amount: number;
+    payment_date: string;
+    payment_method: string;
+    received_by?: string;
+    notes?: string;
+    created_at: string;
 }
 
 export interface Announcement {

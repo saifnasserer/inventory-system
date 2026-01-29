@@ -16,6 +16,9 @@ import usersRoutes from './routes/users';
 import branchesRoutes from './routes/branches';
 import vendorsRoutes from './routes/vendors';
 import licenseRoutes from './routes/license';
+import clientRoutes from './routes/clients';
+import invoiceRoutes from './routes/invoices';
+import financeRoutes from './routes/finance';
 import path from 'path';
 
 const app: Express = express();
@@ -52,6 +55,9 @@ app.use('/api/users', usersRoutes);
 app.use('/api/branches', branchesRoutes);
 app.use('/api/vendors', vendorsRoutes);
 app.use('/api/license', licenseRoutes);
+app.use('/api/clients', clientRoutes);
+app.use('/api/invoices', invoiceRoutes);
+app.use('/api/finance', financeRoutes);
 
 // 404 handler for API routes
 app.use('/api/*', (req: Request, res: Response) => {

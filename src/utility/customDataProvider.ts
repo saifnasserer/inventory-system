@@ -295,4 +295,33 @@ export const customDataProvider: DataProvider = {
     },
 
     getApiUrl: () => API_URL,
+    custom: async ({ url, method, payload, query, headers }) => {
+        let requestUrl = `${API_URL}/api/${url}`;
+
+        if (query) {
+            requestUrl = `${requestUrl}?${stringify(query)}`;
+        }
+
+        try {
+            const response = await fetchWithAuth(requestUrl, {
+                method: method.toUpperCase(),
+                body: payload ? JSON.stringify(payload) : undefined,
+                headers,
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+
+            return {
+                data: result.data,
+            };
+        } catch (error) {
+            console.error(`Error in custom request to ${url}:`, error);
+            throw error;
+        }
+    },
 };
